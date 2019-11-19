@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>邮差登录</title>
+</head>
+<body>
+<script>
+</script>
+
+<center>
+    <br>
+<h3>欢迎使用邮差快递RSC-SYSTEM系统：邮差登录</h3><br>
+<form name="form" action="ptologin" method="post">
+    <p style="color: red;" th:text="${session.perror}"></p>
+    手机号：<input type="text" name="phone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11" required="required"/><p>
+    密码：<input type="password" name="password" maxlength="10" minlength="6" id="pass1" required="required" /><p>
+    <input type="submit" value="登录"/>
+    <input type="reset" value="重置">
+    <!--<input type="button" onclick="search('/find')" value="查询"/>-->
+</form>
+</center>
+
+
+</body>
+</html>

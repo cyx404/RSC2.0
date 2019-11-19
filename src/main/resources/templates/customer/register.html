@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>客户注册</title>
+</head>
+<body>
+<script>
+    function check() {
+       var  pass1=document.getElementById("pass1").value;
+        var  pass2=document.getElementById("pass2").value;
+        if (pass1!=pass2)
+            document.getElementById("tiji").disabled=true;//设置不可点击
+        else
+            document.getElementById("tiji").disabled=false;
+    }
+</script>
+
+<center>
+<h3>用户注册</h3>
+<form name="form" action="toregister" method="post">
+    <p style="color: red;" th:text="${session.cerror}"></p>
+    手机号：<input type="text" name="phone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11" required="required"/><p>
+    密码：<input type="password" name="password" maxlength="10" minlength="6" id="pass1" required="required" /><p>
+    确定密码：<input type="password2" name="password2" maxlength="10" minlength="6"id="pass2" required="required" onchange="check()" /><p>
+    真实姓名：<input type="text" name="name" maxlength="10"/><p>
+    居住地区:
+    <select  name="region">
+        <option th:each="region:${regions}" th:value="${region.id}" th:text="${region.region}"></option>
+    </select><p>
+    家庭详细地址：<input type="text" name="address" maxlength="100" style="width: 400px" required="required"/><p>
+    <input type="submit" value="注册" id="tiji"/>
+    <input type="reset" value="重置">
+    <!--<input type="button" onclick="search('/find')" value="查询"/>-->
+</form>
+</center>
+
+</body>
+</html>

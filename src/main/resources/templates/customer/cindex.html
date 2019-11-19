@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>客户主页</title>
+</head>
+<body>
+<center>
+<h3>欢迎客户：<span th:text="${session.customer.name}"></span>---使用邮差快递RSC-SYSTEM系统</h3>
+<a href="cmail"><p>寄件</p></a>
+<a href="cCheckOrDetermine?page=0"><p>查看/确定等待上门的寄件</p></a>
+<a href="selectmail?page=0"><p>查看收件完成的寄件</p></a>
+<a href="selectfaultmail?page=0"><p>查看历史失败的寄件</p></a>
+</center>
+</body>
+</html>

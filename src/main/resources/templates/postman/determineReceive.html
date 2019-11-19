@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>邮差确定邮件</title>
+</head>
+<body>
+
+<center>
+    <h3>邮差--<span th:text="${session.postman.id}"></span>：确定邮件收取是否成功/属于故障</h3>
+    <div th:text="${psuccess}" style="color: red;"></div>
+    <br>
+    <table border="1" style="text-align: center">
+        <tr>
+            <th>邮件编号</th>
+            <th>所属客户姓名</th>
+            <th>所属客户手机号</th>
+            <th>客户的地区</th>
+            <th>客户的地址</th>
+            <th>收件状态</th>
+            <th>订单生成时间</th>
+            <th>编辑:收件是否故障</th>
+        </tr>
+        <tr th:each="mail:${session.mailList}">
+            <td th:text="${mail.id}"></td>
+            <td th:text="${mail.customer.name}"></td>
+            <td th:text="${mail.customer.phone}"></td>
+            <td th:text="${mail.customer.region.region}"></td>
+            <td th:text="${mail.customer.address}"></td>
+            <td th:text="${mail.receiveState.state}" style="color: blue;"></td>
+            <td th:text="${mail.createTime}"></td>
+            <td>
+                <form action="receivefault" method="post">
+                    <input type="hidden" th:value="${mail.id}" name="mailId" />
+                    <input type="hidden" th:value="${session.page}" name="page" />
+                    <textarea name="season"  rows="3" cols="20" ></textarea><br>
+                    <input type="submit" value="是" style="background-color:coral;width: 60px" />
+                </form>
+            </td>
+
+        </tr>
+    </table>
+    <p>
+        <a th:href="@{|pdeterminereceive?page=${session.page-1}|}"><span th:if="${ session.page!=0}">上一页</span></a>
+        <------>
+        <a th:href="@{|pdeterminereceive?page=${session.page+1}|}"><span th:if="${ session.page+1!= session.TotalPages}">下一页</span></a>
+    </p>
+
+    <a th:href="pindex"><p>返回</p></a>
+</center>
+</body>
+</html>

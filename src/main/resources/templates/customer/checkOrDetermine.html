@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>客户确定邮件</title>
+</head>
+<body>
+<center>
+    <h3>客户--<span th:text="${session.customer.name}"></span>：确定邮件是否已经收取/付款</h3>
+    <table border="1" style="text-align: center">
+        <tr>
+            <th>邮件编号</th>
+            <th>您的姓名</th>
+            <th>您的手机号</th>
+            <th>您的地区</th>
+            <th>您的地址</th>
+            <th>收件人姓名</th>
+            <th>收件人手机</th>
+            <th>收件人的地区</th>
+            <th>收件人详细地址</th>
+            <th>收件快递小哥</th>
+            <th>收件状态</th>
+            <th>订单生成时间</th>
+            <th width="120px">已收取/付款</th>
+        </tr>
+        <tr th:each="mail:${session.mailList}">
+            <td th:text="${mail.id}"></td>
+            <td th:text="${mail.customer.name}"></td>
+            <td th:text="${mail.customer.phone}"></td>
+            <td th:text="${mail.customer.region.region}"></td>
+            <td th:text="${mail.customer.address}"></td>
+            <td th:text="${mail.addresseeName}"></td>
+            <td th:text="${mail.addresseePhone}"></td>
+            <td th:text="${mail.assignRegion.region}"></td>
+            <td th:text="${mail.address}"></td>
+            <td th:text="${mail.receivePostman.name}"></td>
+            <td th:text="${mail.receiveState.state}" style="color: blue;"></td>
+            <td th:text="${mail.createTime}"></td>
+            <td>
+                <form action="cDetermineMail" method="post">
+                    <input type="hidden" th:value="${mail.id}" name="mailId" />
+                    <input type="submit" value="已收取/付款" style="background-color:coral;"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a th:href="@{|cCheckOrDetermine?page=${session.page-1}|}"><span th:if="${ session.page!=0}">上一页</span></a>
+        <------>
+        <a th:href="@{|cCheckOrDetermine?page=${session.page+1}|}"><span th:if="${ session.page+1!= session.TotalPages}">下一页</span></a>
+    </p>
+
+    <a th:href="cindex2"><p>返回</p></a>
+</center>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>客户查看历史寄件</title>
+</head>
+<body>
+<center>
+    <h3>客户--<span th:text="${session.customer.name}"></span>：查看历史寄件</h3>
+    <table border="1" style="text-align: center">
+        <tr>
+            <th>邮件编号</th>
+            <th>您的姓名</th>
+            <th>您的手机号</th>
+            <th>您的地区</th>
+            <th>您的地址</th>
+            <th>收件人姓名</th>
+            <th>收件人手机</th>
+            <th>收件人的地区</th>
+            <th>收件人详细地址</th>
+            <th>收件快递小哥</th>
+            <th>收件状态</th>
+            <th>收件时间</th>
+            <th>派件快递小哥</th>
+            <th>派件状态</th>
+            <th>派件时间</th>
+            <th>订单生成时间</th>
+        </tr>
+        <tr th:each="mail:${session.mailList}">
+            <td th:text="${mail.id}"></td>
+            <td th:text="${mail.customer.name}"></td>
+            <td th:text="${mail.customer.phone}"></td>
+            <td th:text="${mail.customer.region.region}"></td>
+            <td th:text="${mail.customer.address}"></td>
+            <td th:text="${mail.addresseeName}"></td>
+            <td th:text="${mail.addresseePhone}"></td>
+            <td th:text="${mail.assignRegion.region}"></td>
+            <td th:text="${mail.address}"></td>
+            <td th:text="${mail.receivePostman.name}"></td>
+            <td th:text="${mail.receiveState.state}" style="color: blue"></td>
+            <td th:text="${mail.createTime}"></td>
+            <td><span th:if="${mail.assignPostman==null}">无</span><span th:if="${mail.assignPostman!=null}"><span th:text="${mail.assignTime.name}"></span></span></td>
+            <td><span th:if="${mail.assignState==null}">还没派件</span><span th:if="${mail.assignState!=null}"><span th:text="${mail.assignState.state}"></span></span></td>
+            <td><span th:if="${mail.assignTime==null}">无</span><span th:if="${mail.assignTime!=null}"><span th:text="${mail.assignTime}"></span></span></td>
+            <td th:text="${mail.receiveTime}"></td>
+        </tr>
+    </table>
+    <p>
+        <a th:href="@{|selectmail?page=${session.page-1}|}"><span th:if="${ session.page!=0}">上一页</span></a>
+        <------>
+        <a th:href="@{|selectmail?page=${session.page+1}|}"><span th:if="${ session.page+1!= session.TotalPages}">下一页</span></a>
+    </p>
+
+    <a th:href="cindex2"><p>返回</p></a>
+</center>
+</body>
+</html>
