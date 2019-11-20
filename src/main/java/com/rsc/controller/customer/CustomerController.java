@@ -41,7 +41,7 @@ public class CustomerController {
         return customerService.customerToDelivery(mail,session);
     }
 
-    //用户查看/确定邮件是否已经收取/付款：返回”准备收件“状态+”正在收件“状态的单
+    //用户查看/确定邮件是否已经收取/付款：返回”准备收件“状态+“正在收件”+”等待分配“状态的单
     @GetMapping("cCheckOrDetermine")
     public String customerCheckOrDetermine(HttpSession session,@RequestParam int page){
         return customerService.customerCheckOrDetermine(session,page);

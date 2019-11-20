@@ -1,9 +1,6 @@
 package com.rsc.repository;
 
-import com.rsc.entity.Customer;
-import com.rsc.entity.Mail;
-import com.rsc.entity.MailState;
-import com.rsc.entity.Postman;
+import com.rsc.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,9 +25,9 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Query("update Mail as m set m.receiveState =?1 where m.receiveState=?2 and m.receivePostman=?3")
     int updateReceiveStateToReceiving(MailState mailStateReceiving, MailState mailStateReadying, Postman postman);
 
-    //返回某用户的邮件状态为(“准备收件”或“正在收件”)的所有单并分页
-    @Query("select m from  Mail m where m.customer=?1 and (m.receiveState=?2 or m.receiveState=?3)")
-    Page<Mail> findMailByCustomerAndReadyingOrReceiving(Customer customer, MailState mailStateReadying, MailState mailStateReceiving, Pageable pageable);
+    //返回某用户的邮件状态为(“准备收件”或“正在收件”或“等待分配”)的所有单并分页
+    @Query("select m from  Mail m where m.customer=?1 and (m.receiveState=?2 or m.receiveState=?3 or m.receiveState=?4)")
+    Page<Mail> findMailByCustomerAndReadyingOrReceiving(Customer customer, MailState mailStateReadying, MailState mailStateReceiving, MailState mailStateWaitingDistribution, Pageable pageable);
 
     //某客户的邮件状态为“正在收件”的所有单更新为邮件状态“收件完成”
 //    @Modifying
@@ -57,4 +54,33 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Modifying
     @Query("update Mail as m set m.receiveFrequency = m.receiveFrequency+1 ,m.receiveState=?1,m.reason=?2 where m.id=?3 ")
     int updateAMailReceiveFault(MailState mailStateReceiveFault, String reason, int mailId);
+
+    //返回某地区所有收件状态为“等待分配”的件
+    @Query("select m from  Mail m where m.receiveRegion=?1  and m.receiveState=?2")
+    List<Mail> findMailByRegionAndReceiveStateIsWaitingDistribution(Region region, MailState mailStateWaitingDistribution);
+
+    //返回某地区所有派件状态为“等待分配”的件
+    @Query("select m from  Mail m where m.assignRegion=?1 and m.assignState=?2")
+    List<Mail> findMailByRegionAndAssignStateIsWaitingDistribution(Region region, MailState mailStateWaitingDistribution);
+
+    //根据寄件给它分配收件员
+    @Modifying
+    @Query("update Mail as m set m.receivePostman=?1 where m=?2 ")
+    int addAMailReceivePostman(Postman receivePostman, Mail mail);
+
+    //根据寄件给它分配派件员
+    @Modifying
+    @Query("update Mail as m set m.assignPostman=?1 where m=?2 ")
+    int addAMailAssignPostman(Postman assignPostman, Mail mail);
+
+    //改变寄件的收件状态
+    @Modifying
+    @Query("update Mail as m set m.receiveState=?1 where m=?2 ")
+    int updateAMailReceiveState(MailState receiveState, Mail mail);
+
+    //改变寄件的派件状态
+    @Modifying
+    @Query("update Mail as m set m.assignState=?1 where m=?2 ")
+    int updateAMailAssignState(MailState assignState, Mail mail);
+
 }

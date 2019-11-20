@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 
 public interface WorkloadRepository extends JpaRepository<Workload, Integer> {
 
@@ -33,4 +35,11 @@ public interface WorkloadRepository extends JpaRepository<Workload, Integer> {
    @Modifying
    @Query("update Workload as w set w.receiveFault=w.receiveFault+1 ,w.totalFault=w.totalFault+1  where w.year=?1 and w.month=?2 and w.date=?3 and w.postman=?4")
     int updateWorkloadReceiveFaultAndTotalFaultdByPostmanAndYearAndMonthAndDate(int year, int month, int date, Postman postman);
+
+    //返回某地区的已经签到上班的邮差的工作量
+    @Query("select w from Workload  w where w.year=?1 and w.month=?2 and w.date=?3 and w.postman in (select p from Postman p where p.region=?4)")
+    List<Workload> findWorkloadByAlreadyOnduty(int year,int month,int date,Region region);
+
+
+
 }
