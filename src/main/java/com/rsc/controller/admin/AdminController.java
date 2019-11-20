@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * @ClassName:AdminController
- * @Description:TODO
+ * @Description:TODO  管理员
  * @Author:chenyx
  * @Date:Create in  2019/11/20 0:54
  **/
