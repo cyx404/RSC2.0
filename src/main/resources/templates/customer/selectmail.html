@@ -39,8 +39,8 @@
             <td th:text="${mail.receivePostman.name}"></td>
             <td th:text="${mail.receiveState.state}" style="color: blue"></td>
             <td th:text="${mail.createTime}"></td>
-            <td><span th:if="${mail.assignPostman==null}" style="color: brown">暂无分配</span><span th:if="${mail.assignPostman!=null}"><span th:text="${mail.assignTime.name}"></span></span></td>
-            <td><span th:if="${mail.assignState==null}">还没派件</span><span th:if="${mail.assignState!=null}"><span th:text="${mail.assignState.state}"></span></span></td>
+            <td ><span th:if="${mail.assignPostman==null}" style="color: coral;">暂无分配</span><span th:if="${mail.assignPostman!=null}"><span th:text="${mail.assignPostman.name}"></span></span></td>
+            <td ><span th:if="${mail.assignState==null}" style="color: brown;">还没派件</span><span th:if="${mail.assignState!=null}"><span th:text="${mail.assignState.state}"></span></span></td>
             <td><span th:if="${mail.assignTime==null}">无</span><span th:if="${mail.assignTime!=null}"><span th:text="${mail.assignTime}"></span></span></td>
             <td th:text="${mail.receiveTime}"></td>
         </tr>

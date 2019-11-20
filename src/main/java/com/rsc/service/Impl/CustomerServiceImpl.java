@@ -119,8 +119,10 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = (Customer) session.getAttribute("customer");
         if(null!=customer) {
+
             try {//快递小哥上班了，立即分配任务
                 Postman postman = postmanService.selectPostmantoWork(year, month, date, customer.getRegion());////分配收件员
+                mail.setDistributeReceiveTime(new Date());//设置系统分配时间
                 mail.setReceivePostman(postman);//收件员
                 MailState mailStateReadying = mailStateRepository.findMailStateById(1);//返回“准备收件”状态
                 mail.setReceiveState(mailStateReadying);//收件状态
@@ -128,11 +130,13 @@ public class CustomerServiceImpl implements CustomerService {
                 //该收件员的预期总工作量+1
                 int a = postmanService.updateWorkloadExpectationWorkloadByPostman(year, month, date, postman);
                 System.out.println("分配到的收件员的预期总工作量+1影响到的行数:" + a);
+
             } catch (Exception e) {//快递小哥还没上班，收件员为空但订单先存起来，等明天上班，管理员再分配
                 MailState mailStateNull = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
                 mail.setReceiveState(mailStateNull);//收件状态
                 System.out.println("快递小哥还没上班，收件员为空但订单先存起来，等明天上班，管理员再分配");
             }
+
             mail.setCustomer(customer);//所属客户
             mail.setReceiveRegion(customer.getRegion());//收件地区（客户的地区）
 //            MailState mailStateNull = mailStateRepository.findMailStateById(0);//返回空件状态
@@ -141,6 +145,7 @@ public class CustomerServiceImpl implements CustomerService {
             mailRepository.save(mail);
             session.setAttribute("success", "提交成功！请耐心等候快递小哥上门收件！");
             return "customer/success";
+
         }else {
             System.out.println("客户session过时了！");
             return "customer/login";
@@ -194,15 +199,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public String customerDetermineMail(HttpSession session, int mailId) {
+
         MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回收件完成状态
         MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
-        int num=mailRepository.updateAMailReceiveStateToFinishing(mailStateFinishing,mailStateReceiving,new Date(),mailId);
+        MailState mailStateWaiting = mailStateRepository.findMailStateById(0);//返回等待分配状态
+        //邮件收件状态为“正在收件”的单更新为邮件状态“收件完成”，同时派件状态修改为“等待分配”
+        int num=mailRepository.updateAMailReceiveStateToFinishingAndAssignStateToWaiting(mailStateFinishing,new Date(),mailStateReceiving,mailStateWaiting,mailId);
+        System.out.println("num:"+num);
         if(1==num){
             session.setAttribute("success", "付款成功！");
             //完成状态，即该单对应邮差工作量（收件计件数加1，工作总量+1）
             Mail mail=mailRepository.findMailById(mailId);
             Calendar cal=Calendar.getInstance();
-            cal.setTime( mail.getCreateTime());
+            cal.setTime( mail.getDistributeReceiveTime());//获取当初系统分配收件工作的时间
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
             int date = cal.get(Calendar.DATE);
@@ -215,6 +224,7 @@ public class CustomerServiceImpl implements CustomerService {
             session.setAttribute("success", "付款失败！快递小哥还没揽件！");
             return "customer/success";
         }
+
     }
 
     /**

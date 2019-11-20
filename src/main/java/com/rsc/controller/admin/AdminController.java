@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * @ClassName:AdminController
- * @Description:TODO  管理员
+ * @Description:TODO 管理员
  * @Author:chenyx
  * @Date:Create in  2019/11/20 0:54
  **/
@@ -18,8 +18,15 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @GetMapping("beginworking")
-    public String beginWorking(Model model) {
-        return adminService.assignWorksToPostmans(model);
+    //收件工作分配
+    @GetMapping("beginreceiving")
+    public String beginReceiving(Model model) {
+        return adminService.distributeReceivingWorksToPostmans(model);
+    }
+
+    //派件工作分配
+    @GetMapping("beginassigning")
+    public String beginAssigning(Model model) {
+        return adminService.distributeAssigningWorksToPostmans(model);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,9 +36,16 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private WorkloadRepository workloadRepository;
 
+    //当前的日期
+    private Calendar cal = Calendar.getInstance();
+    private int year = cal.get(Calendar.YEAR);
+    private int month = cal.get(Calendar.MONTH) + 1;
+    private int date = cal.get(Calendar.DATE);
+
+
     /**
-     * @Title assignWorksToPostmans
-     * @Description: TODO 分配工作给已经签到上班的快递员
+     * @Title distributeReceivingWorksToPostmans
+     * @Description: TODO 分配收件工作给已经签到上班的快递员
      * @param model
      * @return String
      * @Author: chenyx
@@ -45,21 +53,14 @@ public class AdminServiceImpl implements AdminService {
      **/
     @Override
     @Transactional
-    public String assignWorksToPostmans(Model model) {
-
-        //当前的日期
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int date = cal.get(Calendar.DATE);
-
-
-        MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
-        MailState mailStateReadyingReceive = mailStateRepository.findMailStateById(1);//返回“准备收件”状态
-        MailState mailStateReadyingAssign = mailStateRepository.findMailStateById(5);//返回“准备派件”状态
+    public String distributeReceivingWorksToPostmans(Model model) {
 
         //返回要分配的区
         List<Region> regions = regionRepository.findAll();
+
+        //状态
+        MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
+        MailState mailStateReadyingReceive = mailStateRepository.findMailStateById(1);//返回“准备收件”状态
 
         //所有的区都分配一次
         for (Region region : regions) {
@@ -67,9 +68,6 @@ public class AdminServiceImpl implements AdminService {
 
             //返回某地区所有收件状态为“等待分配”的件
             List<Mail> remailList = mailRepository.findMailByRegionAndReceiveStateIsWaitingDistribution(region, mailStateWaitingDistribution);
-
-            //返回某地区所有派件状态为“等待分配”的件
-            List<Mail> asmailList = mailRepository.findMailByRegionAndAssignStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
             //返回某地区的已经签到上班的邮差的工作量
             List<Workload> workloadList = workloadRepository.findWorkloadByAlreadyOnduty(year, month, date, region);
@@ -80,19 +78,16 @@ public class AdminServiceImpl implements AdminService {
             int postmanIdnex = 0;//List中第一个邮差的下标
             int remailnum = remailList.size();//需要分配的收件的数量
             System.out.println("需要分配的收件的数量:" + remailnum);
-            int asmailnum = asmailList.size();//需要分配的派件的数量
-            System.out.println("需要分配的派件的数量:" + asmailnum);
             int postmannum = workloadList.size();//上班邮差人数，一个人当天生成一条工作量，可以通过当天多少条工作量得出多少人上班
             System.out.println("上班邮差人数:" + postmannum);
             System.out.println("----------------");
 
             //开始分配收件工作，一人一个收件的邮件循环分
-            if (0 != remailnum) {
+            if (0 != remailnum && 0 != postmannum) {
                 for (int i = 0; i < remailnum; i++) {
                     postman = workloadList.get(postmanIdnex).getPostman();
                     mail = remailList.get(i);
-                    mailRepository.addAMailReceivePostman(postman, mail);//根据寄件给它分配收件员
-                    mailRepository.updateAMailReceiveState(mailStateReadyingReceive,mail);//该件的收件状态变成”准备收件“
+                    mailRepository.addAMailReceivePostman(postman, mailStateReadyingReceive, new Date(), mail);//根据寄件给它分配收件员,收件状态变成”准备收件“,设置系统分配收件时间
                     workloadRepository.updateWorkloadExpectationWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, postman);//收件员预期工作总量+1
                     if (0 == (i + 1) % postmannum) {
                         postmanIdnex = 0;
@@ -101,15 +96,57 @@ public class AdminServiceImpl implements AdminService {
                     }
                 }
             }
-            postmanIdnex = 0;//List中第一个邮差的下标
+
+        }
+        model.addAttribute("asuccess", "收件工作分配完成！");
+        return "admin/success";
+    }
+
+
+    /**
+     * @Title distributeAssigningWorksToPostmans
+     * @Description: TODO 分配派件工作给已经签到上班的快递员
+     * @param model
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/11/20  19:06
+     **/
+    @Override
+    @Transactional
+    public String distributeAssigningWorksToPostmans(Model model) {
+
+        //返回要分配的区
+        List<Region> regions = regionRepository.findAll();
+
+        //状态
+        MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
+        MailState mailStateReadyingAssign = mailStateRepository.findMailStateById(5);//返回“准备派件”状态
+
+        //所有的区都分配一次
+        for (Region region : regions) {
+            System.out.println("地区：" + region.getRegion() + " 编号：" + region.getId());
+            //返回某地区所有派件状态为“等待分配”的件
+            List<Mail> asmailList = mailRepository.findMailByRegionAndAssignStateIsWaitingDistribution(region, mailStateWaitingDistribution);
+
+            //返回某地区的已经签到上班的邮差的工作量
+            List<Workload> workloadList = workloadRepository.findWorkloadByAlreadyOnduty(year, month, date, region);
+
+            //根据上班的邮差人数分配邮件
+            Postman postman;
+            Mail mail;
+            int postmanIdnex = 0;//List中第一个邮差的下标
+            int asmailnum = asmailList.size();//需要分配的派件的数量
+            System.out.println("需要分配的派件的数量:" + asmailnum);
+            int postmannum = workloadList.size();//上班邮差人数，一个人当天生成一条工作量，可以通过当天多少条工作量得出多少人上班
+            System.out.println("上班邮差人数:" + postmannum);
+            System.out.println("----------------");
 
             //开始分配派件工作，一人一个派件的邮件循环分
-            if (0 != asmailnum) {
+            if (0 != asmailnum && 0 != postmannum) {
                 for (int i = 0; i < asmailnum; i++) {
                     postman = workloadList.get(postmanIdnex).getPostman();
-                    mail = remailList.get(i);
-                    mailRepository.addAMailAssignPostman(postman, mail); //根据寄件给它分配派件员
-                    mailRepository.updateAMailAssignState(mailStateReadyingAssign,mail);//该件的派件状态变成”准备派件“
+                    mail = asmailList.get(i);
+                    mailRepository.addAMailAssignPostman(postman, mailStateReadyingAssign, new Date(), mail); //根据寄件给它分配派件员,派件状态变成”准备派件“,设置系统分配派件时间
                     workloadRepository.updateWorkloadExpectationWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, postman);//派件员预期工作总量+1
                     if (0 == (i + 1) % postmannum) {
                         postmanIdnex = 0;
@@ -118,8 +155,9 @@ public class AdminServiceImpl implements AdminService {
                     }
                 }
             }
+
         }
-        model.addAttribute("asuccess", "工作分配完成！");
+        model.addAttribute("asuccess", "派件工作分配完成！");
         return "admin/success";
     }
 }

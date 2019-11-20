@@ -34,10 +34,10 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
 //    @Query("update Mail as m set m.receiveState =?1 where m.receiveState=?2 and m.customer=?3")
 //    int updateReceiveStateToFinishing(MailState mailStateFinishing,MailState mailStateReceiving, Customer customer);
 
-    //某客户的某邮件状态为“正在收件”的单更新为邮件状态“收件完成”
+    //某客户的某邮件收件状态为“正在收件”的单更新为邮件状态“收件完成”，同时派件状态修改为“等待分配”
     @Modifying
-    @Query("update Mail as m set m.receiveState =?1 ,m.receiveTime=?3 where m.receiveState=?2 and m.id=?4")
-    int updateAMailReceiveStateToFinishing(MailState mailStateFinishing, MailState mailStateReceiving, Date date, int mailId);
+    @Query("update Mail as m set m.receiveState =?1 ,m.receiveTime=?2 ,m.assignState=?4 where m.receiveState=?3 and m.id=?5")
+    int updateAMailReceiveStateToFinishingAndAssignStateToWaiting(MailState mailStateFinishing, Date date, MailState mailStateReceiving, MailState mailStateWaiting, int mailId);
 
     //根据id返回一条订单
     Mail findMailById(int mailId);
@@ -63,24 +63,15 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Query("select m from  Mail m where m.assignRegion=?1 and m.assignState=?2")
     List<Mail> findMailByRegionAndAssignStateIsWaitingDistribution(Region region, MailState mailStateWaitingDistribution);
 
-    //根据寄件给它分配收件员
+    //根据寄件给它分配收件员,收件状态变成”准备收件“,设置系统分配收件时间
     @Modifying
-    @Query("update Mail as m set m.receivePostman=?1 where m=?2 ")
-    int addAMailReceivePostman(Postman receivePostman, Mail mail);
+    @Query("update Mail as m set m.receivePostman=?1 , m.receiveState=?2, m.distributeReceiveTime=?3 where m=?4 ")
+    int addAMailReceivePostman(Postman receivePostman, MailState receiveState, Date date, Mail mail);
 
-    //根据寄件给它分配派件员
+    //根据寄件给它分配派件员,派件状态变成”准备派件“,设置系统分配派件时间
     @Modifying
-    @Query("update Mail as m set m.assignPostman=?1 where m=?2 ")
-    int addAMailAssignPostman(Postman assignPostman, Mail mail);
+    @Query("update Mail as m set m.assignPostman=?1 , m.assignState=?2, m.distributeAssignTime=?3 where m=?4  ")
+    int addAMailAssignPostman(Postman assignPostman, MailState assignState, Date date, Mail mail);
 
-    //改变寄件的收件状态
-    @Modifying
-    @Query("update Mail as m set m.receiveState=?1 where m=?2 ")
-    int updateAMailReceiveState(MailState receiveState, Mail mail);
-
-    //改变寄件的派件状态
-    @Modifying
-    @Query("update Mail as m set m.assignState=?1 where m=?2 ")
-    int updateAMailAssignState(MailState assignState, Mail mail);
 
 }

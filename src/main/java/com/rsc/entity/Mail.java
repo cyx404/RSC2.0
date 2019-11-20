@@ -73,6 +73,12 @@ public class Mail {
     @Column(name = "delete_state")
     private int deleteState;//订单是否销毁，默认为0，1是销毁，0是正常
 
+    @Column(name="distribute_receive_time")
+    private Date distributeReceiveTime;//系统分配的收件时间
+
+    @Column(name="distribute_assign_time")
+    private Date distributeAssignTime;//系统分配的派件时间
+
     public Mail() {
     }
 
@@ -207,6 +213,22 @@ public class Mail {
 
     public void setAssignTime(Date assignTime) {
         this.assignTime = assignTime;
+    }
+
+    public Date getDistributeReceiveTime() {
+        return distributeReceiveTime;
+    }
+
+    public void setDistributeReceiveTime(Date distributeReceiveTime) {
+        this.distributeReceiveTime = distributeReceiveTime;
+    }
+
+    public Date getDistributeAssignTime() {
+        return distributeAssignTime;
+    }
+
+    public void setDistributeAssignTime(Date distributeAssignTime) {
+        this.distributeAssignTime = distributeAssignTime;
     }
 
     public int getDeleteState() {
