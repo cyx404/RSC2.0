@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
  * @Author:chenyx
  * @Date:Create in  2019/11/15 19:59
  **/
+@RequestMapping("rsc/postman")
 @Controller
 public class PostmanController {
 

@@ -3,6 +3,7 @@ package com.rsc.controller.postman;
 import com.rsc.entity.Postman;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
  * @Author:chenyx
  * @Date:Create in  2019/11/15 20:00
  **/
+@RequestMapping("rsc/postman")
 @Controller
 public class IndexController2 {
 
