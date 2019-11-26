@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>邮差要派送的快递</title>
+</head>
+<body>
+<center>
+    <h3>邮差--<span th:text="${session.postman.id}"></span>：要派送的快递</h3>
+    <table border="1" style="text-align: center">
+        <tr>
+            <th>邮件编号</th>
+            <th>所属客户姓名</th>
+            <th>所属客户手机号</th>
+            <th>客户的地区</th>
+            <th>客户的地址</th>
+            <th>派件状态</th>
+            <th>订单生成时间</th>
+            <th>派件是否故障</th>
+        </tr>
+        <tr th:each="mail:${session.mailList}">
+            <td th:text="${mail.id}"></td>
+            <td th:text="${mail.customer.name}"></td>
+            <td th:text="${mail.customer.phone}"></td>
+            <td th:text="${mail.customer.region.region}"></td>
+            <td th:text="${mail.customer.address}"></td>
+            <td th:text="${mail.assignState.state}" style="color:blue;"></td>
+            <td th:text="${mail.createTime}"></td>
+            <td><span th:if="${mail.assignFrequency == 1}">否</span><span th:if="${mail.assignFrequency > 1}">是</span></td>
+
+        </tr>
+    </table>
+    <p>
+        <a th:href="@{|preceive?page=${session.page-1}|}"><span th:if="${ session.page!=0}">上一页</span></a>
+        <------>
+        <a th:href="@{|preceive?page=${session.page+1}|}"><span th:if="${ session.page+1!= session.TotalPages}">下一页</span></a>
+    </p>
+
+    <a href="ptoallassign"><p>一键全部接单</p></a>
+    <a th:href="pindex"><p>返回</p></a>
+</center>
+</body>
+</html>

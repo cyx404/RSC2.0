@@ -40,6 +40,7 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     int updateAMailReceiveStateToFinishingAndAssignStateToWaiting(MailState mailStateFinishing, Date date, MailState mailStateReceiving, MailState mailStateWaiting, int mailId);
 
     //根据id返回一条订单
+    @Query("select m from Mail m where m.id = ?1")
     Mail findMailById(int mailId);
 
     //返回某用户的邮件状态为“收件完成”的所有单并分页
@@ -73,5 +74,35 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Query("update Mail as m set m.assignPostman=?1 , m.assignState=?2, m.distributeAssignTime=?3 where m=?4  ")
     int addAMailAssignPostman(Postman assignPostman, MailState assignState, Date date, Mail mail);
 
+    //某邮差的邮件状态为“准备派件”的单更新为邮件状态“正在派件”
+    @Modifying
+    @Query("update Mail as m set m.assignState =?1 where m.assignState=?2 and m.assignPostman=?3")
+    int updateAssignStateToAssigning(MailState mailStateReceiving, MailState mailStateReadying, Postman postman);
 
+    Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequency(Postman postman, MailState mailState,int af, Pageable pageable);
+
+    //某邮差确定某邮件派件故障
+    @Modifying
+    @Query("update Mail as m set m.assignFrequency = m.assignFrequency+1 ,m.assignState=?1,m.reason=?2 ,m.lastAssignTime = ?3 where m.id=?4 ")
+    int updateAMailAssignFaultAndLastAssignTime(MailState mailStateAssignFault, String reason, Date date, int mailId);
+
+    @Query("select assignFrequency from Mail m where m.id=?1")
+    int findAssignFrequencyById(int mailId);
+
+    //将正在派件的邮件状态改为派件成功状态并返回时间
+    @Modifying
+    @Query("update Mail as m set m.assignState = 7, m.assignTime= ?2 where m.id = ?1")
+    int updateAMailAssignDetermineStateAndTime(int mailId, Date date);
+
+    @Modifying
+    @Query("update Mail as m set m.deleteState = 1, m.assignState = 8 where m.id = ?1")
+    int updateAMailDeleteStateAndDetermineStateById(int mailId);
+
+    Page<Mail> findMailByAssignPostmanAndAssignState(Postman postman, MailState mailState, Pageable pageable);
+
+    @Modifying
+    @Query("update Mail as m set m.assignState = 7 where m.id = ?1")
+    int updateAMailAssignSuccess(int mailId);
+
+    Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(Postman postman,MailState mailState, int before_af, int after_af, Pageable pageable);
 }

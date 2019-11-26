@@ -2,16 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>主页</title>
+    <title>邮差主页</title>
 </head>
 <body>
 <center>
     <h3>欢迎使用邮差快递RSC-SYSTEM系统：邮差--<span th:text="${session.postman.id}"></span></h3>
-<a href="pduty"><p>去签到</p></a>
-<a href="preceive?page=0"><p>去收件</p></a>
-<a href="pdeterminereceive?page=0"><p>确定收件</p></a>
-<a href="assign"><p>去派件</p></a>
-<a href=""><p>确定派件</p></a>
+    <a href="pduty"><p>去签到</p></a>
+    <a href="preceive?page=0"><p>去收件</p></a>
+    <a href="pdeterminereceive?page=0"><p>确定收件</p></a>
+    <a href="passign?page=0"><p>去派件</p></a>
+    <a href="pdetermineassigned?page=0"><p>确定派件</p></a>
+    <a href="assignException"><p>异常邮件</p></a>
 </center>
 </body>
 </html>

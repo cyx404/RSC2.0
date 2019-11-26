@@ -31,7 +31,7 @@ public interface WorkloadRepository extends JpaRepository<Workload, Integer> {
     @Query("update Workload as w set w.receiveWorkload=w.receiveWorkload+1 ,w.totalWorkload=w.totalWorkload+1  where w.year=?1 and w.month=?2 and w.date=?3 and w.postman=?4")
     int updateWorkloadReceiveWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(int year, int month, int date, Postman postman);
 
-    //邮差收件故障量+1，派件故障量+1
+    //邮差收件故障量+1，总故障量+1
    @Modifying
    @Query("update Workload as w set w.receiveFault=w.receiveFault+1 ,w.totalFault=w.totalFault+1  where w.year=?1 and w.month=?2 and w.date=?3 and w.postman=?4")
     int updateWorkloadReceiveFaultAndTotalFaultdByPostmanAndYearAndMonthAndDate(int year, int month, int date, Postman postman);
@@ -40,6 +40,13 @@ public interface WorkloadRepository extends JpaRepository<Workload, Integer> {
     @Query("select w from Workload  w where w.year=?1 and w.month=?2 and w.date=?3 and w.postman in (select p from Postman p where p.region=?4)")
     List<Workload> findWorkloadByAlreadyOnduty(int year,int month,int date,Region region);
 
+    //邮差派件故障量+1，总故障量+1
+    @Modifying
+    @Query("update Workload as w set w.assignFault=w.assignFault+1 ,w.totalFault=w.totalFault+1  where w.year=?1 and w.month=?2 and w.date=?3 and w.postman=?4")
+    int updateWorkloadAssignFaultAndTotalFaultByPostmanAndYearAndMonthAndDate(int year, int month, int date, Postman postman);
 
-
+    //邮差派件量+1，总工作总量+1
+    @Modifying
+    @Query("update Workload as w set w.assignWorkload=w.assignWorkload+1 ,w.totalWorkload=w.totalWorkload+1  where w.year=?1 and w.month=?2 and w.date=?3 and w.postman=?4")
+    int updateWorkloadAssignWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(int year, int month, int date, Postman receivePostman);
 }
