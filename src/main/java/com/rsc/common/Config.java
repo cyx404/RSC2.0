@@ -8,5 +8,5 @@ package com.rsc.common;
  **/
 
 public class Config {
-
+int i;
 }
