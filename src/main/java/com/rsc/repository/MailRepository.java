@@ -37,7 +37,7 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     //某客户的某邮件收件状态为“正在收件”的单更新为邮件状态“收件完成”，同时派件状态修改为“等待分配”
     @Modifying
     @Query("update Mail as m set m.receiveState =?1 ,m.receiveTime=?2 ,m.assignState=?4 where m.receiveState=?3 and m.id=?5")
-    int updateAMailReceiveStateToFinishingAndAssignStateToWaiting(MailState mailStateFinishing, Date date, MailState mailStateReceiving, MailState mailStateWaiting, Mail mailId);
+    int updateAMailReceiveStateToFinishingAndAssignStateToWaiting(MailState mailStateFinishing, Date date, MailState mailStateReceiving, MailState mailStateWaiting, int mailId);
 
     //根据id返回一条订单
     @Query("select m from Mail m where m.id = ?1")

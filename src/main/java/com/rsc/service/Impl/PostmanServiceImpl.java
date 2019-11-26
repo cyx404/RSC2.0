@@ -169,7 +169,7 @@ public class PostmanServiceImpl implements PostmanService {
             return "postman/login";
         } else {
             Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
-            MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回准备收件状态
+            MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回准备派件状态
             Page<Mail> mailPage = mailRepository.findMailByReceivePostmanAndReceiveState(postman, mailState, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
