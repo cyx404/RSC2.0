@@ -61,7 +61,7 @@ public interface CustomerService {
      * @Author: chenyx
      * @Date: 2019/11/17  15:22
      **/
-    String customerDetermineMail(HttpSession session, int mailId);
+    String customerDetermineMail(HttpSession session, Mail mailId);
 
     /**
      * @Title customerSelectMail

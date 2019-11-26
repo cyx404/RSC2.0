@@ -1,5 +1,6 @@
 package com.rsc.service;
 
+import com.rsc.entity.Mail;
 import com.rsc.entity.Postman;
 import com.rsc.entity.Region;
 import org.springframework.ui.Model;
@@ -43,7 +44,7 @@ public interface PostmanService {
      * @Author: chenyx
      * @Date: 2019/11/17  16:44
      **/
-     int  updateWorkloadExpectationWorkloadByPostman(int year, int month, int date,Postman postman);
+    int  updateWorkloadExpectationWorkloadByPostman(int year, int month, int date,Postman postman);
 
     /**
      * @Title selectPostmantoWork
@@ -89,12 +90,84 @@ public interface PostmanService {
      * @Description: TODO 邮差确定某邮件收件故障
      * @param session
      * @param mailId
-     * @param season
+     * @param reason
      * @param page
      * @param model
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/17  18:00
      **/
-    String postmanReceivefault(HttpSession session, int mailId, String season, int page, Model model);
+    String postmanReceivefault(HttpSession session, Mail mailId, String reason, int page, Model model);
+
+    /**
+     *@Title: postmanToAssign
+     *@Description: TODO  邮差查看需派的件
+     *@Param: [session, page, i, s]
+     *@return: java.lang.String
+     *@Author: zsy
+     *@date: 2019/11/21 10:56
+     */
+    String postmanToAssign(HttpSession session, int page, int i, String s);
+
+    /**
+     *@Title: postmanToAllAssign
+     *@Description: TODO  邮差一键接需派送的单
+     *@Param: [session]
+     *@return: java.lang.String
+     *@Author: zsy
+     *@date: 2019/11/21 17:36
+     */
+    String postmanToAllAssign(HttpSession session);
+
+
+    /**
+     *@Title: postmanAssignfault
+     *@Description: TODO  邮差确定某邮件派送故障
+     *@Param: [session, mailId, season, page, model]
+     *@return: java.lang.String
+     *@Author: zsy
+     *@date: 2019/11/21 18:14
+     */
+    String postmanAssignfault(HttpSession session, Mail mailId, String reason, int page, Model model);
+
+    /**
+     *@Title: postmanToDetermineAssigned
+     *@Description: TODO 确认派送状态
+     *@Param: [session, page, mailId, mailStateId, str]
+     *@return: java.lang.String
+     *@Author: zsy
+     *@date: 2019/11/24 17:14
+     */
+    String postmanToDetermineAssigned(HttpSession session, int i, int mailStateId, String str);
+
+    /**
+     *@Title: postmanAssignedSuccess
+     *@Description: TODO  派送成功
+     *@Param: [session, i, s]
+     *@return: java.lang.String
+     *@Author: zsy
+     *@date: 2019/11/24 21:27
+     */
+    String postmanAssignedSuccess(HttpSession session,int page, int mailStateId, String str);
+
+
+    /**
+     *@Title: postmanAssignException
+     *@Description: TODO 派件异常订单界面
+     *@Param: [session, i, i1, s]
+     *@return: java.lang.String
+     *@Author: zsy
+     *@date: 2019/11/26 14:41
+     */
+    String postmanAssignException(HttpSession session, int page, int stateId, String str);
+
+    /**
+     *@Title: exceptionToSuccess
+     *@Description: TODO 异常邮件派送成功
+     *@Param: [session, mailId, page, model]
+     *@return: java.lang.String
+     *@Author: zsy
+     *@date: 2019/11/26 14:56
+     */
+    String exceptionToSuccess(HttpSession session, Mail mailId, int page, Model model);
 }

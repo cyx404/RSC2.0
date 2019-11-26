@@ -49,7 +49,7 @@ public class CustomerController {
 
     //用户确定邮件已经被邮差收取
     @PostMapping("cDetermineMail")
-    public String customerDetermineMail(HttpSession session,@RequestParam int mailId){
+    public String customerDetermineMail(HttpSession session,@RequestParam Mail mailId){
         return customerService.customerDetermineMail(session,mailId);
     }
 

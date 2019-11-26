@@ -79,6 +79,9 @@ public class Mail {
     @Column(name="distribute_assign_time")
     private Date distributeAssignTime;//系统分配的派件时间
 
+    @Column(name="last_assign_time")
+    private Date lastAssignTime;//上一次分配的时间
+
     public Mail() {
     }
 
@@ -237,5 +240,13 @@ public class Mail {
 
     public void setDeleteState(int deleteState) {
         this.deleteState = deleteState;
+    }
+
+    public Date getLastAssignTime() {
+        return lastAssignTime;
+    }
+
+    public void setLastAssignTime(Date lastAssignTime) {
+        this.lastAssignTime = lastAssignTime;
     }
 }
