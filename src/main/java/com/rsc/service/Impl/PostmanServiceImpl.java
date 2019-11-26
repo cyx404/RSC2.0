@@ -394,17 +394,18 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(mailId.getDistributeAssignTime());
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH) + 1;
-                int date = cal.get(Calendar.DATE);
-                System.out.println(year + " " + month + " " + date);
-                mailRepository.updateAMailAssignSuccess(mailId.getId());//设置邮件为派件成功
-                workloadRepository.updateWorkloadAssignWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, postman);
-                model.addAttribute("psuccess", "单号:" + mailId.getId() + "--派件故障处理成功！");
-                session.setAttribute("page", page);
-                return "forward:/assignException";
+            Calendar cal = Calendar.getInstance();
+            System.out.println(mailId.getDistributeAssignTime());
+            cal.setTime(mailId.getDistributeAssignTime());
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int date = cal.get(Calendar.DATE);
+            System.out.println(year + " " + month + " " + date);
+            mailRepository.updateAMailAssignSuccess(mailId.getId());//设置邮件为派件成功
+            workloadRepository.updateWorkloadAssignWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, postman);//派件工作量+1  总工作量+1
+            model.addAttribute("psuccess", "单号:" + mailId.getId() + "--派件故障处理成功！");
+            session.setAttribute("page", page);
+            return "postman/assignSuccess";
         }
     }
 
@@ -452,7 +453,7 @@ public class PostmanServiceImpl implements PostmanService {
             mailRepository.updateAMailAssignFaultAndLastAssignTime(mailStateAssignFault, reason, new Date(), mailId.getId());
             //当assignFrequency（派件故障数）> 3时，修改该邮差的当天的工作量：派件故障量+1，总故障量+1
             int assignFrenquency = mailRepository.findAssignFrequencyById(mailId.getId());
-            if(assignFrenquency == 1)
+            if(assignFrenquency - 1 == 1)
                 str = "forward:/pdetermineassigned";
             else
                 str = "forward:/assignException";
