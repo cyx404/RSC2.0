@@ -395,7 +395,6 @@ public class PostmanServiceImpl implements PostmanService {
             return "postman/login";
         } else {
             Calendar cal = Calendar.getInstance();
-            System.out.println(mailId.getDistributeAssignTime());
             cal.setTime(mailId.getDistributeAssignTime());
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
