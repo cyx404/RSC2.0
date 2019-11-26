@@ -307,6 +307,7 @@ public class PostmanServiceImpl implements PostmanService {
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
+                System.out.println("--------------------:"+str);
                 return str;
             }
         }

@@ -28,6 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
             "/rsc/customer/clogin",
             "/rsc/customer/ctologin",
             "/rsc/customer/toregister",
+            "/rsc/postman/assignfault",
+            "/rsc/postman/pdetermineassigned"
 
     };
 
