@@ -28,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
             "/rsc/customer/clogin",
             "/rsc/customer/ctologin",
             "/rsc/customer/toregister",
-            "/rsc/admin/mLogin",
+            "/rsc/admin/mlogin",
             "/rsc/admin/mtologin",
             "/rsc/admin/echarts-en.common.js",
             "/rsc/admin/echarts.min.js",

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("rsc/admin")
 @Controller
 public class IndexController3 {
+
     //返回管理员的开始上班(分配工作)页面
     @GetMapping("awork")
     public String awork(HttpSession session) {

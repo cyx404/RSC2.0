@@ -42,7 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             if (null != session.getAttribute("manager")) {
                 return true;
             } else {
-                String tourl = "/rsc/admin/mLogin";
+                String tourl = "/rsc/admin/mlogin";
                 response.sendRedirect(tourl);
                 return false;
             }

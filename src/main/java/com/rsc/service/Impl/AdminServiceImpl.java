@@ -62,10 +62,11 @@ public class AdminServiceImpl implements AdminService {
         MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
         MailState mailStateReadyingReceive = mailStateRepository.findMailStateById(1);//返回“准备收件”状态
 
+        String s="";
         //所有的区都分配一次
         for (Region region : regions) {
-            System.out.println("地区：" + region.getRegion() + " 编号：" + region.getId());
-
+            System.out.println("<br>地区：" + region.getRegion() + " 编号：" + region.getId());
+            s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
             //返回某地区所有收件状态为“等待分配”的件
             List<Mail> remailList = mailRepository.findMailByRegionAndReceiveStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
@@ -78,8 +79,10 @@ public class AdminServiceImpl implements AdminService {
             int postmanIdnex = 0;//List中第一个邮差的下标
             int remailnum = remailList.size();//需要分配的收件的数量
             System.out.println("需要分配的收件的数量:" + remailnum);
+            s = s+ "需要分配的收件的数量:" +remailnum+"---->";
             int postmannum = workloadList.size();//上班邮差人数，一个人当天生成一条工作量，可以通过当天多少条工作量得出多少人上班
             System.out.println("上班邮差人数:" + postmannum);
+            s = s+ "上班邮差人数:" +postmannum+"<br><br>";
             System.out.println("----------------");
 
             //开始分配收件工作，一人一个收件的邮件循环分
@@ -98,8 +101,11 @@ public class AdminServiceImpl implements AdminService {
             }
 
         }
-        model.addAttribute("asuccess", "收件工作分配完成！");
-        return "admin/success";
+        s=s+"----------收件工作分配完成！------------<br>";
+        s=s+" <center><a href=\"admin\">返回首页</a></center>";
+        //  model.addAttribute("asuccess", "收件工作分配完成！");
+        // return "admin/success";
+        return s;
     }
 
 
@@ -122,9 +128,12 @@ public class AdminServiceImpl implements AdminService {
         MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
         MailState mailStateReadyingAssign = mailStateRepository.findMailStateById(5);//返回“准备派件”状态
 
+        String s="";
+
         //所有的区都分配一次
         for (Region region : regions) {
-            System.out.println("地区：" + region.getRegion() + " 编号：" + region.getId());
+            System.out.println("<br>地区：" + region.getRegion() + " 编号：" + region.getId());
+            s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
             //返回某地区所有派件状态为“等待分配”的件
             List<Mail> asmailList = mailRepository.findMailByRegionAndAssignStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
@@ -137,8 +146,10 @@ public class AdminServiceImpl implements AdminService {
             int postmanIdnex = 0;//List中第一个邮差的下标
             int asmailnum = asmailList.size();//需要分配的派件的数量
             System.out.println("需要分配的派件的数量:" + asmailnum);
+            s = s+ "需要分配的收件的数量:" +asmailnum+"---->";
             int postmannum = workloadList.size();//上班邮差人数，一个人当天生成一条工作量，可以通过当天多少条工作量得出多少人上班
             System.out.println("上班邮差人数:" + postmannum);
+            s = s+ "上班邮差人数:" +postmannum+"<br><br>";
             System.out.println("----------------");
 
             //开始分配派件工作，一人一个派件的邮件循环分
@@ -157,7 +168,10 @@ public class AdminServiceImpl implements AdminService {
             }
 
         }
-        model.addAttribute("asuccess", "派件工作分配完成！");
-        return "admin/success";
+        s=s+"----------派件工作分配完成！------------<br>";
+        s=s+"<center><a href=\"admin\">返回首页</a></center>";
+        //model.addAttribute("asuccess", "派件工作分配完成！");
+        // return "admin/success";
+        return s;
     }
 }
