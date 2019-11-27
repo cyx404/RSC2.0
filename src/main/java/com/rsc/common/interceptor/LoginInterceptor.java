@@ -30,11 +30,19 @@ public class LoginInterceptor implements HandlerInterceptor {
                 response.sendRedirect(tourl);
                 return false;
             }
-        } else if (url.contains("postman")) {
+        } else if (url.contains("pm")) {
             if (null != session.getAttribute("postman")) {
                 return true;
             } else {
-                String tourl = "/rsc/postman/plogin";
+                String tourl = "/rsc/pm/plogin";
+                response.sendRedirect(tourl);
+                return false;
+            }
+        }else if (url.contains("admin")) {
+            if (null != session.getAttribute("manager")) {
+                return true;
+            } else {
+                String tourl = "/rsc/admin/mLogin";
                 response.sendRedirect(tourl);
                 return false;
             }

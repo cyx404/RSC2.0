@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 public class ManagerServiceImpl implements ManagerService {
     @Autowired
     ManagerRepository managerRepository;
+
     @Override
     public String managerToLogin(String phone, String password, HttpSession session) {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());

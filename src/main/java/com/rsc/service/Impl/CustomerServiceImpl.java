@@ -68,7 +68,8 @@ public class CustomerServiceImpl implements CustomerService {
             session.setAttribute("cerror", "手机号已经存在！");
             return "customer/register";
         } else {
-            String md5Password = DigestUtils.md5DigestAsHex(customer.getPassword().getBytes());;
+            String md5Password = DigestUtils.md5DigestAsHex(customer.getPassword().getBytes());
+            ;
             customer.setPassword(md5Password);
             customerRepository.save(customer);
             session.setAttribute("success", "注册成功！");
@@ -118,7 +119,7 @@ public class CustomerServiceImpl implements CustomerService {
         int date = cal.get(Calendar.DATE);
 
         Customer customer = (Customer) session.getAttribute("customer");
-        if(null!=customer) {
+        if (null != customer) {
 
             try {//快递小哥上班了，立即分配任务
                 Postman postman = postmanService.selectPostmantoWork(year, month, date, customer.getRegion());////分配收件员
@@ -146,7 +147,7 @@ public class CustomerServiceImpl implements CustomerService {
             session.setAttribute("success", "提交成功！请耐心等候快递小哥上门收件！");
             return "customer/success";
 
-        }else {
+        } else {
             System.out.println("客户session过时了！");
             return "customer/login";
         }
@@ -162,7 +163,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @Date: 2019/11/17  14:08
      **/
     @Override
-    public String customerCheckOrDetermine(HttpSession session,int page) {
+    public String customerCheckOrDetermine(HttpSession session, int page) {
         Customer customer = (Customer) session.getAttribute("customer");
         if (null == customer)
             return "customer/login";
@@ -170,8 +171,8 @@ public class CustomerServiceImpl implements CustomerService {
             Pageable pageable = PageRequest.of(page, 5);//分页，每页多少条记录
             MailState mailStateReadying = mailStateRepository.findMailStateById(1);//返回准备收件状态
             MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
-            MailState mailStateWaitingDistribution=mailStateRepository.findMailStateById(0);//返回等待分配状态
-            Page<Mail> mailPage = mailRepository.findMailByCustomerAndReadyingOrReceiving(customer, mailStateReadying, mailStateReceiving,mailStateWaitingDistribution,pageable);
+            MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回等待分配状态
+            Page<Mail> mailPage = mailRepository.findMailByCustomerAndReadyingOrReceiving(customer, mailStateReadying, mailStateReceiving, mailStateWaitingDistribution, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("success", "您没有正在处理的单！");
@@ -203,24 +204,24 @@ public class CustomerServiceImpl implements CustomerService {
         MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
         MailState mailStateWaiting = mailStateRepository.findMailStateById(0);//返回等待分配状态
         //邮件收件状态为“正在收件”的单更新为邮件状态“收件完成”，同时派件状态修改为“等待分配”
-        int num=mailRepository.updateAMailReceiveStateToFinishingAndAssignStateToWaiting(mailStateFinishing,new Date(),mailStateReceiving,mailStateWaiting,mailId);
-        System.out.println("num:"+num);
-        if(1==num){
+        int num = mailRepository.updateAMailReceiveStateToFinishingAndAssignStateToWaiting(mailStateFinishing, new Date(), mailStateReceiving, mailStateWaiting, mailId);
+        System.out.println("num:" + num);
+        if (1 == num) {
             session.setAttribute("success", "付款成功！");
 //            int mailId1 = mailId.getId();
             //完成状态，即该单对应邮差工作量（收件计件数加1，工作总量+1）
-            Mail mail=mailRepository.findMailById(mailId);
-            Calendar cal=Calendar.getInstance();
-            cal.setTime( mail.getDistributeReceiveTime());//获取当初系统分配收件工作的时间
+            Mail mail = mailRepository.findMailById(mailId);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(mail.getDistributeReceiveTime());//获取当初系统分配收件工作的时间
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH) + 1;
             int date = cal.get(Calendar.DATE);
-            System.out.println(year +" "+month+" "+date);
+            System.out.println(year + " " + month + " " + date);
             //完成状态，即该单对应邮差工作量（收件计件数加1，工作总量+1）
-            int a=workloadRepository.updateWorkloadReceiveWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(year,month,date,mail.getReceivePostman());
-            System.out.println("收件计件数加1，工作总量+1："+a);
+            int a = workloadRepository.updateWorkloadReceiveWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, mail.getReceivePostman());
+            System.out.println("收件计件数加1，工作总量+1：" + a);
             return "customer/success";
-        }else {
+        } else {
             session.setAttribute("success", "付款失败！快递小哥还没揽件！");
             return "customer/success";
         }
@@ -244,7 +245,7 @@ public class CustomerServiceImpl implements CustomerService {
         else {
             Pageable pageable = PageRequest.of(page, 5);//分页，每页多少条记录
             MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回完成收件状态
-            Page<Mail> mailPage = mailRepository.findMailByCustomerAndFinishing(customer, mailStateFinishing,pageable);
+            Page<Mail> mailPage = mailRepository.findMailByCustomerAndFinishing(customer, mailStateFinishing, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("success", "您没有该状态的邮件！");
@@ -276,8 +277,8 @@ public class CustomerServiceImpl implements CustomerService {
         else {
             Pageable pageable = PageRequest.of(page, 5);//分页，每页多少条记录
             MailState mailStateReceiveFault = mailStateRepository.findMailStateById(4);//返回“收件不成功"状态
-            MailState mailStateAssignFault= mailStateRepository.findMailStateById(8);//返回”派件不成功“状态
-            Page<Mail> mailPage = mailRepository.findMailByCustomerAndFault(customer, mailStateReceiveFault,mailStateAssignFault,pageable);
+            MailState mailStateAssignFault = mailStateRepository.findMailStateById(8);//返回”派件不成功“状态
+            Page<Mail> mailPage = mailRepository.findMailByCustomerAndFault(customer, mailStateReceiveFault, mailStateAssignFault, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("success", "您没有失败订单！");

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
  * @Author:chenyx
  * @Date:Create in  2019/11/20 0:54
  **/
+@RequestMapping("rsc/admin")
 @Controller
 public class AdminController {
 
@@ -41,7 +42,9 @@ public class AdminController {
 
     //xiaqi:管理页面
     @RequestMapping(value = "admin")
-    public String admin(){return "admin/adminIndex.html";}
+    public String admin() {
+        return "admin/adminIndex.html";
+    }
 
     //xiaqi:登录页面
     @PostMapping(value = "mtologin")
@@ -50,7 +53,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "mLogin")
-    public String mLogin(){
+    public String mLogin() {
         return "admin/adminLogin.html";
     }
 }

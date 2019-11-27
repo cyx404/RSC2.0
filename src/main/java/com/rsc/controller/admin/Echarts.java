@@ -6,9 +6,14 @@ import lombok.Data;
 @Data
 public class Echarts {
     private String name;
-   // private Integer value;
+    // private Integer value;
     private Object value;
+
     public Echarts(String name, Object value) {
         this.name = name;
-        this.value = value;    }
-        public Echarts() {    }}
+        this.value = value;
+    }
+
+    public Echarts() {
+    }
+}

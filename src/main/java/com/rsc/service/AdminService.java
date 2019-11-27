@@ -25,5 +25,4 @@ public interface AdminService {
     String distributeAssigningWorksToPostmans(Model model);
 
 
-
 }

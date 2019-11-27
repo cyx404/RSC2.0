@@ -21,14 +21,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     //不需拦截的路径
     private String[] excludePathPatterns = {
-            "/rsc/postman/plogin",
-            "/rsc/postman/ptologin",
+            "/rsc/pm/plogin",
+            "/rsc/pm/ptologin",
             "/rsc/customer/cindex",
             "/rsc/customer/register",
             "/rsc/customer/clogin",
             "/rsc/customer/ctologin",
             "/rsc/customer/toregister",
-
+            "/rsc/admin/mLogin",
+            "/rsc/admin/mtologin",
+            "/rsc/admin/echarts-en.common.js",
+            "/rsc/admin/echarts.min.js",
+            "/rsc/admin/jquery-3.4.1.min.js",
     };
 
     @Override

@@ -2,9 +2,9 @@
 <html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>每月的邮件派件量、收件量及故障件数</title>
-    <script src="echarts-en.common.js"></script>
-    <script src="jquery-3.4.1.min.js"></script>
+    <title>地区各工作量情况百分比统计图</title>
+    <script src="/echarts-en.common.js"></script>
+    <script src="/jquery-3.4.1.min.js"></script>
     <style>
         #year,#month,#address{
             float: left;
@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-<center><h1>地区各工作量情况百分比统计图</h1></center>
+<center><h1>地区各工作量情况百分比统计图dd</h1></center>
 <h3>
 <div id="top">
     <div id="address">
@@ -54,7 +54,7 @@
 <center>
 <div id="main" style="width: 600px;height:400px;border:1px dashed #000;"/>
 </center>
-<center><a href="/admin">返回首页</a></center>
+<center><a href="admin">返回首页</a></center>
 </div>
 
 <script>
@@ -74,7 +74,7 @@
             type : "post",
             async : true,
             //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url : "/monthWorkData?year="+year+"&month="+month+"&region="+region,    //请求发送到dataActiont处
+            url : "monthWorkData?year="+year+"&month="+month+"&region="+region,    //请求发送到dataActiont处
             data : {},
             dataType : "json",        //返回数据形式为json
             success : function(result) {

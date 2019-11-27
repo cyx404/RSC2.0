@@ -19,6 +19,7 @@ public class SalaryServiceImpl implements SalaryService {
     PostmanRepository postmanRepository;
     @Autowired
     SalaryRepository salaryRepository;
+
     @Override
     public List postmanSalaryDetails(int id) {
         Calendar date = Calendar.getInstance();
@@ -27,24 +28,24 @@ public class SalaryServiceImpl implements SalaryService {
         detail.add(id);// id:0
         detail.add(postman.getName());//名字:1
         detail.add(postman.getPhone());//手机:2
-        int receiveWorkloadsum=0;//收件总和
-        int assignWorkloadsum=0;//派件总和
-        for (Workload w:postman.getWorkloads()) {
-            receiveWorkloadsum+=w.getReceiveWorkload();
-            assignWorkloadsum+=w.getAssignWorkload();
+        int receiveWorkloadsum = 0;//收件总和
+        int assignWorkloadsum = 0;//派件总和
+        for (Workload w : postman.getWorkloads()) {
+            receiveWorkloadsum += w.getReceiveWorkload();
+            assignWorkloadsum += w.getAssignWorkload();
         }
         detail.add(receiveWorkloadsum);//收件总和:3
         detail.add(assignWorkloadsum);//派件总和:4
-        detail.add(receiveWorkloadsum+assignWorkloadsum);//总件数:5
-        double total = (receiveWorkloadsum+assignWorkloadsum)*5+3000;
-        detail.add("("+receiveWorkloadsum+"+"+assignWorkloadsum+")*5+3000="+total);//总工资:6
-        double assessment = (receiveWorkloadsum+assignWorkloadsum)*5;
+        detail.add(receiveWorkloadsum + assignWorkloadsum);//总件数:5
+        double total = (receiveWorkloadsum + assignWorkloadsum) * 5 + 3000;
+        detail.add("(" + receiveWorkloadsum + "+" + assignWorkloadsum + ")*5+3000=" + total);//总工资:6
+        double assessment = (receiveWorkloadsum + assignWorkloadsum) * 5;
         detail.add(assessment);//考核工资:7
         detail.add(postman.getRegion().getRegion());//邮差所在地:8
-        Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id,date.get(Calendar.YEAR),date.get(Calendar.MONTH)+1);
-        if (salary==null){
+        Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id, date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1);
+        if (salary == null) {
             detail.add(1);//查看数据库是否已有数据（没有）:9
-        }else {
+        } else {
             detail.add(0);//查看数据库是否已有数据（有）:9
         }
         return detail;
@@ -54,20 +55,20 @@ public class SalaryServiceImpl implements SalaryService {
     public int addSalary(int pid, double assessment, double total) {
         Salary salary = new Salary();
         Calendar date = Calendar.getInstance();
-        int year=date.get(Calendar.YEAR);
-        int month=date.get(Calendar.MONTH)+1;
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH) + 1;
         Postman postman = postmanRepository.findPostmanById(pid);
-        Salary salary1=salaryRepository.findSalaryByPostmanAndYearAndMonth(pid,year,month);
-        if(salary1==null){
-        salary.setPostman(postman);
-        salary.setAssessment(assessment);
-        salary.setBasic(3000);
-        salary.setMonth(month);
-        salary.setYear(year);
-        salary.setTotal(total);
-        salaryRepository.save(salary);}
-        else{
-            salaryRepository.updateSalaryByPidAndYearAndMonth(pid,year,month,3000,assessment,total);
+        Salary salary1 = salaryRepository.findSalaryByPostmanAndYearAndMonth(pid, year, month);
+        if (salary1 == null) {
+            salary.setPostman(postman);
+            salary.setAssessment(assessment);
+            salary.setBasic(3000);
+            salary.setMonth(month);
+            salary.setYear(year);
+            salary.setTotal(total);
+            salaryRepository.save(salary);
+        } else {
+            salaryRepository.updateSalaryByPidAndYearAndMonth(pid, year, month, 3000, assessment, total);
         }
         return 1;
     }

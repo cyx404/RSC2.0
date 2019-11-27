@@ -14,11 +14,12 @@ import java.util.List;
 public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     AttendanceRepository attendanceRepository;
+
     @Override
     public List<Echarts> findAttendanceByPostmanName(int year, int month, String postmanName) {
-        Attendance attendance = attendanceRepository.findAttendanceByPostmanAndYearAndMonth1(year,month,postmanName);
+        Attendance attendance = attendanceRepository.findAttendanceByPostmanAndYearAndMonth1(year, month, postmanName);
         List<Echarts> list = new ArrayList<Echarts>();
-        if(attendance==null) list.add(new Echarts("无数据",0));
+        if (attendance == null) list.add(new Echarts("无数据", 0));
         else {
             if (attendance.getDuty() != 0) {
                 list.add(new Echarts("在岗天数", attendance.getDuty()));

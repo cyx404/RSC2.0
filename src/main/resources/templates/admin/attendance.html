@@ -50,7 +50,7 @@
 <body>
 <center>
     <h3>邮差的考勤情况</h3>
-<form method="post" action="/findPostmanAttendance">
+<form method="post" action="findPostmanAttendance">
     <input type="text" name="mid" placeholder="请输入邮差id">
     <input type="submit" value="搜索">
 </form>
@@ -85,13 +85,13 @@
                     已超过请假次数
                 </div>
                 <div th:if="${attendence.getLeaves()<3}">
-                <input type="submit" formmethod="post" formaction="/leaves" value="请假"/>
+                <input type="submit" formmethod="post" formaction="leaves" value="请假"/>
                 </div>
                 <div th:if="${attendence.getOvertime()>=4}">
                     已超过加班次数
                 </div>
                 <div th:if="${attendence.getOvertime()<4}">
-                <input type="submit" formmethod="post" formaction="/overtime" value="加班" />
+                <input type="submit" formmethod="post" formaction="overtime" value="加班" />
                 </div>
             </form>
         </td>
@@ -100,7 +100,7 @@
 </table>
 
 </div>
-    <a href="/admin">返回首页</a>
+    <a href="admin">返回首页</a>
 </center>
 </body>
 </html>

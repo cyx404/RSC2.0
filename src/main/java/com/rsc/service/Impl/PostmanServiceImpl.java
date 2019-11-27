@@ -218,9 +218,44 @@ public class PostmanServiceImpl implements PostmanService {
     }
 
 
+    /**
+     * @Title postmanReceivefault
+     * @Description: TODO 邮差确定某邮件收件故障
+     * @param session
+     * @param mailId
+     * @param season
+     * @param page
+     * @param model
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/11/17  18:00
+     **/
+    @Transactional
     @Override
     public String postmanReceivefault(HttpSession session, int mailId, String season, int page, Model model) {
-        return null;
+        Postman postman = (Postman) session.getAttribute("postman");
+        if (postman == null) {
+            System.out.println("==========空工号，没登录！==========");
+            return "postman/login";
+        } else {
+            //设置收件状态为”收件不成功“，receiveFrequency（收件故障数）=1，故障原因
+            MailState mailStateReceiveFault = mailStateRepository.findMailStateById(4);//返回收件不成功状态
+            mailRepository.updateAMailReceiveFault(mailStateReceiveFault, season, mailId);
+
+            //修改该邮差的当天的工作量：收件故障量+1，总故障量+1
+            Mail mail = mailRepository.findMailById(mailId);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(mail.getCreateTime());
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int date = cal.get(Calendar.DATE);
+            System.out.println(year + " " + month + " " + date);
+            workloadRepository.updateWorkloadReceiveFaultAndTotalFaultdByPostmanAndYearAndMonthAndDate(year, month, date, postman);
+
+            model.addAttribute("psuccess", "单号:" + mailId + "--收件故障处理成功！");
+            session.setAttribute("page", page);
+            return "forward:/rsc/pm/pdeterminereceive";
+        }
     }
 
 
@@ -258,7 +293,7 @@ public class PostmanServiceImpl implements PostmanService {
 
             model.addAttribute("psuccess", "单号:" + mailId.getId() + "--收件故障处理成功！");
             session.setAttribute("page", page);
-            return "forward:/pdeterminereceive";
+            return "forward:/rsc/pm/pdeterminereceive";
         }
     }
 
@@ -266,12 +301,12 @@ public class PostmanServiceImpl implements PostmanService {
     public List<List> findAllPostmanSalary() {
         List<Postman> postmanList = postmanRepository.findAllPostman();
         List<List> salaryList = new ArrayList<>();
-        for (Postman p:postmanList) {
+        for (Postman p : postmanList) {
             List salary = new ArrayList();
-            double total=3000;
+            double total = 3000;
             List<Workload> workloads = p.getWorkloads();
-            for (Workload w:workloads) {
-                total += w.getTotalWorkload()*5;
+            for (Workload w : workloads) {
+                total += w.getTotalWorkload() * 5;
             }
             salary.add(p.getId());
             salary.add(p.getName());
@@ -290,7 +325,7 @@ public class PostmanServiceImpl implements PostmanService {
     @Override
     public List<Attendance> findAttendencesByPid(int pid, HttpSession session) {
         List<Attendance> attendanceList = attendanceRepository.findAttendancesByPostman(pid);
-        session.setAttribute("attendences",attendanceList);
+        session.setAttribute("attendences", attendanceList);
         return null;
     }
 
@@ -311,7 +346,7 @@ public class PostmanServiceImpl implements PostmanService {
         } else {
             Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回准备派件状态
-            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState,1, pageable);
+            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState, 1, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("psuccess", "你没有单要处理！");
@@ -343,7 +378,7 @@ public class PostmanServiceImpl implements PostmanService {
         } else {
             Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回正在派件状态
-            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState,1, pageable);//获取派件次数为1、状态为正在派件的订单
+            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState, 1, pageable);//获取派件次数为1、状态为正在派件的订单
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("psuccess", "你没有单要处理！");
@@ -367,7 +402,7 @@ public class PostmanServiceImpl implements PostmanService {
      *@date: 2019/11/24 21:28
      */
     @Transactional
-    public String postmanAssignedSuccess(HttpSession session,int page, int mailStateId, String str) {
+    public String postmanAssignedSuccess(HttpSession session, int page, int mailStateId, String str) {
         Postman postman = (Postman) session.getAttribute("postman");
 //        System.out.println(postman.getName());
         Pageable pageable = PageRequest.of(page, 10);
@@ -379,7 +414,7 @@ public class PostmanServiceImpl implements PostmanService {
         System.out.println(mailList);
         for (Mail mail : mailList) {
             int mailId = mail.getId();
-            System.out.println(mailId+"\n"+mail.getAssignPostman());
+            System.out.println(mailId + "\n" + mail.getAssignPostman());
             mailRepository.updateAMailAssignDetermineStateAndTime(mailId, new Date());//将正在派件状态改为派件成功状态并返回时间
             Calendar cal = Calendar.getInstance();
             cal.setTime(mail.getDistributeAssignTime());//获取当初系统分配派件工作的时间
@@ -410,7 +445,7 @@ public class PostmanServiceImpl implements PostmanService {
         } else {
             Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(stateId);//返回派件异常状态
-            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(postman, mailState,2,4,pageable);//获取派件次数>1、状态为派件异常的订单
+            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(postman, mailState, 2, 4, pageable);//获取派件次数>1、状态为派件异常的订单
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("psuccess", "你没有单要处理！");
@@ -487,7 +522,7 @@ public class PostmanServiceImpl implements PostmanService {
      *@date: 2019/11/21 18:17
      */
     @Transactional
-    public String postmanAssignfault(HttpSession session, Mail mailId, String reason, int page, Model model){
+    public String postmanAssignfault(HttpSession session, Mail mailId, String reason, int page, Model model) {
         String str;
         Postman postman = (Postman) session.getAttribute("postman");
         if (postman == null) {
@@ -499,11 +534,11 @@ public class PostmanServiceImpl implements PostmanService {
             mailRepository.updateAMailAssignFaultAndLastAssignTime(mailStateAssignFault, reason, new Date(), mailId.getId());
             //当assignFrequency（派件故障数）> 3时，修改该邮差的当天的工作量：派件故障量+1，总故障量+1
             int assignFrenquency = mailRepository.findAssignFrequencyById(mailId.getId());
-            if(assignFrenquency - 1 == 1)
-                str = "forward:/pdetermineassigned";
+            if (assignFrenquency - 1 == 1)
+                str = "forward:/rsc/pm/pdetermineassigned";
             else
-                str = "forward:/assignException";
-            if(assignFrenquency > 3) {
+                str = "forward:/rsc/pm/assignException";
+            if (assignFrenquency > 3) {
                 int mailId1 = mailId.getId();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(mailId.getDistributeAssignTime());
@@ -514,9 +549,9 @@ public class PostmanServiceImpl implements PostmanService {
                 workloadRepository.updateWorkloadAssignFaultAndTotalFaultByPostmanAndYearAndMonthAndDate(year, month, date, postman);
                 mailRepository.updateAMailDeleteStateAndDetermineStateById(mailId1);//设置邮件为派件不成功和销毁状态(delete_state为1,assign_state为8)
             }
-                model.addAttribute("psuccess", "单号:" + mailId.getId() + "--派件故障处理成功！");
-                session.setAttribute("page", page);
-                return str;
+            model.addAttribute("psuccess", "单号:" + mailId.getId() + "--派件故障处理成功！");
+            session.setAttribute("page", page);
+            return str;
 
         }
     }

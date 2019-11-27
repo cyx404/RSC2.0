@@ -32,7 +32,7 @@ public interface PostmanService {
      * @Author: chenyx
      * @Date: 2019/11/16  14:21
      **/
-    String postmanAddWorkload( HttpSession session);
+    String postmanAddWorkload(HttpSession session);
 
 
     /**
@@ -46,7 +46,7 @@ public interface PostmanService {
      * @Author: chenyx
      * @Date: 2019/11/17  16:44
      **/
-     int  updateWorkloadExpectationWorkloadByPostman(int year, int month, int date,Postman postman);
+    int updateWorkloadExpectationWorkloadByPostman(int year, int month, int date, Postman postman);
 
     /**
      * @Title selectPostmantoWork
@@ -62,7 +62,6 @@ public interface PostmanService {
     Postman selectPostmantoWork(int year, int month, int date, Region region) throws IndexOutOfBoundsException;
 
 
-
     /**
      * @Title postmanToReceive
      * @Description: TODO  邮差去收快递 或 邮差确定邮件是否收取成功
@@ -74,7 +73,7 @@ public interface PostmanService {
      * @Author: chenyx
      * @Date: 2019/11/17  13:19
      **/
-    String postmanToReceive(HttpSession session,int page,int mailStateId,String str);
+    String postmanToReceive(HttpSession session, int page, int mailStateId, String str);
 
     /**
      * @Title postmanToAllReceive
@@ -102,13 +101,14 @@ public interface PostmanService {
     String postmanReceivefault(HttpSession session, int mailId, String season, int page, Model model);
 
     //查询所有邮差的工资情况
-     List<List> findAllPostmanSalary();
+    List<List> findAllPostmanSalary();
 
-     //查询某一邮差
+    //查询某一邮差
     Postman findPostman(String name);
 
     //xiaqi：查找某一员工的考勤情况
-    List<Attendance> findAttendencesByPid(int pid,HttpSession session);
+    List<Attendance> findAttendencesByPid(int pid, HttpSession session);
+
     String postmanReceivefault(HttpSession session, Mail mailId, String reason, int page, Model model);
 
     /**
@@ -160,7 +160,7 @@ public interface PostmanService {
      *@Author: zsy
      *@date: 2019/11/24 21:27
      */
-    String postmanAssignedSuccess(HttpSession session,int page, int mailStateId, String str);
+    String postmanAssignedSuccess(HttpSession session, int page, int mailStateId, String str);
 
 
     /**
