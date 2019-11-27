@@ -197,7 +197,6 @@ public class CustomerServiceImpl implements CustomerService {
      * @Date: 2019/11/17  15:22
      **/
     @Transactional
-    @Override
     public String customerDetermineMail(HttpSession session, int mailId) {
 
         MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回收件完成状态
@@ -208,6 +207,7 @@ public class CustomerServiceImpl implements CustomerService {
         System.out.println("num:"+num);
         if(1==num){
             session.setAttribute("success", "付款成功！");
+//            int mailId1 = mailId.getId();
             //完成状态，即该单对应邮差工作量（收件计件数加1，工作总量+1）
             Mail mail=mailRepository.findMailById(mailId);
             Calendar cal=Calendar.getInstance();

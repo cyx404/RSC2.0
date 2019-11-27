@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>邮差的考勤情况</title>
+    <script src="echarts-en.common.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <style>
+        #year,#month,#address{
+            float: left;
+        }
+        #top{
+            margin-left: 40%;
+        }
+    </style>
+</head>
+<body>
+<center><h1>邮差的考勤情况</h1></center>
+<h3>
+    <div id="top">
+<div>
+    姓名:<input type="text" id="postmanName"/>
+
+</div>
+<div id="year">
+    年份
+    <select>
+        <option th:each="year:${years}" th:value="${year}" th:text="${year}"></option>
+    </select>
+</div>
+<div id="month">
+    月份
+    <select>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select>
+</div>
+<div><input type="submit" value="确定" class="btn"/></div><br><br>
+</div>
+</h3>
+<center>
+    <div id="main" style="width: 600px;height:400px;border:1px dashed #000;"/>
+</center>
+<center><a href="/admin">返回首页</a></center>
+</div>
+
+<script>
+    // $(document).ready(function() {
+    $(".btn").click(function () {
+
+            var year = $('#year option:selected').val();
+            var month = $('#month option:selected').val();
+            var postname = $('#postmanName').val();
+        if(postname==""){
+            alert("请输入邮差的名字");
+        }else {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+            // 指定图表的配置项和数据
+            var names = ["在岗天数", "请假天数", "加班天数"];
+            var values = [];
+            // 数据加载完之前先显示一段简单的loading动画
+            myChart.showLoading();
+            $.ajax({
+                type: "post",
+                async: true,
+                //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: "/attendanceData?year=" + year + "&month=" + month + "&name=" + postname,    //请求发送到dataActiont处
+                data: {},
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    //清除之前的图层
+                    myChart.clear();
+                    //请求成功时执行该函数内容，result即为服务器返回的json对象
+                    if (result) {
+                        if (result[0].name=="无数据") {
+                            values.push(null);
+                            values.push(null);
+                            values.push(null);
+                            myChart.hideLoading();
+                            //隐藏加载动画
+                            myChart.setOption(
+                                {
+                                    title: {
+                                        text: '无记录',
+                                        x: 'center'
+                                    }
+                                })
+                        }
+                        else {
+                            for (var i = 0; i < result.length; i++) {
+
+                               // names.push(result[i].name);
+                                values.push(result[i].value);
+                            }
+                            myChart.hideLoading();
+                            //隐藏加载动画
+                            myChart.setOption(
+                                {
+                                    title: {
+                                        text: postname + '的工作情况',
+                                        x: 'center'
+                                    },
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: "{b} : {c} ({d}%)"
+                                    },
+                                    legend: {
+                                        orient: 'vertical',
+                                        left: 'left',
+                                        data: names
+                                    },
+                                    series: [
+                                        {
+                                            name: '',
+                                            type: 'pie',
+                                            radius: '55%',
+                                            center: ['50%', '60%'],
+                                            data: result,
+                                            itemStyle: {
+                                                emphasis: {
+                                                    shadowBlur: 10,
+                                                    shadowOffsetX: 0,
+                                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                                }
+                                            }
+                                        }
+                                    ]
+                                });
+                        }
+                    } else {
+                        alert("改月没有数据！")
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    myChart.hideLoading();
+                }
+            });
+        }
+        //end ajax
+    });//刷新方法结束
+    //});
+</script>
+
+</body>
+</html>

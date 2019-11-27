@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<center>
+    <h2>工资详情</h2>
+    <form action="/addSalary" method="post">
+        id:[[${salary.get(0)}]]<br/>
+        名字：[[${salary.get(1)}]]<br/>`
+        手机：[[${salary.get(2)}]]<br/>
+        地区：[[${salary.get(8)}]]<br/>
+        收件量：[[${salary.get(3)}]]<br/>
+        派件量：[[${salary.get(4)}]]<br/>
+        总件量：[[${salary.get(5)}]]<br/>
+        工资：[[${salary.get(6)}]]
+        <input type="text" th:value="${salary.get(0)}" name="id" hidden="true"/>
+        <input type="text" th:value="${salary.get(5)}" name="totalMail" hidden="true"/>
+        <input type="text" th:value="${salary.get(7)}" name="assessment" hidden="true"/>
+        <div th:switch="${salary.get(9)}">
+            <div th:case="1">    <input type="submit" value="确定发工资"></div>
+            <div th:case="0">已发工资了！</div>
+        </div>
+
+    </form>
+    <br>
+    <a href="/postmanAllSalary">返回上一页</a>&nbsp;&nbsp;
+    <a href="/admin">返回首页</a>
+</center>
+</body>
+</html>

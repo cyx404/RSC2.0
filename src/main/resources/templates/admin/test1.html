@@ -1,0 +1,103 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+
+    <script type="text/javascript" src="../static/jquery-3.4.1.min.js" th:src="@{jquery-3.4.1.min.js}"></script>
+    <!-- 引入 echarts.js -->
+    <script type="text/javascript" src="../static/echarts-en.common.js" th:src="@{echarts-en.common.js}"></script>
+    <script type="text/javascript" src="../static/echarts.min.js" th:src="@{echarts.min.js}"></script>
+    <!--&lt;!&ndash;&ndash;&gt;<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>-->
+
+</head>
+<body>
+
+<div align="center">
+    <form action="##" method="post">
+        <input type="text" id="month" name="month"/>
+        <!--<input type="text" id="region" name="region"/>-->
+        <input type="text" id="name2" name="name2" />
+        <input type="button" onclick="getStatisticDataList()" value="查询" />
+    </form>
+
+</div>
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" align="center" style="width: 800px;height:600px;margin-left: 140px;"></div>
+
+<h1>测试</h1>
+
+<script>
+    function getStatisticDataList() {
+        var month = document.getElementById("month").value;
+        var name2 = document.getElementById("name2").value;
+        var name = [];
+        var result;
+        //var data2= ['在岗天数','请假天数','加班天数'];
+
+        /*for(var i=0;i<res.length;i++){
+            data1.push(res[i].num);
+        }*/
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+
+        option = {
+            title : {
+                text: '某站点用户访问来源',
+                subtext: '纯属虚构',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: name
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:result,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        $.ajax({
+            url: "http://172.16.153.83:8090/html2/staff/statusmessage?month="+month+'&name2='+name2,
+            type: "get",
+            data: {},
+            datatype: "json",
+            success: function (res) {
+                result = res;
+
+                for(var i=0;i<res.length;i++){
+                    name.push(res[i].num);
+                }
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        })
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+
+
+
+</script>
+</body>
+</html>

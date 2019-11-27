@@ -22,7 +22,6 @@ public class Region {
 
     @OneToMany(fetch = FetchType.LAZY,targetEntity = Customer.class,mappedBy = "region")//mappedBy表示声明自己不是一对多的关系维护端,而是由对方来维护,声明的值为关系的维护方的关系对象属性名
     private Set<Customer> customers=new HashSet<>();//该地区的用户
-
     @OneToMany(fetch = FetchType.LAZY,targetEntity = Postman.class,mappedBy = "region")
     private Set<Postman> postmens=new HashSet<>();//该地区的邮差
 

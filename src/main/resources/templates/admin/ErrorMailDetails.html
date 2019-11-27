@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <title>地区邮差的收派失败情况图</title>
+        <script src="echarts-en.common.js"></script>
+        <script src="jquery-3.4.1.min.js"></script>
+        <style>
+            #year,#month,#address{
+                float: left;
+            }
+            #top{
+                margin-left: 40%;
+            }
+        </style>
+    </head>
+<body>
+<center><h1>地区邮差的收派失败情况图</h1></center>
+<h3>
+    <div id="top">
+        <div id="address">
+            地区
+            <select >
+                <option th:each="address1:${address}" th:value="${address1.getRegion()}" th:text="${address1.getRegion()}"></option>
+            </select>
+        </div>
+        <div id="year">
+            年份
+            <select>
+                <option th:each="year:${years}" th:value="${year}" th:text="${year}"></option>
+            </select>
+        </div>
+        <div id="month">
+            月份
+            <select>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+        </div>
+        <div><input type="submit" value="确定" class="btn"/></div><br><br>
+    </div>
+</h3>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<center>
+    <div id="main" style="width: 600px;height:400px;border:1px dashed #000;"/>
+</center>
+<center><a href="/admin">返回首页</a></center>
+</div>
+<script>
+    // $(document).ready(function() {
+    $(".btn").click(function () {
+        var year=$('#year option:selected').val();
+        var month=$('#month option:selected').val();
+        var region=$('#address option:selected').val();
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        //清除数据
+        // $("#main").removeAttr("_echarts_instance_").empty();
+        // 指定图表的配置项和数据
+        var names=[];
+        var values=[];
+        // 数据加载完之前先显示一段简单的loading动画
+        myChart.showLoading();
+        $.ajax({
+            type : "post",
+            async : true,
+            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : "/errorPostWordDetailsData?year="+year+"&month="+month+"&region="+region,    //请求发送到dataActiont处
+            data : {},
+            dataType : "json",        //返回数据形式为json
+            success : function(result) {
+
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    //清除之前的图层
+                    myChart.clear();
+                    if (result.length==1) {
+                        //  $("#main").clear();
+
+                        myChart.hideLoading();
+                        //隐藏加载动画
+                        myChart.setOption(
+                            {
+                                title: {
+                                    text: '无记录',
+                                    x: 'center'
+                                }});
+                    }
+                    else{
+                        for(var i=0;i<result.length;i++) {
+
+                            names.push(result[i].name);
+                            values.push(result[i].value);
+                        }
+                        myChart.hideLoading();
+                        //隐藏加载动画
+                        myChart.setOption(
+                            {
+                                legend: {},
+                                tooltip: {},
+                                dataset: {
+                                    source:result
+                                },
+                                xAxis: {type: 'category'},
+                                yAxis: {},
+                                // Declare several bar series, each will be mapped
+                                // to a column of dataset.source by default.
+                                series: [
+                                    {type: 'bar'},
+                                    {type: 'bar'},
+                                    {type: 'bar'}
+                                ]
+                            });
+                    }
+                }else{
+                    alert("改月没有数据！")
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();        }    });
+        //end ajax
+    });//刷新方法结束
+    //});
+</script>
+</body>
+</html>

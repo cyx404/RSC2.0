@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>包裹状态</title>
+    <style type="text/css">
+        .t1
+        {
+            clear: both;
+            border: 1px solid #c9dae4;
+        }
+        .t1 tr th
+        {
+            color: #0d487b;
+            background: #f2f4f8 repeat-x left bottom;
+            line-height: 28px;
+            border-bottom: 1px solid #9cb6cf;
+            border-top: 1px solid #e9edf3;
+            font-weight: normal;
+            text-shadow: #e6ecf3 1px 1px 0px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        .t1 tr td
+        {
+            border-bottom: 1px solid #e9e9e9;
+            padding-bottom: 5px;
+            padding-top: 5px;
+            color: #444;
+            border-top: 1px solid #FFFFFF;
+            padding-left: 5px;
+            padding-right: 5px;
+            word-break: break-all;
+            text-align: center;
+        }
+        /* white-space:nowrap; text-overflow:ellipsis; */
+        tr.alt td
+        {
+            background: #ecf6fc; /*这行将给所有的tr加上背景色*/
+        }
+        tr.over td
+        {
+            background: #bcd4ec; /*这个将是鼠标高亮行的背景色*/
+        }
+        hr{
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <h1>[[${session.state}]]</h1><a href="/mailAllState">返回全部包裹状态</a><br/>
+        <table  width="70%" border="0" class="t1" align="center" cellpadding="0"
+                cellspacing="0">
+            <tr>
+                <th>订单号</th>
+                <th>用户id</th>
+                <th>收件地区</th>
+               <!-- <th th:if="${session.state!='收件不成功'&&session.state!='正在收件'&&session.state!='准备收件'}">-->
+                <th>派件地区</th>
+                <!--<th th:if="${session.state!='准备收件'}">-->
+                <th>收货员工id</th>
+                <!--<th th:if="${session.state!='收件不成功'&&session.state!='正在收件'&&session.state!='准备收件'}">-->
+                <th>派件员工id</th>
+                <th>用户确定收货时间</th>
+                <th>派单成功时间</th>
+                <th>订单生成时间</th>
+                <th>系统分配收件时间</th>
+                <th>系统分配派件时间</th>
+                <th></th>
+                <div th:if="${session.state=='收件不成功'||session.state=='派件不成功'}">
+                    <th>没成功派件/收件的原因</th>
+                <!--    <th>收派次数</th>-->
+                </div>
+            </tr>
+            <tr th:each="mail:${mailAllStateMap}">
+                <td>[[${mail.getId()}]]</td>
+                <td>[[${mail.getCustomer().getId()}]]</td>
+                <td th:if="${mail.getReceiveRegion()!=null}">[[${mail.getReceiveRegion().getRegion()}]]</td>
+                <td th:if="${mail.getAssignRegion()!=null}">[[${mail.getAssignRegion().getRegion()}]]</td>
+                <td th:if="${mail.getReceivePostman()!=null}">[[${mail.getReceivePostman().getId()}]]</td>
+                <td th:if="${mail.getAssignPostman()!=null}">[[${mail.getAssignPostman().getId()}]]</td>
+                <td th:if="${mail.getReceiveTime()!=null}">[[${mail.getReceiveTime()}]]</td>
+                <td th:if="${mail.getAssignTime()!=null}">[[${mail.getAssignTime()}]]</td>
+                <td th:if="${mail.getCreateTime()!=null}">[[${mail.getCreateTime()}]]</td>
+                <td th:if="${mail.getDistributeReceiveTime()!=null}">[[${mail.getDistributeReceiveTime()}]]</td>
+                <td th:if="${mail.getDistributeAssignTime()!=null}">[[${mail.getDistributeAssignTime()}]]</td>
+                <div th:if="${session.state=='收件不成功'||session.state=='派件不成功'}">
+                    <td>[[${mail.getReason()}]]</td>
+                    <!--    <th>收派次数</th>-->
+                </div>
+            </tr>
+        </table>
+    <a th:href="@{|mailState?state=${session.state}&i=${session.page-1}|}"><span th:if="${session.page!=0}">上一页</span></a>
+    <a th:href="@{|mailState?state=${session.state}&i=${session.page+1}|}"><span th:if="${session.page+1<session.totalPage}">下一页</span></a>
+</center>
+
+</body>
+</html>
