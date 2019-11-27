@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>考勤系统</title>
+</head><style type="text/css">
+    .t1
+    {
+        clear: both;
+        border: 1px solid #c9dae4;
+    }
+    .t1 tr th
+    {
+        color: #0d487b;
+        background: #f2f4f8 repeat-x left bottom;
+        line-height: 28px;
+        border-bottom: 1px solid #9cb6cf;
+        border-top: 1px solid #e9edf3;
+        font-weight: normal;
+        text-shadow: #e6ecf3 1px 1px 0px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .t1 tr td
+    {
+        border-bottom: 1px solid #e9e9e9;
+        padding-bottom: 5px;
+        padding-top: 5px;
+        color: #444;
+        border-top: 1px solid #FFFFFF;
+        padding-left: 5px;
+        padding-right: 5px;
+        word-break: break-all;
+        text-align: center;
+    }
+    /* white-space:nowrap; text-overflow:ellipsis; */
+    tr.alt td
+    {
+        background: #ecf6fc; /*这行将给所有的tr加上背景色*/
+    }
+    tr.over td
+    {
+        background: #bcd4ec; /*这个将是鼠标高亮行的背景色*/
+    }
+    hr{
+        width: 80%;
+    }
+</style>
+
+<body>
+<center>
+    <h3>邮差的考勤情况</h3>
+<form method="post" action="/findPostmanAttendance">
+    <input type="text" name="mid" placeholder="请输入邮差id">
+    <input type="submit" value="搜索">
+</form>
+    <br/>
+<div th:if="${session.attendences!=null}">
+
+    <table  width="70%" border="0" class="t1" align="center" cellpadding="0"
+            cellspacing="0">
+    <tr>
+        <th>邮差id</th>
+        <th>年</th>
+        <th>月</th>
+        <th>打卡天数</th>
+        <th>请假天数</th>
+        <th>加班天数</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="attendence:${session.attendences}">
+
+        <td>[[${attendence.getPostman().getId()}]]</td>
+        <td>[[${attendence.getYear()}]]</td>
+        <td>[[${attendence.getMonth()}]]</td>
+        <td>[[${attendence.getDuty()}]]</td>
+        <td>[[${attendence.getLeaves()}]]</td>
+        <td>[[${attendence.getOvertime()}]]</td>
+        <td>
+            <form>
+                <input type="text" th:value="${attendence.getPostman().getId()}" name="pid" hidden="true"/>
+                <input type="text" th:value="${attendence.getYear()}" name="year" hidden="true"/>
+                <input type="text" th:value="${attendence.getMonth()}" name="month" hidden="true"/>
+                <div th:if="${attendence.getLeaves()>=3}">
+                    已超过请假次数
+                </div>
+                <div th:if="${attendence.getLeaves()<3}">
+                <input type="submit" formmethod="post" formaction="/leaves" value="请假"/>
+                </div>
+                <div th:if="${attendence.getOvertime()>=4}">
+                    已超过加班次数
+                </div>
+                <div th:if="${attendence.getOvertime()<4}">
+                <input type="submit" formmethod="post" formaction="/overtime" value="加班" />
+                </div>
+            </form>
+        </td>
+
+    </tr>
+</table>
+
+</div>
+    <a href="/admin">返回首页</a>
+</center>
+</body>
+</html>

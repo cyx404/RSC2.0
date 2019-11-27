@@ -40,6 +40,20 @@ public interface WorkloadRepository extends JpaRepository<Workload, Integer> {
     @Query("select w from Workload  w where w.year=?1 and w.month=?2 and w.date=?3 and w.postman in (select p from Postman p where p.region=?4)")
     List<Workload> findWorkloadByAlreadyOnduty(int year,int month,int date,Region region);
 
+    //xiaqi：按月份统计工作量（邮件派件量、收件量及故障件数）
+    @Query("select sum(w.receiveWorkload),sum(w.assignWorkload),sum(w.receiveFault),sum(w.assignFault) from Workload w where w.year=?1 and w.month=?2 and w.postman in (select p from  Postman p where p.region.region=?3)")
+    List<Object[]> findByYearAndAndMonth(int year,int month,String region);
 
+    //xiaqi:查询所有的应有的年份
+    @Query("select w.year from Workload w group by w.year")
+    List<Object[]> findGroupByYear();
+
+    //xiaqi:按地区月份查找每个邮差的工作情况(正常）
+    @Query("select w.postman.name,sum(w.receiveWorkload),sum(w.assignWorkload),sum(w.totalWorkload) from Workload w where w.year=?1 and w.month=?2 and w.postman in (select p from Postman p where p.region.region=?3) group by w.postman order by sum(w.totalWorkload) DESC")
+    List<Object[]> findDetailsByRegion(int year,int month,String region);
+
+    //xiaqi:按地区月份查找每个邮差的工作情况(不正常）
+    @Query("select w.postman.name,sum(w.receiveFault),sum(w.assignFault),sum(w.totalFault) from Workload w where w.year=?1 and w.month=?2 and w.postman in (select p from Postman p where p.region.region=?3) group by w.postman order by sum(w.totalFault) DESC")
+    List<Object[]> findErrorDetailsByRegion(int year,int month,String region);
 
 }

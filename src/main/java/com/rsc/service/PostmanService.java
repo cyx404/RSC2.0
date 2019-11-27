@@ -1,10 +1,12 @@
 package com.rsc.service;
 
+import com.rsc.entity.Attendance;
 import com.rsc.entity.Postman;
 import com.rsc.entity.Region;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public interface PostmanService {
 
@@ -97,4 +99,13 @@ public interface PostmanService {
      * @Date: 2019/11/17  18:00
      **/
     String postmanReceivefault(HttpSession session, int mailId, String season, int page, Model model);
+
+    //查询所有邮差的工资情况
+     List<List> findAllPostmanSalary();
+
+     //查询某一邮差
+    Postman findPostman(String name);
+
+    //xiaqi：查找某一员工的考勤情况
+    List<Attendance> findAttendencesByPid(int pid,HttpSession session);
 }

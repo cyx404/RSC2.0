@@ -42,6 +42,10 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     //根据id返回一条订单
     Mail findMailById(int mailId);
 
+    //xiaqi:根据id返回一条订单
+    @Query("select m from  Mail m where m.id=?1")
+    List<Mail> findMailById1(int mailId);
+
     //返回某用户的邮件状态为“收件完成”的所有单并分页
     @Query("select m from  Mail m where m.customer=?1 and m.receiveState=?2")
     Page<Mail> findMailByCustomerAndFinishing(Customer customer, MailState mailStateFinishing, Pageable pageable);
@@ -72,6 +76,11 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Modifying
     @Query("update Mail as m set m.assignPostman=?1 , m.assignState=?2, m.distributeAssignTime=?3 where m=?4  ")
     int addAMailAssignPostman(Postman assignPostman, MailState assignState, Date date, Mail mail);
+
+    @Query("select m from Mail m")
+    List<Mail>  findAllMail();
+
+
 
 
 }

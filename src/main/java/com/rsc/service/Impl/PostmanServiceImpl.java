@@ -14,8 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 
 /**
  * @ClassName:PostmanServiceImpl
@@ -253,5 +255,37 @@ public class PostmanServiceImpl implements PostmanService {
             session.setAttribute("page", page);
             return "forward:/pdeterminereceive";
         }
+    }
+
+    @Override
+    public List<List> findAllPostmanSalary() {
+        List<Postman> postmanList = postmanRepository.findAllPostman();
+        List<List> salaryList = new ArrayList<>();
+        for (Postman p:postmanList) {
+            List salary = new ArrayList();
+            double total=3000;
+            List<Workload> workloads = p.getWorkloads();
+            for (Workload w:workloads) {
+                total += w.getTotalWorkload()*5;
+            }
+            salary.add(p.getId());
+            salary.add(p.getName());
+            salary.add(total);
+            salaryList.add(salary);
+        }
+        System.out.println(salaryList.toString());
+        return salaryList;
+    }
+
+    @Override
+    public Postman findPostman(String name) {
+        return postmanRepository.findPostmanByName(name);
+    }
+
+    @Override
+    public List<Attendance> findAttendencesByPid(int pid, HttpSession session) {
+        List<Attendance> attendanceList = attendanceRepository.findAttendancesByPostman(pid);
+        session.setAttribute("attendences",attendanceList);
+        return null;
     }
 }
