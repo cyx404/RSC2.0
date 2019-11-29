@@ -26,13 +26,22 @@ public class MailController {
         Map<String, List<Mail>> mailAllStateMap = mailService.divideMailState();
         List<Mail> mailList = mailAllStateMap.get(state);
         int n = mailList.size();
+        int totalPage;
         session.setAttribute("page", i);
-        session.setAttribute("totalPage", n / 5);
+        if(n%5!=0){
+            totalPage=n/5+1;
+        }else{
+            totalPage=n/5;
+        }
+        session.setAttribute("totalPage", totalPage);
         session.setAttribute("state", state);
+        System.out.println("n"+n+"page"+i+",totalPage"+totalPage+",state"+state);
         if (n < 5) {
             model.addAttribute("mailAllStateMap", mailList.subList(0, n));
-        } else {
+        } else if((n-i*5)>5){
             model.addAttribute("mailAllStateMap", mailList.subList(i * 5, (i + 1) * 5));
+        }else{
+            model.addAttribute("mailAllStateMap", mailList.subList(i * 5, n));
         }
         //System.out.println("hhhhh"+mailAllStateMap);
         return "admin/mailState.html";

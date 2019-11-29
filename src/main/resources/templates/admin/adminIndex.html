@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -17,4 +18,202 @@
     <p><a href="attendance">考勤系统</a></p>
 </center>
 </body>
+</html>-->
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/all.css">
+    <title>客户关系管理系统</title>
+    <style>
+        #accordionExample,
+        #rs {
+            transition: max-width 2s, opacity 2s;
+        }
+
+        .guanl {
+            max-width: 0%;
+            opacity: 0;
+        }
+
+        .guanr {
+            max-width: 100%;
+        }
+
+        .fontlqx {
+            color: rgb(235, 227, 227);
+        }
+
+        .fontlqx:hover {
+            color: white;
+        }
+
+        body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        #shang,
+        #xia {
+            transition: height 2s, margin 2s, padding 2s;
+        }
+
+        #shang {
+            height: 0vh;
+        }
+
+        #xia {
+            height: 90vh;
+        }
+    </style>
+</head>
+
+<body>
+<div class="row no-gutters">
+    <br/>
+    <div class="accordion col-lqxl bg-dark vh-100" id="accordionExample">
+        <div class="card bg-dark text-light">
+            <div class="row no-gutters">
+                <div class="col-4">
+                    <img src="/image/xiaqi.jpeg" class="card-img rounded-circle w-lqx mx-3 my-1">
+                </div><br/> <br/>
+                <div class="col-8">
+                    <div class="card-body text-nowrap">
+                        姓名： [[${session.mname}]]
+                    </div>
+                </div>
+            </div>
+        </div>
+<br/>
+        <div class="list-group">
+                   <a href="#collapseOne" class="list-group-item list-group-item-action bg-dark text-light"
+                      data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">分配管理</a>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                 data-parent="#accordionExample">
+                <div class="card-body p-0">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab">
+                        <a class="nav-link" href="beginreceiving" target="lqx">分配工作</a>
+                        <a class="nav-link" href="beginassigning" target="lqx">分配派件工作</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group">
+            <a href="#collapseTwo" class="list-group-item list-group-item-action bg-dark text-light"
+               data-toggle="collapse" aria-expanded="true" aria-controls="collapseTwo">考勤管理</a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                  <div class="card-body p-0">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab">
+                        <a class="nav-link" href="attendance" target="lqx">进行考勤</a>
+                        <a class="nav-link" href="attendanceDetails" target="lqx">查看考勤</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group">
+        <a href="#collapseThr" class="list-group-item list-group-item-action bg-dark text-light"
+           data-toggle="collapse" aria-expanded="true" aria-controls="collapseThr">工资管理</a>
+        <div id="collapseThr" class="collapse" aria-labelledby="headingThr" data-parent="#accordionExample">
+            <div class="card-body p-0">
+                <div class="nav flex-column nav-pills" id="v-pills-tab">
+                    <a class="nav-link" href="postsAllSalary" target="lqx">工资管理</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="list-group">
+            <a href="#collapseFour" class="list-group-item list-group-item-action bg-dark text-light"
+               data-toggle="collapse" aria-expanded="true" aria-controls="collapseFour">查看工作量</a>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                <div class="card-body p-0">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab">
+                        <a class="nav-link" href="postWordDetails" target="lqx">邮差工作量</a>
+                        <a class="nav-link" href="errorPostWordDetails" target="lqx">收派失败情况</a>
+                        <a class="nav-link" href="monthWork" target="lqx">地区工作量</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group">
+            <a href="#collapseFive" class="list-group-item list-group-item-action bg-dark text-light"
+               data-toggle="collapse" aria-expanded="true" aria-controls="collapseFive">包裹管理</a>
+            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                <div class="card-body p-0">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab">
+                        <a class="nav-link" target="lqx" href="mailState?state=等待分配&i=0">等待分配</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=准备收件&i=0">准备收件</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=正在收件&i=0">正在收件</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=收件完成&i=0">收件完成</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=收件不成功&i=0">收件不成功</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=准备派件&i=0">准备派件</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=正在派件&i=0">正在派件</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=派件签收&i=0">派件签收</a>
+                        <a class="nav-link" target="lqx" href="mailState?state=派件不成功&i=0">派件不成功</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lqxr bg-light" id="rs">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light shadow-sm p-3 mb-3 bg-white rounded">
+            <button class="btn btn-secondary" type="button" id="yingcang">
+                <span>隐藏</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mynav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item mx-3">
+                        <a class="navbar-brand ml-2" href="#">欢迎使用RSC后台侍服系统</a >
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+        <div class="bg-light">
+            <div class="embed-responsive embed-responsive-21by9 vw-lqx vh-83 mx-auto shadow p-3 bg-white rounded"
+                 id="xia">
+                <iframe class="embed-responsive-item" src="" name="lqx" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.4.0.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#yingcang').on('click', function () {
+            $('#accordionExample').toggleClass('guanl')
+            $('#rs').toggleClass('guanr')
+        })
+        $('.nav-link').on('click', function () {
+            $('.nav-link').removeClass('bg-secondary')
+            $(this).addClass('bg-secondary')
+        })
+        $('#tiancha').on('click', function () {
+            $('#shang').toggleClass('vh-5 mb-2 pt-2')
+            $("#xia").toggleClass('vh-83')
+        })
+        $('#fanhui').on('click', function () {
+            $('#shang').addClass('vh-5 mb-2 pt-2')
+            $("#xia").addClass('vh-83')
+        })
+        $('.nav-link').addClass('fontlqx pl-5 text-nowrap')
+        $('.list-group>a').addClass('text-nowrap')
+    })
+
+</script>
+</body>
+
 </html>

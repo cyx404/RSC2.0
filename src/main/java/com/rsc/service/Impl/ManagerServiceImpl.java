@@ -23,6 +23,8 @@ public class ManagerServiceImpl implements ManagerService {
             return "admin/adminLogin.html";
         } else {
             session.setAttribute("manager", manager);
+            session.setAttribute("mname",manager.getMname());
+            System.out.println("jjjjjjjjjjjjjjjjjjjj"+manager.getMname());
             return "admin/adminIndex.html";
         }
     }

@@ -35,13 +35,18 @@ public class SalaryController {
     }
 
     @RequestMapping(value = "postmanSalary1", method = RequestMethod.POST)
-    public String postmanSalary1(Model model, @RequestParam String pname) {
-        Postman postman = postmanService.findPostman(pname);
-        List salary = salaryService.postmanSalaryDetails(postman.getId());
-        model.addAttribute("salary", salary);
-        return "admin/postmanSalaryDetails.html";
+    public String postmanSalary1(Model model, @RequestParam int pid) {
+        List salary = salaryService.postmanSalaryDetails(pid);
+        if (salary == null) {
+            List<List> postmanSalaryList = postmanService.findAllPostmanSalary();
+            model.addAttribute("salaryList", postmanSalaryList);
+            model.addAttribute("error", "没有该员工的信息");
+            return "admin/postmanSalary.html";
+        } else {
+            model.addAttribute("salary", salary);
+            return "admin/postmanSalaryDetails.html";
+        }
     }
-
     @RequestMapping(value = "addSalary", method = RequestMethod.POST)
     public String addSalary(@RequestParam int id, @RequestParam double assessment, @RequestParam double totalMail) {
         double total = totalMail * 5 + 3000;

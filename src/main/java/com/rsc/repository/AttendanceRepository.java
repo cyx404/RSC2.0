@@ -21,8 +21,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
     int updateAttendanceDutyByPostmanAndYearAndMonth(Postman postman, int year, int month);
 
     //xiaqi:根据邮差、年、月返回一个月的考勤记录
-    @Query("select a from Attendance a where a.year=?1 and a.month=?2 and a.postman.name=?3")
-    Attendance findAttendanceByPostmanAndYearAndMonth1(int year, int month,String name);
+    @Query("select a from Attendance a where a.year=?1 and a.month=?2 and a.postman.id=?3")
+    Attendance findAttendanceByPostmanAndYearAndMonth1(int year, int month,int id);
 
     //xiaqi:通过id查找员工的考勤情况
     @Query("select a from Attendance a where a.postman.id=?1")

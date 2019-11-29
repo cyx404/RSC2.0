@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>考勤系统</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/all.css">
 </head><style type="text/css">
     .t1
     {
@@ -45,18 +47,34 @@
     hr{
         width: 80%;
     }
+    h3{
+        color: transparent;
+        background-color : black;
+        text-shadow : rgba(255,255,255,0.5) 0 5px 6px, rgba(255,255,255,0.2) 1px 3px 3px;
+        -webkit-background-clip : text;
+    }
 </style>
+
 
 <body>
 <center>
-    <h3>邮差的考勤情况</h3>
-<form method="post" action="findPostmanAttendance">
-    <input type="text" name="mid" placeholder="请输入邮差id">
-    <input type="submit" value="搜索">
+    <h3>邮差的考勤情况</h3><br/>
+<form method="post" action="findPostmanAttendance"  onsubmit="return verify()">
+    <div class="col-lg-6">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="请输入要查询员工的id" name="mid" id="mid">
+            <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Go!</button>
+                    </span>
+        </div>
+    </div>
+  <!--  <input type="text" name="mid" placeholder="请输入邮差id">
+    <input type="submit" value="搜索">-->
+
 </form>
     <br/>
-<div th:if="${session.attendences!=null}">
-
+    <div th:if="${session.attendences!=null}">
+<div th:if="${#lists.size(session.attendences)!=0}">
     <table  width="70%" border="0" class="t1" align="center" cellpadding="0"
             cellspacing="0">
     <tr>
@@ -98,9 +116,25 @@
 
     </tr>
 </table>
-
 </div>
-    <a href="admin">返回首页</a>
+        <div th:if="${#lists.size(session.attendences)==0}">
+            <center>没有该员工的信息</center>
+        </div>
+</div>
+    <!--<a href="admin">返回首页</a>-->
 </center>
+<script src="/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+function verify() {
+    var mid=$("#mid").val();
+    if(mid==""||mid==null){
+        alert("请输入员工id");
+        return false;
+    }else if(mid.replace(/[^\d]/g,'').length==0){
+        alert("请输入有效的员工id");
+        return false;
+    }
+}
+</script>
 </body>
 </html>

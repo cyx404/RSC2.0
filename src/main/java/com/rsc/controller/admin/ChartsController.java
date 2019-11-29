@@ -110,10 +110,10 @@ public class ChartsController {
     }
 
     @RequestMapping(value = "attendanceData")
-    public List<Echarts> find3(@RequestParam int year, @RequestParam int month, @RequestParam String name) {
-        //  System.out.println(year+month+name);
-        System.out.println(attendanceService.findAttendanceByPostmanName(year, month, name));
-        return attendanceService.findAttendanceByPostmanName(year, month, name);
+    public List<Echarts> find3(@RequestParam int year, @RequestParam int month, @RequestParam int  id) {
+       //  System.out.println(year+month+id);
+       // System.out.println(attendanceService.findAttendanceByPostmanName(year, month, id));
+        return attendanceService.findAttendanceByPostmanName(year, month, id);
     }
 
     @RequestMapping(value = "attendanceDetails", method = RequestMethod.GET)
