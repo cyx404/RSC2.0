@@ -79,7 +79,7 @@ public class PostmanController {
         return postmanService.postmanAssignedSuccess(session, 0, 6, "postman/assignSuccess");
     }
 
-    //邮差一键全部接单(接全部收件)
+    //邮差一键全部接单(接全部派件)
     @GetMapping("ptoallassign")
     public String postmanToAllAssign(HttpSession session) {
         return postmanService.postmanToAllAssign(session);
@@ -93,8 +93,8 @@ public class PostmanController {
 
     //获取派件异常的订单界面
     @RequestMapping("assignException")
-    public String postmanAssignException(HttpSession session) {
-        return postmanService.postmanAssignException(session, 0, 9, "postman/assignException");
+    public String postmanAssignException(HttpSession session,@RequestParam int page) {
+        return postmanService.postmanAssignException(session, page, 9, "postman/assignException");
     }
 
     //异常邮件派送成功

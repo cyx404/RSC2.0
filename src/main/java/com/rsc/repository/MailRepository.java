@@ -84,7 +84,7 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
 
     //某邮差的邮件状态为“准备派件”的单更新为邮件状态“正在派件”
     @Modifying
-    @Query("update Mail as m set m.assignState =?1 where m.assignState=?2 and m.assignPostman=?3")
+    @Query("update Mail as m set m.assignState =?1, m.assignFrequency=1 where m.assignState=?2 and m.assignPostman=?3")
     int updateAssignStateToAssigning(MailState mailStateReceiving, MailState mailStateReadying, Postman postman);
 
     Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequency(Postman postman, MailState mailState,int af, Pageable pageable);
@@ -113,4 +113,5 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     int updateAMailAssignSuccess(int mailId);
 
     Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(Postman postman,MailState mailState, int before_af, int after_af, Pageable pageable);
+
 }
