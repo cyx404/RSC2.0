@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
         @ExceptionHandler
         @ResponseStatus
         public String runtimeExceptionHandler(Exception e){
+            e.printStackTrace();
            return "------------------无法访问！------------------";
     }
 }

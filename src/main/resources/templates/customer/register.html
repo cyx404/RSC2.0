@@ -1,39 +1,123 @@
 <!DOCTYPE html>
 <html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>客户注册</title>
+	<base href="<%=basePath%>">
+
+	<title>注册</title>
+
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/all.css">
+	<style type="text/css">
+		#left {
+			float: left;
+			width: 65%;
+		}
+
+		#right {
+			float: right;
+			width: 35%;
+		}
+
+		#rightbottom {
+			width: 80%;
+			/* 采用弹性布局的方式 */
+			margin-top: 10%;
+			display: -webkit-flex;
+			/* Safari */
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	</style>
+
 </head>
-<body>
 <script>
     function check() {
-       var  pass1=document.getElementById("pass1").value;
-        var  pass2=document.getElementById("pass2").value;
+        var  pass1=document.getElementById("password").value;
+        var  pass2=document.getElementById("password1").value;
         if (pass1!=pass2)
             document.getElementById("tiji").disabled=true;//设置不可点击
         else
             document.getElementById("tiji").disabled=false;
     }
 </script>
+<body>
+   <div id="left" class="vh-100 d-flex align-items-center justify-content-center">
+		<img src="/images/zc.jpg" style="width:96%;height:97%;">
+	</div>
 
-<center>
-<h3>用户注册</h3>
-<form name="form" action="toregister" method="post">
-    <p style="color: red;" th:text="${session.cerror}"></p>
-    手机号：<input type="text" name="phone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11" required="required"/><p>
-    密码：<input type="password" name="password" maxlength="10" minlength="6" id="pass1" required="required" /><p>
-    确定密码：<input type="password2" name="password2" maxlength="10" minlength="6"id="pass2" required="required" onchange="check()" /><p>
-    真实姓名：<input type="text" name="name" maxlength="10"/><p>
-    居住地区:
-    <select  name="region">
-        <option th:each="region:${regions}" th:value="${region.id}" th:text="${region.region}"></option>
-    </select><p>
-    家庭详细地址：<input type="text" name="address" maxlength="100" style="width: 400px" required="required"/><p>
-    <input type="submit" value="注册" id="tiji"/>
-    <input type="reset" value="重置">
-    <!--<input type="button" onclick="search('/find')" value="查询"/>-->
-</form>
-</center>
+	<div id="right">
+		<div id="rgihttop"></div>
+		<div id="rightbottom">
 
+			<form action="toregister" method="post"  onsubmit="tixin()">
+				<div class="">
+					<h1 class="text-center">
+						<font color="#696969">注册</font>
+					</h1>
+				</div>
+				<br>
+				<div id="page1" style="display:">
+					<!-- 显示DIV，显示页面：开始 -->
+					<div class="form-group">
+						<label>手机号 &nbsp;&nbsp;&nbsp;<span id="msg" class="float-right" style="color:red;"></span></label>
+						<input type="text" class="form-control" placeholder="phone" id="account" name="phone" onchange="accountName()"
+							maxlength="11" required>
+					</div>
+
+					<div class="form-group">
+						<label>真实姓名</label>
+						<input type="text" class="form-control" placeholder="Realname" id="eName" name="name" required>
+					</div>
+
+					<div class="form-group">
+						<label>密 码</label>
+						<input type="password" class="form-control" placeholder="Password" id="password" name="password"
+							   minlength="6"	maxlength="11" required>
+					</div>
+
+					<div class="form-group">
+						<label>确认密码</label>
+						<input type="password" class="form-control" placeholder="Password" id="password1"
+							name="password1" minlength="6" maxlength="11" onchange="check()" required>
+					</div>
+
+					<div class="form-group">
+						<label>居住地区</label>
+						<select  name="region">
+							<option th:each="region:${regions}" th:value="${region.id}" th:text="${region.region}"></option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>家庭详细地址</label>
+						<input type="text" class="form-control" id="Password1" placeholder="Address" name="address" style="width: 300px;"
+							   required>
+					</div>
+
+					<button type="submit" class="btn btn-primary" id="tiji">提交</button><br>
+				</div><!-- 显示页面结束 -->
+				<br><span style="color: red;" th:text="${session.cerror}"></span>
+				<small class="form-text text-muted">已有账号，<a href="clogin">
+						<font color="#1E90FF">去登录</font>
+					</a></small>
+
+			</form>
+		</div>
+	</div>
+	<script src="/js/jquery-3.4.0.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.js"></script>
 </body>
+
 </html>

@@ -1,6 +1,5 @@
 package com.rsc.controller.customer;
 
-import com.rsc.entity.Customer;
 import com.rsc.entity.Region;
 import com.rsc.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,24 +25,26 @@ public class IndexController1 {
     private RegionRepository regionRepository;
 
     //返回用户使用的主页(登录/注册)
-    @GetMapping("cindex")
+    @GetMapping("clogin")
     public String customerIndex(HttpSession session) {
-            return "customer/index";
-    }
-
-
-    //返回用户使用的主页
-    @GetMapping("cindex2")
-    public String customerIndex2(HttpSession session) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        if (null == customer)
+        if (null != session.getAttribute("cerror"))
+            session.removeAttribute("cerror");
             return "customer/login";
-        else
-            return "customer/cindex";
     }
+
+
+//    //返回用户使用的主页
+//    @GetMapping("cindex2")
+//    public String customerIndex2(HttpSession session) {
+//        Customer customer = (Customer) session.getAttribute("customer");
+//        if (null == customer)
+//            return "xlogin.html";
+//        else
+//            return "customer/cindex";
+//    }
 
     //返回用户使用的注册页面
-    @GetMapping("register")
+    @RequestMapping("register")
     public String customerRegister(Model model) {
         List<Region> regions = regionRepository.findAll();
         model.addAttribute("regions", regions);
@@ -51,10 +52,10 @@ public class IndexController1 {
     }
 
     //返回用户使用的登录页面
-    @GetMapping("clogin")
-    public String customerLogin() {
-        return "customer/login";
-    }
+//    @GetMapping("clogin")
+//    public String customerLogin() {
+//        return "xlogin.html";
+//    }
 
     //返回用户寄快递页面
     @GetMapping("cmail")

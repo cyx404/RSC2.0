@@ -66,13 +66,15 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer1 = customerRepository.findCustomerByPhone(customer.getPhone());
         if (null != customer1) {
             session.setAttribute("cerror", "手机号已经存在！");
-            return "customer/register";
+            return "forward:/rsc/customer/register";
         } else {
             String md5Password = DigestUtils.md5DigestAsHex(customer.getPassword().getBytes());
             ;
             customer.setPassword(md5Password);
             customerRepository.save(customer);
             session.setAttribute("success", "注册成功！");
+            if (null != session.getAttribute("cerror"))
+                session.removeAttribute("cerror");
             return "customer/success";
         }
     }
@@ -96,6 +98,8 @@ public class CustomerServiceImpl implements CustomerService {
             return "customer/login";
         } else {
             session.setAttribute("customer", customer);
+            if (null != session.getAttribute("cerror"))
+                session.removeAttribute("cerror");
             return "customer/cindex";
         }
     }
