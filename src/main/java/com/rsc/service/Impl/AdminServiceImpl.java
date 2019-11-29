@@ -65,8 +65,10 @@ public class AdminServiceImpl implements AdminService {
         String s="";
         //所有的区都分配一次
         for (Region region : regions) {
-            System.out.println("<br>地区：" + region.getRegion() + " 编号：" + region.getId());
-            s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
+            System.out.println("<center><br>地区：" + region.getRegion() + " 编号：" + region.getId());
+            //xiaqi：改
+           // s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
+            s ="<center>"+s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
             //返回某地区所有收件状态为“等待分配”的件
             List<Mail> remailList = mailRepository.findMailByRegionAndReceiveStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
@@ -101,8 +103,10 @@ public class AdminServiceImpl implements AdminService {
             }
 
         }
-        s=s+"----------收件工作分配完成！------------<br>";
-        s=s+" <center><a href=\"admin\">返回首页</a></center>";
+        //xiaqi：改
+       // s=s+"----------收件工作分配完成！------------<br>";
+        s=s+"----------收件工作分配完成！------------<br></center>";
+       //xiaqi： s=s+" <center><a href=\"admin\">返回首页</a></center>";
         //  model.addAttribute("asuccess", "收件工作分配完成！");
         // return "admin/success";
         return s;
@@ -133,7 +137,11 @@ public class AdminServiceImpl implements AdminService {
         //所有的区都分配一次
         for (Region region : regions) {
             System.out.println("<br>地区：" + region.getRegion() + " 编号：" + region.getId());
-            s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
+            //xiaqi：改
+           //s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
+            s ="<center>"+ s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
+
+
             //返回某地区所有派件状态为“等待分配”的件
             List<Mail> asmailList = mailRepository.findMailByRegionAndAssignStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
@@ -168,8 +176,10 @@ public class AdminServiceImpl implements AdminService {
             }
 
         }
-        s=s+"----------派件工作分配完成！------------<br>";
-        s=s+"<center><a href=\"admin\">返回首页</a></center>";
+        //xiaqi:改
+        //s=s+"----------派件工作分配完成！------------<br>";
+        s=s+"----------派件工作分配完成！------------<br></center>";
+        //xiaqi：s=s+"<center><a href=\"admin\">返回首页</a></center>";
         //model.addAttribute("asuccess", "派件工作分配完成！");
         // return "admin/success";
         return s;

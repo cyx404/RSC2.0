@@ -26,7 +26,7 @@ public class AttendanceController {
     public String addOvertime(HttpSession session, @RequestParam int pid, @RequestParam int year, @RequestParam int month) {
         // System.out.println("id"+pid+"year"+year+"month"+month);
         attendanceRepository.updateAttendanceOvertimeByPostmanIdAndYearAndMonth(pid, year, month);
-        return "redirect:/rsc/admin/attendance";
+        return "c";
 
     }
 

@@ -183,9 +183,11 @@ public class CustomerServiceImpl implements CustomerService {
                 return "customer/success";
             } else {
                 List<Mail> mailList = mailPage.getContent();
+                int count = mailList.size();
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
+                session.setAttribute("count",count);
                 return "customer/checkOrDetermine";
             }
         }

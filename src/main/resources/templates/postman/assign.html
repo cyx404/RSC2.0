@@ -1,43 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="UTF-8">
-    <title>邮差要派送的快递</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <title>去派件</title>
 </head>
+
 <body>
-<center>
-    <h3>邮差--<span th:text="${session.postman.id}"></span>：要派送的快递</h3>
-    <table border="1" style="text-align: center">
-        <tr>
-            <th>邮件编号</th>
-            <th>所属客户姓名</th>
-            <th>所属客户手机号</th>
-            <th>客户的地区</th>
-            <th>客户的地址</th>
-            <th>派件状态</th>
-            <th>订单生成时间</th>
-            <th>派件是否故障</th>
-        </tr>
-        <tr th:each="mail:${session.mailList}">
-            <td th:text="${mail.id}"></td>
-            <td th:text="${mail.customer.name}"></td>
-            <td th:text="${mail.customer.phone}"></td>
-            <td th:text="${mail.customer.region.region}"></td>
-            <td th:text="${mail.customer.address}"></td>
-            <td th:text="${mail.assignState.state}" style="color:blue;"></td>
-            <td th:text="${mail.createTime}"></td>
-            <td><span th:if="${mail.assignFrequency == 1}">否</span><span th:if="${mail.assignFrequency > 1}">是</span></td>
+<div class="d-flex justify-content-center vh-90">
+    <center>
+        <h3 style="color: #cf9d2a">邮差&#45;&#45;<span th:text="${session.postman.id}"></span>：要派送的快递</h3>
+        <table class="table-striped form-group vw-100">
+            <thead>
+            <tr>
+                <th>邮件编号</th>
+                <th>所属客户姓名</th>
+                <th>所属客户手机号</th>
+                <th>客户的地区</th>
+                <th>客户的地址</th>
+                <th>派件状态</th>
+                <th>订单生成时间</th>
+                <th>派件是否故障</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mail:${session.mailList}" var="contactrecordlistByType">
+                <td th:text="${mail.id}"></td>
+                <td th:text="${mail.customer.name}"></td>
+                <td th:text="${mail.customer.phone}"></td>
+                <td th:text="${mail.customer.region.region}"></td>
+                <td th:text="${mail.customer.address}"></td>
+                <td th:text="${mail.assignState.state}" style="color:blue;"></td>
+                <td th:text="${mail.createTime}"></td>
+                <td><span th:if="${mail.assignFrequency == 0}">否</span><span
+                        th:if="${mail.assignFrequency > 1}">是</span></td>
+            </tr>
+            </tbody>
+        </table>
+        <!--<a href="ptoallassign"><p>一键全部接单</p></a>-->
+        <a href="ptoallassign"> <button class="btn btn-primary">一键接单</button></a><p></p>
+    </center>
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <th:url var="url_pre" value="contact_select">
+            <th:param name="pageCur" value="${session.page-1}"/>
+        </th:url>
+        <th:url var="url_next" value="contact_select">
+            <th:param name="pageCur" value="${session.page+1}"/>
+        </th:url>
+        <span th:if="${session.page !=0 }">
+            <li class="page-item">
+                <a class="page-link" th:href="@{passign(page=${session.page-1})}">上一页</a>
+            </li>
+        </span>
+        <span  th:if="${session.page ==0 }">
+            <li class="page-item disabled">
+                <a class="page-link" th:href="@{passign(page=${session.page-1})}">上一页</a>
+            </li>
+        </span>
+        <li class="page-item"><a class="page-link">第<span th:text="${session.page+1}"></span>页/共<span
+                th:text="${session.TotalPages}"></span>页</a></li>
+        <li class="page-item"><a class="page-link">共<span th:text="${session.count}"></span>条记录</a></li>
+        <span th:if="${session.page+1 !=session.TotalPages && session.TotalPages !=0}">
+            <li class="page-item">
+                <!--<a class="page-link" href="passign?page=1">下一页</a>-->
+                <a class="page-link" th:href="@{passign(page=${session.page+1})}">下一页</a>
+            </li>
+        </span>
+        <span th:if="${session.page+1 == session.TotalPages || session.TotalPages == 0}">
+            <li class="page-item disabled">
+                <a class="page-link" th:href="@{passign(page=${session.page+1})}">下一页</a>
+            </li>
+        </span>
+    </ul>
+</nav>
 
-        </tr>
-    </table>
-    <p>
-        <a th:href="@{|preceive?page=${session.page-1}|}"><span th:if="${ session.page!=0}">上一页</span></a>
-        <------>
-        <a th:href="@{|preceive?page=${session.page+1}|}"><span th:if="${ session.page+1!= session.TotalPages}">下一页</span></a>
-    </p>
+<script src="/js/jquery-3.4.0.js"></script>
+<script src="/js/bootstrap.js"></script>
 
-    <a href="ptoallassign"><p>一键全部接单</p></a>
-    <a th:href="pindex"><p>返回</p></a>
-</center>
+<script>
+    $(document).ready(function () {
+
+        $('#mymodal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var cname = button.closest('tr').children('td').first().text()
+            var cid = button.data('cid')
+
+            $(this).find('#course').text(cname)
+            $(this).find('#delete').data('cid', cid)
+        })
+
+        $('#delete').on('click', function () {
+            var cid = $(this).data('cid')
+            // console.log('此处发送AJAX请求到服务端删除cid为 %s 的记录。', cid)
+            $('#mymodal').modal('hide')
+        })
+
+    })
+    $('th').addClass('text-center p-2 border-top border-bottom')
+    $('td').addClass('text-center p-2 border-top border-bottom')
+</script>
+
 </body>
+
 </html>

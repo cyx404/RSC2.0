@@ -33,6 +33,8 @@ public class WebConfig implements WebMvcConfigurer {
             "/rsc/admin/echarts-en.common.js",
             "/rsc/admin/echarts.min.js",
             "/rsc/admin/jquery-3.4.1.min.js",
+            "/rsc/admin/js/**",
+            "/rsc/admin/css/**",
     };
 
     @Override

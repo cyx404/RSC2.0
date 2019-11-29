@@ -1,25 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>客户寄快递</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/all.css">
+    <title>填写寄件单</title>
+    <style>
+        #jz {
+            color: rgb(34, 136, 204);
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+    </style>
 </head>
+
 <body>
-<center>
-    <h3>寄快递</h3>
-    <form name="form" action="postcmail" method="post">
-        收件人姓名：<input type="text" name="addresseeName" maxlength="10" required="required"/><p>
-        收件人手机号：<input type="text" name="addresseePhone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11" required="required"/><p>
-        收件地区:
-        <select  name="assignRegion">
-            <option th:each="region:${regions}" th:value="${region.id}" th:text="${region.region}"></option>
-        </select><p>
-        收件详细地址：<input type="text" name="address" maxlength="100" style="width: 400px" required="required"/><p>
-        <input type="submit" value="确定"/>
-        <input type="reset" value="重置">
-        <br>
-        <a href="cindex2"><p>返回</p></a>
-    </form>
-</center>
+<form action="postcmail" method="post">
+    <div class="row no-gutters">
+        <div class="col-12 mt-3 px-5 py-2 border-right border-bottom">
+            <div class="row">
+                <p><i class="fa fa-comments" id="jz"></i>填写寄件单</p>
+            </div>
+            <div class="form-group row">
+                <label for="staticEmail" class="col-form-label">收件人姓名：</label>
+                <div>
+                    <input type="text"  name="addresseeName" required>
+                    <div class="xing">*</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-form-label">收件人手机号：</label>
+                <div>
+                    <input type="text" name="addresseePhone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11"
+                           required="required"/>
+                    <p>
+                    <div class="xing">*</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-form-label">收件地区：</label>
+                <div>
+                    <select class="custom-select" name="assignRegion" required>
+                        <option th:each="region:${regions}" th:value="${region.id}" th:text="${region.region}"></option>
+                    </select>
+                    <div class="xing ml-2">*</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-form-label">收件详细地址：</label>
+                <div>
+                    <input type="text" name="address" maxlength="100" style="width: 400px" required="required"/>
+                    <div class="xing">*</div>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-info mt-4 w-15">确定寄件</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="/js/jquery-3.4.0.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.form-group').addClass('d-flex justify-content-center')
+        $('.form-group .col-form-label').addClass('text-muted col-2')
+        $('.form-group>div').addClass('col-4 d-flex flex-row')
+        $('.form-group>div>.xing').addClass('d-flex align-items-center pl-4 text-danger')
+        $('.form-group .form-control').addClass('w-75')
+        $('.form-group .custom-select').addClass('w-75')
+    })
+</script>
 </body>
+
 </html>

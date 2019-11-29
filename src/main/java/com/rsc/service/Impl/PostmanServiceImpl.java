@@ -183,9 +183,11 @@ public class PostmanServiceImpl implements PostmanService {
                 return "postman/success";
             } else {
                 List<Mail> mailList = mailPage.getContent();
+                int count = mailList.size();
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
+                session.setAttribute("count",count);
                 //return "postman/receive";
                 return str;
             }
@@ -344,18 +346,20 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回准备派件状态
-            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState, 1, pageable);
+            Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState, 0, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("psuccess", "你没有单要处理！");
                 return "postman/success";
             } else {
                 List<Mail> mailList = mailPage.getContent();
+                int count = mailList.size();
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
+                session.setAttribute("count",count);
                 return str;
             }
         }
@@ -385,9 +389,11 @@ public class PostmanServiceImpl implements PostmanService {
                 return "postman/success";
             } else {
                 List<Mail> mailList = mailPage.getContent();
+                int count = mailList.size();
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
+                session.setAttribute("count",count);
                 return str;
             }
         }
@@ -452,9 +458,11 @@ public class PostmanServiceImpl implements PostmanService {
                 return "postman/success";
             } else {
                 List<Mail> mailList = mailPage.getContent();
+                int count = mailList.size();
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
+                session.setAttribute("count",count);
                 return str;
             }
         }
@@ -484,7 +492,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println(year + " " + month + " " + date);
             mailRepository.updateAMailAssignSuccess(mailId.getId());//设置邮件为派件成功
             workloadRepository.updateWorkloadAssignWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, postman);//派件工作量+1  总工作量+1
-            model.addAttribute("psuccess", "单号:" + mailId.getId() + "--派件故障处理成功！");
+            model.addAttribute("psuccess", "单号:" + mailId.getId() + "--派件成功！");
             session.setAttribute("page", page);
             return "postman/assignSuccess";
         }

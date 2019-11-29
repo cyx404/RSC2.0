@@ -16,8 +16,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     AttendanceRepository attendanceRepository;
 
     @Override
-    public List<Echarts> findAttendanceByPostmanName(int year, int month, String postmanName) {
-        Attendance attendance = attendanceRepository.findAttendanceByPostmanAndYearAndMonth1(year, month, postmanName);
+    public List<Echarts> findAttendanceByPostmanName(int year, int month, int id) {
+        Attendance attendance = attendanceRepository.findAttendanceByPostmanAndYearAndMonth1(year, month, id);
         List<Echarts> list = new ArrayList<Echarts>();
         if (attendance == null) list.add(new Echarts("无数据", 0));
         else {

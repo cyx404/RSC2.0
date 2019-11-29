@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>包裹状态</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/all.css">
     <style type="text/css">
         .t1
         {
@@ -48,9 +50,20 @@
     </style>
 </head>
 <body>
+<br/>
 <center>
-    <h1>[[${session.state}]]</h1><a href="mailAllState">返回全部包裹状态</a><br/>
-        <table  width="70%" border="0" class="t1" align="center" cellpadding="0"
+    <form action="findMailById" method="post"  onsubmit="return verify()">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="请输入快递单号" name="mid" id="mid">
+                <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" >Go!</button>
+                    </span>
+            </div>
+        </div>
+    </form><br/>
+    <div th:if="${#lists.size(mailAllStateMap)!=0}">
+        <table  width="90%" border="0" class="t1" align="center" cellpadding="0"
                 cellspacing="0">
             <tr>
                 <th>订单号</th>
@@ -76,24 +89,40 @@
             <tr th:each="mail:${mailAllStateMap}">
                 <td>[[${mail.getId()}]]</td>
                 <td>[[${mail.getCustomer().getId()}]]</td>
-                <td th:if="${mail.getReceiveRegion()!=null}">[[${mail.getReceiveRegion().getRegion()}]]</td>
-                <td th:if="${mail.getAssignRegion()!=null}">[[${mail.getAssignRegion().getRegion()}]]</td>
-                <td th:if="${mail.getReceivePostman()!=null}">[[${mail.getReceivePostman().getId()}]]</td>
-                <td th:if="${mail.getAssignPostman()!=null}">[[${mail.getAssignPostman().getId()}]]</td>
-                <td th:if="${mail.getReceiveTime()!=null}">[[${mail.getReceiveTime()}]]</td>
-                <td th:if="${mail.getAssignTime()!=null}">[[${mail.getAssignTime()}]]</td>
-                <td th:if="${mail.getCreateTime()!=null}">[[${mail.getCreateTime()}]]</td>
-                <td th:if="${mail.getDistributeReceiveTime()!=null}">[[${mail.getDistributeReceiveTime()}]]</td>
-                <td th:if="${mail.getDistributeAssignTime()!=null}">[[${mail.getDistributeAssignTime()}]]</td>
+                <td><div th:if="${mail.getReceiveRegion()!=null}">[[${mail.getReceiveRegion().getRegion()}]]</div></td>
+                <td><div th:if="${mail.getAssignRegion()!=null}">[[${mail.getAssignRegion().getRegion()}]]</div></td>
+                <td><div th:if="${mail.getReceivePostman()!=null}">[[${mail.getReceivePostman().getId()}]]</div></td>
+                <td><div th:if="${mail.getAssignPostman()!=null}">[[${mail.getAssignPostman().getId()}]]</div></td>
+                <td><div th:if="${mail.getReceiveTime()!=null}">[[${mail.getReceiveTime()}]]</div></td>
+                <td><div th:if="${mail.getAssignTime()!=null}">[[${mail.getAssignTime()}]]</div></td>
+                <td><div th:if="${mail.getCreateTime()!=null}">[[${mail.getCreateTime()}]]</div></td>
+                <td><div th:if="${mail.getDistributeReceiveTime()!=null}">[[${mail.getDistributeReceiveTime()}]]</div></td>
+                <td><div th:if="${mail.getDistributeAssignTime()!=null}">[[${mail.getDistributeAssignTime()}]]</div></td>
                 <div th:if="${session.state=='收件不成功'||session.state=='派件不成功'}">
                     <td>[[${mail.getReason()}]]</td>
-                    <!--    <th>收派次数</th>-->
                 </div>
             </tr>
         </table>
     <a th:href="@{|mailState?state=${session.state}&i=${session.page-1}|}"><span th:if="${session.page!=0}">上一页</span></a>
     <a th:href="@{|mailState?state=${session.state}&i=${session.page+1}|}"><span th:if="${session.page+1<session.totalPage}">下一页</span></a>
-</center>
+    </div>
+    <div th:if="${#lists.size(mailAllStateMap)==0}">
+        <center>没有相关数据</center>
+    </div>
 
+</center>
+<script src="/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    function verify() {
+        var mid=$("#mid").val();
+        if(mid==""||mid==null){
+            alert("请输入快递单号");
+            return false;
+        }else if(mid.replace(/[^\d]/g,'').length==0){
+            alert("请输入有效的快递单号");
+            return false;
+        }
+    }
+</script>
 </body>
 </html>

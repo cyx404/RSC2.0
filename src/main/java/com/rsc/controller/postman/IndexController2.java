@@ -17,6 +17,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class IndexController2 {
 
+    @RequestMapping("welcome")
+    public String welcome(){
+        return "postman/welcome";
+    }
+
     //返回邮差使用的登录页面
     @GetMapping("plogin")
     public String postmanLogin() {

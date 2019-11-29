@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>地区邮差工资情况</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/all.css">
 </head>
 <style type="text/css">
     .t1
@@ -43,14 +45,27 @@
     {
         background: #bcd4ec; /*这个将是鼠标高亮行的背景色*/
     }
+    h2{
+        color: transparent;
+        background-color : black;
+        text-shadow : rgba(255,255,255,0.5) 0 5px 6px, rgba(255,255,255,0.2) 1px 3px 3px;
+        -webkit-background-clip : text;
+    }
 </style>
 <body>
 <center>
-<h1>邮差工资情况</h1>
-    <form action="postmanSalary1" method="POST">
-        <input type="text" placeholder="请输入要查询员工的名字" name="pname">
-        <input type="submit" value="搜索">
+<h2>邮差工资情况</h2>
+    <form action="postmanSalary1" method="POST" onsubmit="return verify()">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" id="pid" placeholder="请输入要查询员工的id" name="pid">
+                <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" >Go!</button>
+                    </span>
+            </div><!-- /input-group -->
+        </div>
     </form>
+    <p th:text="${error}" style="color:red"></p>
     <br>
 <table width="70%" border="0" class="t1" align="center" cellpadding="0"
     cellspacing="0">
@@ -66,9 +81,24 @@
         <td th:text="${deltail.get(2)}"></td>
         <td><a th:href="@{'postmanSalary?id='+${deltail.get(0)}}">详情</a></td>
     </tr>
-</table>
-    <br>
-    <a href="admin">返回首页</a>
+</table> <br>
 </center>
+    <script src="/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript">
+        function verify() {
+            var mid=$("#pid").val();
+            if(mid==""||mid==null){
+                alert("请输入员工id");
+                return false;
+            }else if(mid.replace(/[^\d]/g,'').length==0){
+                alert("请输入有效的员工id");
+                return false;
+            }
+        }
+       </script>
+
+
+
+
 </body>
 </html>

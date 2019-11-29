@@ -26,29 +26,33 @@ public class SalaryServiceImpl implements SalaryService {
         Postman postman = postmanRepository.findPostmanById(id);
         List detail = new ArrayList();
         detail.add(id);// id:0
-        detail.add(postman.getName());//名字:1
-        detail.add(postman.getPhone());//手机:2
-        int receiveWorkloadsum = 0;//收件总和
-        int assignWorkloadsum = 0;//派件总和
-        for (Workload w : postman.getWorkloads()) {
-            receiveWorkloadsum += w.getReceiveWorkload();
-            assignWorkloadsum += w.getAssignWorkload();
-        }
-        detail.add(receiveWorkloadsum);//收件总和:3
-        detail.add(assignWorkloadsum);//派件总和:4
-        detail.add(receiveWorkloadsum + assignWorkloadsum);//总件数:5
-        double total = (receiveWorkloadsum + assignWorkloadsum) * 5 + 3000;
-        detail.add("(" + receiveWorkloadsum + "+" + assignWorkloadsum + ")*5+3000=" + total);//总工资:6
-        double assessment = (receiveWorkloadsum + assignWorkloadsum) * 5;
-        detail.add(assessment);//考核工资:7
-        detail.add(postman.getRegion().getRegion());//邮差所在地:8
-        Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id, date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1);
-        if (salary == null) {
-            detail.add(1);//查看数据库是否已有数据（没有）:9
+        if (postman == null) {
+            return null;
         } else {
-            detail.add(0);//查看数据库是否已有数据（有）:9
+            detail.add(postman.getName());//名字:1
+            detail.add(postman.getPhone());//手机:2
+            int receiveWorkloadsum = 0;//收件总和
+            int assignWorkloadsum = 0;//派件总和
+            for (Workload w : postman.getWorkloads()) {
+                receiveWorkloadsum += w.getReceiveWorkload();
+                assignWorkloadsum += w.getAssignWorkload();
+            }
+            detail.add(receiveWorkloadsum);//收件总和:3
+            detail.add(assignWorkloadsum);//派件总和:4
+            detail.add(receiveWorkloadsum + assignWorkloadsum);//总件数:5
+            double total = (receiveWorkloadsum + assignWorkloadsum) * 5 + 3000;
+            detail.add("(" + receiveWorkloadsum + "+" + assignWorkloadsum + ")*5+3000=" + total);//总工资:6
+            double assessment = (receiveWorkloadsum + assignWorkloadsum) * 5;
+            detail.add(assessment);//考核工资:7
+            detail.add(postman.getRegion().getRegion());//邮差所在地:8
+            Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id, date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1);
+            if (salary == null) {
+                detail.add(1);//查看数据库是否已有数据（没有）:9
+            } else {
+                detail.add(0);//查看数据库是否已有数据（有）:9
+            }
+            return detail;
         }
-        return detail;
     }
 
     @Override
