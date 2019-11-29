@@ -10,13 +10,14 @@
 <center>
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title">工资详情</h3>
+            <p><h4>邮差工资详情</h4></p>
         </div><br/>
         <div class="panel-body">
             <form action="addSalary" method="post">
-                <table style="text-align: center;background-color: #FFF5EE;width: 50%;">
+                <table width="70%" border="0" class="t1" style="text-align: center;font-size:18px;" cellpadding="0"
+                       cellspacing="0">
                     <tr>
-                        <td>id</td>
+                        <td>工号</td>
                         <td>[[${salary.get(0)}]]</td>
                     </tr>
                     <tr>
@@ -28,24 +29,32 @@
                         <td>[[${salary.get(2)}]]</td>
                     </tr>
                     <tr>
-                        <td>地区</td>
+                        <td>负责地区</td>
+                        <td>[[${salary.get(8)}]]</td>
+                    </tr>
+                    <tr>
+                        <td>年份</td>
+                        <td>[[${salary.get(8)}]]</td>
+                    </tr>
+                    <tr>
+                        <td>月份</td>
                         <td>[[${salary.get(8)}]]</td>
                     </tr>
                     <tr>
                         <td>收件量</td>
-                        <td>[[${salary.get(3)}]]</td>
+                        <td>[[${salary.get(3)}]] 件</td>
                     </tr>
                     <tr>
                         <td>派件量</td>
-                        <td>[[${salary.get(4)}]]</td>
+                        <td>[[${salary.get(4)}]] 件</td>
                     </tr>
                     <tr>
                         <td>总件量</td>
-                        <td>[[${salary.get(5)}]]</td>
+                        <td>[[${salary.get(5)}]] 件</td>
                     </tr>
                     <tr>
                         <td>工资</td>
-                        <td>[[${salary.get(6)}]]</td>
+                        <td>[[${salary.get(6)}]] 元</td>
                     </tr>
                 </table>
                 <br/>
@@ -54,17 +63,16 @@
                 <input type="text" th:value="${salary.get(7)}" name="assessment" hidden="true"/>
                 <div th:switch="${salary.get(9)}">
                     <div th:case="1"><input type="submit" value="确定发工资" class="btn btn-primary"></div>
-                    <div th:case="0" style="color: red">已发工资了！</div>
+                    <div th:case="0" style="color: red"><h4>已发工资了！</h4></div>
                 </div>
-
             </form>
         </div>
     </div>
 <!--    <h2>工资详情</h2>-->
 
     <br>
-    <a href="postsAllSalary">返回上一页</a>
-    <!--<a href="admin">返回首页</a>-->
+    <a href="postsAllSalary"><button class="btn btn-info">返回上一页</button></a>
+
 </center>
 </body>
 </html>

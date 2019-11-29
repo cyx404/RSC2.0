@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpSession;
@@ -55,29 +56,27 @@ public class CustomerServiceImpl implements CustomerService {
      * @Title customerToRegister
      * @Description: TODO 用户注册信息
      * @param customer
-     * @param session
+     * @param model
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/16  1:09
      **/
     @Transactional
     @Override
-    public String customerToRegister(Customer customer, HttpSession session) {
+    public String customerToRegister(Customer customer, Model model) {
         Customer customer1 = customerRepository.findCustomerByPhone(customer.getPhone());
         if (null != customer1) {
-            session.setAttribute("cerror", "手机号已经存在！");
+            model.addAttribute("cerror", "手机号已经存在！");
             return "forward:/rsc/customer/register";
         } else {
             String md5Password = DigestUtils.md5DigestAsHex(customer.getPassword().getBytes());
-            ;
             customer.setPassword(md5Password);
             customerRepository.save(customer);
-            session.setAttribute("success", "注册成功！");
-            if (null != session.getAttribute("cerror"))
-                session.removeAttribute("cerror");
+            model.addAttribute("success", "注册成功！");
             return "customer/success";
         }
     }
+
 
     /**
      * @Title customerToLogin
@@ -85,22 +84,21 @@ public class CustomerServiceImpl implements CustomerService {
      * @param phone
      * @param password
      * @param session
+     * @param model
      * @return java.lang.String
      * @Author: chenyx
-     * @Date: 2019/11/16  0:54
+     * @Date: 2019/11/29  18:28
      **/
     @Override
-    public String customerToLogin(String phone, String password, HttpSession session) {
+    public String customerToLogin(String phone, String password, HttpSession session,Model model) {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
         Customer customer = customerRepository.findCustomerByPhoneAndPassword(phone, md5Password);
         if (null == customer) {
-            session.setAttribute("cerror", "手机号或密码错误！");
+            model.addAttribute("cerror", "手机号或密码错误！");
             return "customer/login";
         } else {
             session.setAttribute("customer", customer);
-            if (null != session.getAttribute("cerror"))
-                session.removeAttribute("cerror");
-            return "customer/cindex";
+            return "customer/index";
         }
     }
 
@@ -172,7 +170,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 5);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
             MailState mailStateReadying = mailStateRepository.findMailStateById(1);//返回准备收件状态
             MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
             MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回等待分配状态
@@ -249,7 +247,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 5);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
             MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回完成收件状态
             Page<Mail> mailPage = mailRepository.findMailByCustomerAndFinishing(customer, mailStateFinishing, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页

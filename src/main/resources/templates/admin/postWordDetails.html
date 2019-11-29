@@ -17,24 +17,24 @@
     </style>
 </head>
 <body>
-<center><h3>地区邮差工作情况详情</h3></center><br/>
 <center>
+    <p><h4>地区邮差工作情况详情</h4></p><br>
     <div class="row col-sm-6">
-        <label>地区</label>
+        <label style="font-size: 22px;">地区&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div id="address">
             <select class="form-control">
                 <option th:each="address1:${address}" th:value="${address1.getRegion()}" th:text="${address1.getRegion()}"></option>
             </select>
         </div>
 
-        <label>年份</label>
+        <label style="font-size: 22px;">&nbsp;&nbsp;年份&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div id="year">
             <select class="form-control">
                 <option th:each="year:${years}" th:value="${year}" th:text="${year}"></option>
             </select>
         </div>
 
-        <label> 月份</label>
+        <label style="font-size: 22px;"> &nbsp;&nbsp;月份&nbsp;&nbsp;&nbsp;&nbsp;</label>
         <div id="month">
             <select class="form-control">
                 <option value="1">1</option>

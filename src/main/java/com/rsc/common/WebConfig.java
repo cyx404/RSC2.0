@@ -23,11 +23,13 @@ public class WebConfig implements WebMvcConfigurer {
     private String[] excludePathPatterns = {
             "/rsc/pm/plogin",
             "/rsc/pm/ptologin",
+            "/rsc/pm/plogout",
             "/rsc/customer/cindex",
             "/rsc/customer/register",
             "/rsc/customer/clogin",
             "/rsc/customer/ctologin",
             "/rsc/customer/toregister",
+            "/rsc/customer/clogout",
             "/rsc/admin/mlogin",
             "/rsc/admin/mtologin",
             "/rsc/admin/echarts-en.common.js",

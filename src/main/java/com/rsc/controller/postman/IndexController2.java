@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 public class IndexController2 {
 
     @RequestMapping("welcome")
-    public String welcome(){
+    public String welcome() {
         return "postman/welcome";
     }
 
@@ -42,5 +42,16 @@ public class IndexController2 {
         return "postman/index";
     }
 
+    @GetMapping("plogout")
+    public String plogout(HttpSession session){
+        Postman postman = (Postman) session.getAttribute("postman");
+        if (postman == null) {
+            System.out.println("空工号，没登录！");
+            return "postman/login";
+        } else {
+           session.removeAttribute("postman");
+        }
+        return "postman/login";
+    }
 
 }

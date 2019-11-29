@@ -16,10 +16,11 @@ import java.util.Map;
 @RequestMapping("rsc/admin")
 @Controller
 public class MailController {
+
     @Autowired
-    MailService mailService;
+    private MailService mailService;
     @Autowired
-    MailRepository mailRepository;
+    private  MailRepository mailRepository;
 
     @RequestMapping("mailState")
     public String mailState(Model model, HttpSession session, @RequestParam String state, @RequestParam int i) {

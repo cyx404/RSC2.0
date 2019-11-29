@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 public class SalaryServiceImpl implements SalaryService {
+
     @Autowired
     PostmanRepository postmanRepository;
     @Autowired

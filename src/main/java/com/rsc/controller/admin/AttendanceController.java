@@ -3,6 +3,7 @@ package com.rsc.controller.admin;
 import com.rsc.repository.AttendanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -11,8 +12,9 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("rsc/admin")
 @Controller
 public class AttendanceController {
+
     @Autowired
-    AttendanceRepository attendanceRepository;
+   private AttendanceRepository attendanceRepository;
 
     @RequestMapping(value = "leaves")
     public String addLeaves(HttpSession session, @RequestParam int pid, @RequestParam int year, @RequestParam int month) {
@@ -40,16 +42,11 @@ public class AttendanceController {
     }
 
     @RequestMapping(value = "findPostmanAttendance")
-    public String findPostmanAttendance(HttpSession session, @RequestParam int mid) {
+    public String findPostmanAttendance(Model model, @RequestParam int mid) {
         // attendanceRepository.updateAttendanceLeavesByPostmanAndYearAndMonth(pid,year,month);
-        session.setAttribute("mid", mid);
-        session.setAttribute("attendences", attendanceRepository.findAttendancesByPostman(mid));
+        model.addAttribute("mid", mid);
+        model.addAttribute("attendences", attendanceRepository.findAttendancesByPostman(mid));
         return "admin/attendance.html";
-    }
-
-    @RequestMapping(value = "test1")
-    public String test1() {
-        return "admin/test1.html";
     }
 
 

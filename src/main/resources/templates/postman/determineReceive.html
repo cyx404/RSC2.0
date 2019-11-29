@@ -7,12 +7,21 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <title>确认收件</title>
 </head>
-
+<script>
+    function check() {
+        var yichang = $("#yichang").val();
+        if (yichang == null || yichang == "") {
+            alert("异常原因不能为空");
+            return false;
+        }
+        return true;
+    }
+</script>
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
-        <h3 style="color: #cf9d2a">邮差&#45;&#45;<span th:text="${session.postman.id}"></span>：确定邮件收取是否成功/属于故障</h3>
-        <div th:text="${psuccess}" style="color: red;"></div>
+        <p><h4 style="color: #cf9d2a">确定收取的快递是否成功/属于故障</h4></p>
+        <div th:text="${psuccess}" style="color: red;font-size: 18px;"></div>
         <table class="table-striped form-group vw-100">
             <thead>
             <tr>
@@ -22,8 +31,9 @@
                 <th>客户的地区</th>
                 <th>客户的地址</th>
                 <th>收件状态</th>
-                <th>订单生成时间</th>
-                <th>编辑:收件是否故障</th>
+                <th>系统分配收件时间</th>
+                <th>编辑异常原因</th>
+                <th>异常</th>
             </tr>
             </thead>
             <tbody>
@@ -34,15 +44,19 @@
                 <td th:text="${mail.customer.region.region}"></td>
                 <td th:text="${mail.customer.address}"></td>
                 <td th:text="${mail.receiveState.state}" style="color: blue;"></td>
-                <td th:text="${mail.createTime}"></td>
-                <td>
-                    <form action="receivefault" method="post">
+                <td th:text="${#dates.format(mail.distributeReceiveTime,'yyyy-MM-dd HH:mm')}"></td>
+
+                <form action="receivefault" method="post" onsubmit="return check()">
+                    <td>
                         <input type="hidden" th:value="${mail.id}" name="mailId"/>
                         <input type="hidden" th:value="${session.page}" name="page"/>
-                        <textarea name="reason" rows="2" cols="20"></textarea><br>
+                        <textarea name="reason" placeholder="如异常请填写异常原因" rows="2" cols="20" id="yichang"></textarea><br>
+                    </td>
+                    <td>
                         <input type="submit" value="异常" class="btn btn-danger"/>
-                    </form>
-                </td>
+                    </td>
+                </form>
+
             </tr>
             </tbody>
         </table>
@@ -61,7 +75,7 @@
                 <a class="page-link" th:href="@{pdeterminereceive(page=${session.page-1})}">上一页</a>
             </li>
         </span>
-        <span  th:if="${session.page ==0 }">
+        <span th:if="${session.page ==0 }">
             <li class="page-item disabled">
                 <a class="page-link" th:href="@{pdeterminereceive(page=${session.page-1})}">上一页</a>
             </li>

@@ -62,13 +62,11 @@ public class AdminServiceImpl implements AdminService {
         MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
         MailState mailStateReadyingReceive = mailStateRepository.findMailStateById(1);//返回“准备收件”状态
 
-        String s="";
+        String s="<h3>分配收件工作</h3><h4>";
         //所有的区都分配一次
         for (Region region : regions) {
-            System.out.println("<center><br>地区：" + region.getRegion() + " 编号：" + region.getId());
-            //xiaqi：改
-           // s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
-            s ="<center>"+s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
+            System.out.println("<center><br>地区：" + region.getRegion() + "  编号：" + region.getId());
+            s ="<center>"+s+ "地区：" +region.getRegion() + " &nbsp;编号：" + region.getId()+"---->";
             //返回某地区所有收件状态为“等待分配”的件
             List<Mail> remailList = mailRepository.findMailByRegionAndReceiveStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
@@ -103,12 +101,7 @@ public class AdminServiceImpl implements AdminService {
             }
 
         }
-        //xiaqi：改
-       // s=s+"----------收件工作分配完成！------------<br>";
-        s=s+"----------收件工作分配完成！------------<br></center>";
-       //xiaqi： s=s+" <center><a href=\"admin\">返回首页</a></center>";
-        //  model.addAttribute("asuccess", "收件工作分配完成！");
-        // return "admin/success";
+        s=s+"----------收件工作分配完成！------------<br></center></h4>";
         return s;
     }
 
@@ -132,13 +125,11 @@ public class AdminServiceImpl implements AdminService {
         MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回“等待分配”状态
         MailState mailStateReadyingAssign = mailStateRepository.findMailStateById(5);//返回“准备派件”状态
 
-        String s="";
+        String s="<h3>分配派件工作</h3><h4>";
 
         //所有的区都分配一次
         for (Region region : regions) {
-            System.out.println("<br>地区：" + region.getRegion() + " 编号：" + region.getId());
-            //xiaqi：改
-           //s = s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
+            System.out.println("<br>地区：" + region.getRegion() + "&nbsp; 编号：" + region.getId());
             s ="<center>"+ s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
 
 
@@ -176,12 +167,7 @@ public class AdminServiceImpl implements AdminService {
             }
 
         }
-        //xiaqi:改
-        //s=s+"----------派件工作分配完成！------------<br>";
-        s=s+"----------派件工作分配完成！------------<br></center>";
-        //xiaqi：s=s+"<center><a href=\"admin\">返回首页</a></center>";
-        //model.addAttribute("asuccess", "派件工作分配完成！");
-        // return "admin/success";
+        s=s+"----------派件工作分配完成！------------<br></center></h4>";
         return s;
     }
 }

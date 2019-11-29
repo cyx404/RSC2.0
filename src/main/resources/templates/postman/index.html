@@ -70,10 +70,11 @@
         <div class="card bg-dark text-light">
             <div class="row no-gutters">
                 <div class="col-4">
-                    <img src="/images/萌萌哒.jpg" class="card-img rounded-circle w-lqx mx-3 my-1">
+                    <img src="/images/快递小哥.png" class="card-img rounded-circle w-lqx mx-3 my-1">
                 </div>
                 <div class="col-8">
                     <div class="card-body text-nowrap">
+                        工号： <span th:text="${session.postman.id}"></span><br>
                         姓名： <span th:text="${session.postman.name}"></span>
                     </div>
                 </div>
@@ -108,22 +109,26 @@
             <div class="collapse navbar-collapse" id="mynav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item mx-3">
-                        <a class="navbar-brand ml-2" href="#">快递管理系统</a>
+                        <a class="navbar-brand ml-2" href="#">RSC快递管理系统-邮差端</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <a class="btn btn-outline-info my-2 my-sm-0 yin invisible" target="lqx" id="fanhui">返回上级</a>
                 </form>
             </div>
+            <button class="btn btn-danger" type="button" >
+                <a href="plogout" style="text-decoration:none;color: white;"><span>注销</span></a>
+            </button>
+
         </nav>
         <div class="bg-light">
-                <div class="embed-responsive embed-responsive-21by9 w-100 mx-auto shadow p-3 bg-white rounded"
-                     id="you">
-                    <iframe class="embed-responsive-item" src="/rsc/pm/welcome" name="lqx" allowfullscreen></iframe>
-                </div>
+            <div class="embed-responsive embed-responsive-21by9 w-100 mx-auto shadow p-3 bg-white rounded"
+                 id="you">
+                <iframe class="embed-responsive-item" src="/rsc/pm/welcome" name="lqx" allowfullscreen></iframe>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script src="/js/jquery-3.4.0.js"></script>

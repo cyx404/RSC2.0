@@ -50,16 +50,17 @@ public class PostmanServiceImpl implements PostmanService {
      * @param phone
      * @param password
      * @param session
+     *  @param model
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/16  13:16
      **/
     @Override
-    public String postmanToLogin(String phone, String password, HttpSession session) {
+    public String postmanToLogin(String phone, String password, HttpSession session,Model model) {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
         Postman postman = postmanRepository.findPostmanByPhoneAndPassword(phone, md5Password);
         if (null == postman) {
-            session.setAttribute("perror", "手机号或密码错误！");
+            model.addAttribute("perror", "手机号或密码错误！");
             return "postman/login";
         } else {
             session.setAttribute("postman", postman);
@@ -174,7 +175,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回准备派件状态
             Page<Mail> mailPage = mailRepository.findMailByReceivePostmanAndReceiveState(postman, mailState, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
@@ -380,7 +381,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回正在派件状态
             Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState, 1, pageable);//获取派件次数为1、状态为正在派件的订单
             int totalPages = mailPage.getTotalPages();//一共多少页
@@ -411,7 +412,7 @@ public class PostmanServiceImpl implements PostmanService {
     public String postmanAssignedSuccess(HttpSession session, int page, int mailStateId, String str) {
         Postman postman = (Postman) session.getAttribute("postman");
 //        System.out.println(postman.getName());
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 2);
 //        System.out.println("1:"+pageable);
         MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回正在派件状态
         Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignState(postman, mailState, pageable);
@@ -449,7 +450,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 10);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(stateId);//返回派件异常状态
             Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(postman, mailState, 2, 4, pageable);//获取派件次数>1、状态为派件异常的订单
             int totalPages = mailPage.getTotalPages();//一共多少页

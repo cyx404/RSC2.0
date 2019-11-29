@@ -58,24 +58,22 @@
 
 <body>
 <center>
-    <h3>邮差的考勤情况</h3><br/>
+    <p><h4>进行考勤-加班/请假</h4></p>
 <form method="post" action="findPostmanAttendance"  onsubmit="return verify()">
     <div class="col-lg-6">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="请输入要查询员工的id" name="mid" id="mid">
+            <input type="text" class="form-control" placeholder="请输入要考勤员工的id" name="mid" id="mid" required  oninput="value=value.replace(/[^\d]/g,'');" >
             <span class="input-group-btn">
                         <button class="btn btn-default" type="submit">Go!</button>
                     </span>
         </div>
     </div>
-  <!--  <input type="text" name="mid" placeholder="请输入邮差id">
-    <input type="submit" value="搜索">-->
 
 </form>
     <br/>
-    <div th:if="${session.attendences!=null}">
-<div th:if="${#lists.size(session.attendences)!=0}">
-    <table  width="70%" border="0" class="t1" align="center" cellpadding="0"
+    <div th:if="${attendences!=null}" >
+<div th:if="${#lists.size(attendences)!=0}" >
+    <table  width="70%" border="0" class="t1" align="center" cellpadding="0" style="text-align: center;"
             cellspacing="0">
     <tr>
         <th>邮差id</th>
@@ -86,7 +84,7 @@
         <th>加班天数</th>
         <th>操作</th>
     </tr>
-    <tr th:each="attendence:${session.attendences}">
+    <tr th:each="attendence:${attendences}">
 
         <td>[[${attendence.getPostman().getId()}]]</td>
         <td>[[${attendence.getYear()}]]</td>
@@ -117,8 +115,8 @@
     </tr>
 </table>
 </div>
-        <div th:if="${#lists.size(session.attendences)==0}">
-            <center>没有该员工的信息</center>
+        <div th:if="${#lists.size(attendences)==0}">
+            <h4 style="color: #d39e04;"><center>没有该员工的信息!</center></h4>
         </div>
 </div>
     <!--<a href="admin">返回首页</a>-->
@@ -130,7 +128,7 @@ function verify() {
     if(mid==""||mid==null){
         alert("请输入员工id");
         return false;
-    }else if(mid.replace(/[^\d]/g,'').length==0){
+    }else if(mid.replace(/[^\d]/g,'').length==0||mid.length>7){
         alert("请输入有效的员工id");
         return false;
     }

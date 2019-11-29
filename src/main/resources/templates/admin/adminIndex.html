@@ -1,33 +1,12 @@
-<!--
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>RSC后台侍服系统首页</title>
-</head>
-<body>
-<center>
-    <h3>欢迎使用RSC后台侍服系统</h3>
-    <p><a href="awork">开始分配工作</a></p><br/>
-    <p><a href="monthWork">地区工作量情况百分比统计图</a></p><br/>
-    <p><a href="postWordDetails">地区邮差工作情况详情图</a></p><br/>
-    <p><a href="errorPostWordDetails">地区邮差的收派失败情况图</a></p><br/>
-    <p><a href="attendanceDetails">邮差的考勤情况图</a></p><br/>
-    <p><a href="postsAllSalary">邮差工资情况</a></p><br/>
-    <p><a href="mailAllState">查看包裹状态</a></p><br/>
-    <p><a href="attendance">考勤系统</a></p>
-</center>
-</body>
-</html>-->
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/all.css">
-    <title>客户关系管理系统</title>
+    <title>RSC后台侍服系统</title>
     <style>
         #accordionExample,
         #rs {
@@ -78,11 +57,11 @@
         <div class="card bg-dark text-light">
             <div class="row no-gutters">
                 <div class="col-4">
-                    <img src="/image/xiaqi.jpeg" class="card-img rounded-circle w-lqx mx-3 my-1">
+                    <img src="/images/萌萌哒.jpg" class="card-img rounded-circle w-lqx mx-3 my-1">
                 </div><br/> <br/>
                 <div class="col-8">
                     <div class="card-body text-nowrap">
-                        姓名： [[${session.mname}]]
+                        姓名：  <span th:text="${mname}"></span>
                     </div>
                 </div>
             </div>
@@ -95,7 +74,7 @@
                  data-parent="#accordionExample">
                 <div class="card-body p-0">
                     <div class="nav flex-column nav-pills" id="v-pills-tab">
-                        <a class="nav-link" href="beginreceiving" target="lqx">分配工作</a>
+                        <a class="nav-link" href="beginreceiving" target="lqx">分配收件工作</a>
                         <a class="nav-link" href="beginassigning" target="lqx">分配派件工作</a>
                     </div>
                 </div>
@@ -178,6 +157,10 @@
                 </ul>
 
             </div>
+
+            <button class="btn btn-danger" type="button" >
+                <a href="mlogout" style="text-decoration:none;color: white;"><span>注销</span></a>
+            </button>
         </nav>
         <div class="bg-light">
             <div class="embed-responsive embed-responsive-21by9 vw-lqx vh-83 mx-auto shadow p-3 bg-white rounded"

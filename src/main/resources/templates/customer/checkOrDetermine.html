@@ -11,7 +11,7 @@
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
-        <!--<h3 style="color: #cf9d2a">客户&#45;&#45;<span th:text="${session.customer.name}"></span>：确定邮件是否已经收取/付款</h3>-->
+        <p><h4 style="color: #cf9d2a">确定邮件是否已经收取/付款</h4></p>
         <table class="table-striped form-group vw-100">
             <thead>
             <tr>
@@ -45,7 +45,7 @@
                         th:if="${mail.receivePostman!=null}"><span th:text="${mail.receivePostman.name}"></span></span>
                 </td>
                 <td th:text="${mail.receiveState.state}" style="color: blue;"></td>
-                <td th:text="${mail.createTime}"></td>
+                <td th:text="${#dates.format(mail.createTime,'yyyy-MM-dd HH:mm')}"></td>
                 <td>
                     <form action="cDetermineMail" method="post">
                         <input type="hidden" th:value="${mail.id}" name="mailId"/>

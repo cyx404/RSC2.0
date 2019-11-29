@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class Echarts {
+
     private String name;
-    // private Integer value;
     private Object value;
 
     public Echarts(String name, Object value) {

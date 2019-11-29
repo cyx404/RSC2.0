@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <base href="<%=basePath%>">
@@ -40,7 +40,12 @@
             justify-content: center;
         }
     </style>
-
+    <!--session过期，登录页被内嵌iframe的解决方案-->
+    <script>
+        if (window != top) {
+            top.location.href = location.href;
+        }
+    </script>
 </head>
 
 <body>
@@ -61,17 +66,21 @@
             <div class="form-group">
                 <label>手机号</label>
                 <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                       placeholder="Username"  name="phone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11" required="required">
+                       placeholder="Username" name="phone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11"
+                       required="required">
             </div>
 
             <div class="form-group">
                 <label>密码</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
-                       name="password"  maxlength="10" minlength="6"  required="required" >
+                       name="password" maxlength="10" minlength="6" required="required">
             </div>
 
-            <small id="emailHelp" class="form-text text-muted"> <span style="color: red;" th:text="${session.perror}"></span> </small><br>
-            <button type="submit" class="btn btn-primary">Submit</button><br><br>
+            <small id="emailHelp" class="form-text text-muted"><span style="color: red;"
+                                                                     th:text="${perror}"></span></small>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <br><br>
 
         </form>
     </div>

@@ -20,12 +20,13 @@ import java.util.List;
 @RequestMapping("rsc/admin")
 @RestController
 public class ChartsController {
+
     @Autowired
-    WorkloadService workloadService;
+    private WorkloadService workloadService;
     @Autowired
-    AttendanceService attendanceService;
+    private AttendanceService attendanceService;
     @Autowired
-    RegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @RequestMapping(value = "monthWorkData")
     public List<Echarts> find(@RequestParam int year, @RequestParam int month, @RequestParam String region) {

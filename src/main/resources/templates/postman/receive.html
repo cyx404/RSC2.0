@@ -11,7 +11,7 @@
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
-        <h3 style="color: #cf9d2a">邮差&#45;&#45;<span th:text="${session.postman.id}"></span>：要收取的快递</h3>
+        <p><h4 style="color: #cf9d2a">要收取的快递</h4></p>
         <table class="table-striped form-group vw-100">
             <thead>
             <tr>
@@ -21,7 +21,7 @@
                 <th>客户的地区</th>
                 <th>客户的地址</th>
                 <th>收件状态</th>
-                <th>订单生成时间</th>
+                <th>系统分配收件时间</th>
                 <th>收件是否故障</th>
             </tr>
             </thead>
@@ -33,7 +33,7 @@
                 <td th:text="${mail.customer.region.region}"></td>
                 <td th:text="${mail.customer.address}"></td>
                 <td th:text="${mail.receiveState.state}" style="color:blue;"></td>
-                <td th:text="${mail.createTime}"></td>
+                <td th:text="${#dates.format(mail.distributeReceiveTime,'yyyy-MM-dd HH:mm')}"></td>
                 <td><span th:if="${mail.receiveFrequency == 0}">否</span><span
                         th:if="${mail.receiveFrequency == 1}">是</span></td>
             </tr>

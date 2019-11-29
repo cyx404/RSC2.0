@@ -11,29 +11,29 @@
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
-        <h3 style="color: #cf9d2a">邮差&#45;&#45;<span th:text="${session.postman.id}"></span>：要派送的快递</h3>
+        <p><h4 style="color: #cf9d2a">要派送的快递</h4></p>
         <table class="table-striped form-group vw-100">
             <thead>
             <tr>
                 <th>邮件编号</th>
-                <th>所属客户姓名</th>
-                <th>所属客户手机号</th>
-                <th>客户的地区</th>
-                <th>客户的地址</th>
+                <th>收件人姓名</th>
+                <th>收件人手机号</th>
+                <th>派送的地区</th>
+                <th>派送的地址</th>
                 <th>派件状态</th>
-                <th>订单生成时间</th>
+                <th>系统分配派件时间</th>
                 <th>派件是否故障</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="mail:${session.mailList}" var="contactrecordlistByType">
                 <td th:text="${mail.id}"></td>
-                <td th:text="${mail.customer.name}"></td>
-                <td th:text="${mail.customer.phone}"></td>
-                <td th:text="${mail.customer.region.region}"></td>
-                <td th:text="${mail.customer.address}"></td>
+                <td th:text="${mail.addresseeName}"></td>
+                <td th:text="${mail.addresseePhone}"></td>
+                <td th:text="${mail.assignRegion.region}"></td>
+                <td th:text="${mail.address}"></td>
                 <td th:text="${mail.assignState.state}" style="color:blue;"></td>
-                <td th:text="${mail.createTime}"></td>
+                <td th:text="${#dates.format(mail.distributeAssignTime,'yyyy-MM-dd HH:mm')}"></td>
                 <td><span th:if="${mail.assignFrequency == 0}">否</span><span
                         th:if="${mail.assignFrequency > 1}">是</span></td>
             </tr>

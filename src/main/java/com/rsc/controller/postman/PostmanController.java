@@ -27,8 +27,8 @@ public class PostmanController {
 
     //邮差提交的登录
     @PostMapping("ptologin")
-    public String postmanToLogin(@RequestParam String phone, @RequestParam String password, HttpSession session) {
-        return postmanService.postmanToLogin(phone, password, session);
+    public String postmanToLogin(@RequestParam String phone, @RequestParam String password, HttpSession session,Model model) {
+        return postmanService.postmanToLogin(phone, password, session,model);
     }
 
     //邮差去签到

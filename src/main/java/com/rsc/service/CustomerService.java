@@ -2,6 +2,7 @@ package com.rsc.service;
 
 import com.rsc.entity.Customer;
 import com.rsc.entity.Mail;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,12 +12,12 @@ public interface CustomerService {
      * @Title customerToRegister
      * @Description: TODO 用户注册
      * @param customer
-     * @param session
+     * @param model
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/16  1:09
      **/
-    String customerToRegister(Customer customer, HttpSession session);
+    String customerToRegister(Customer customer, Model model);
 
     /**
      * @Title customerToLogin
@@ -24,11 +25,12 @@ public interface CustomerService {
      * @param phone
      * @param password
      * @param session
+     * @param model
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/16  0:54
      **/
-    String customerToLogin(String phone, String password, HttpSession session);
+    String customerToLogin(String phone, String password, HttpSession session, Model model);
 
     /**
      * @Title customerToDelivery

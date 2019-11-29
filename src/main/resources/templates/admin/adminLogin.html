@@ -31,12 +31,15 @@
     </style>
 
 </head>
-
+<script>
+    if (window != top) {
+        top.location.href = location.href;
+    }
+</script>
 <body>
-<div id="left">
-    <img src="/image/login1.jpg" style="width:100%;height:100%;">
+<div id="left" class="vh-100 d-flex align-items-center justify-content-center">
+    <img src="/images/index.png" style="width:100%;height:90%;">
 </div>
-
 <div id="right" class="p-5">
     <!--<div id="rgihttop"></div>-->
     <div id="rightbottom">
@@ -47,7 +50,7 @@
                 </h1>
             </div>
             <br><br>
-            <p style="color: red;" th:text="${session.merror}"></p>
+            <p style="color: red;" th:text="${merror}"></p>
             <div class="form-group">
                 <label>手机号</label>
                 <input  type="text" name="phone" oninput="value=value.replace(/[^\d]/g,'');" maxlength="11" required="required" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"

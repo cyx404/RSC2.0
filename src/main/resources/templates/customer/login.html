@@ -42,7 +42,11 @@
     </style>
 
 </head>
-
+<script>
+    if (window != top) {
+        top.location.href = location.href;
+    }
+</script>
 <body>
 <div id="left" class="vh-100 d-flex align-items-center justify-content-center">
     <img src="/images/dl.jpg" style="width:96%;height:97%;">
@@ -70,7 +74,7 @@
                        name="password"  maxlength="10" minlength="6"  required="required" >
             </div>
 
-            <small id="emailHelp" class="form-text text-muted"> <span style="color: red;" th:text="${session.cerror}"></span> </small><br>
+            <small id="emailHelp" class="form-text text-muted"> <span style="color: red;" th:text="${cerror}"></span> </small><br>
 
 
             <button type="submit" class="btn btn-primary">Submit</button><br><br>

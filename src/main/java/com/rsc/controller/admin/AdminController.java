@@ -1,5 +1,6 @@
 package com.rsc.controller.admin;
 
+import com.rsc.entity.Manager;
 import com.rsc.service.AdminService;
 import com.rsc.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +43,29 @@ public class AdminController {
     //xiaqi:管理页面
     @RequestMapping(value = "admin")
     public String admin() {
-        return "admin/adminIndex.html";
+        return "admin/adminIndex";
     }
 
     //xiaqi:登录页面
     @PostMapping(value = "mtologin")
-    public String managerToLogin(@RequestParam String phone, @RequestParam String password, HttpSession session) {
-        return managerService.managerToLogin(phone, password, session);
+    public String managerToLogin(@RequestParam String phone, @RequestParam String password, Model model, HttpSession session) {
+        return managerService.managerToLogin(phone, password, model, session);
     }
 
-    @RequestMapping(value = "mlogin")
+    @GetMapping(value = "mlogin")
     public String mLogin() {
-        return "admin/adminLogin.html";
+        return "admin/adminLogin";
+    }
+
+    @GetMapping("mlogout")
+    public String clogout(HttpSession session) {
+        Manager manager = (Manager) session.getAttribute("manager");
+        if (manager == null) {
+            System.out.println("空工号，没登录！");
+            return "admin/adminLogin";
+        } else {
+            session.removeAttribute("manager");
+        }
+        return "admin/adminLogin";
     }
 }

@@ -17,11 +17,12 @@ public interface PostmanService {
      * @param phone
      * @param password
      * @param session
+     * @param model
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/16  13:15
      **/
-    String postmanToLogin(String phone, String password, HttpSession session);
+    String postmanToLogin(String phone, String password, HttpSession session,Model model);
 
 
     /**

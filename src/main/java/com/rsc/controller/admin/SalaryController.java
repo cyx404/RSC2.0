@@ -1,6 +1,5 @@
 package com.rsc.controller.admin;
 
-import com.rsc.entity.Postman;
 import com.rsc.service.PostmanService;
 import com.rsc.service.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,11 @@ import java.util.List;
 @RequestMapping("rsc/admin")
 @Controller
 public class SalaryController {
+
     @Autowired
-    PostmanService postmanService;
+    private PostmanService postmanService;
     @Autowired
-    SalaryService salaryService;
+    private SalaryService salaryService;
 
     @RequestMapping(value = "postsAllSalary")
     public String postmanAllSalary(Model model) {

@@ -52,10 +52,11 @@
 <body>
 <br/>
 <center>
+    <p><h4>包裹状态</h4></p><br>
     <form action="findMailById" method="post"  onsubmit="return verify()">
         <div class="col-lg-6">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="请输入快递单号" name="mid" id="mid">
+                <input type="text" class="form-control" placeholder="请输入快递单号" name="mid" id="mid" oninput="value=value.replace(/[^\d]/g,'');">
                 <span class="input-group-btn">
                         <button class="btn btn-default" type="submit" >Go!</button>
                     </span>
@@ -63,27 +64,24 @@
         </div>
     </form><br/>
     <div th:if="${#lists.size(mailAllStateMap)!=0}">
-        <table  width="90%" border="0" class="t1" align="center" cellpadding="0"
+        <table  width="98%" border="0" class="t1" style="text-align: center;" cellpadding="0"
                 cellspacing="0">
             <tr>
                 <th>订单号</th>
-                <th>用户id</th>
+                <th>用户ID</th>
                 <th>收件地区</th>
-               <!-- <th th:if="${session.state!='收件不成功'&&session.state!='正在收件'&&session.state!='准备收件'}">-->
                 <th>派件地区</th>
-                <!--<th th:if="${session.state!='准备收件'}">-->
-                <th>收货员工id</th>
-                <!--<th th:if="${session.state!='收件不成功'&&session.state!='正在收件'&&session.state!='准备收件'}">-->
-                <th>派件员工id</th>
-                <th>用户确定收货时间</th>
-                <th>派单成功时间</th>
-                <th>订单生成时间</th>
+                <th>收件员工</th>
+                <th>派件员工</th>
+                <th>收件状态</th>
+                <th>派件状态</th>
+                <th>收件时间</th>
+                <th>派件时间</th>
                 <th>系统分配收件时间</th>
                 <th>系统分配派件时间</th>
-                <th></th>
+                <th>订单生成时间</th>
                 <div th:if="${session.state=='收件不成功'||session.state=='派件不成功'}">
                     <th>没成功派件/收件的原因</th>
-                <!--    <th>收派次数</th>-->
                 </div>
             </tr>
             <tr th:each="mail:${mailAllStateMap}">
@@ -93,19 +91,50 @@
                 <td><div th:if="${mail.getAssignRegion()!=null}">[[${mail.getAssignRegion().getRegion()}]]</div></td>
                 <td><div th:if="${mail.getReceivePostman()!=null}">[[${mail.getReceivePostman().getId()}]]</div></td>
                 <td><div th:if="${mail.getAssignPostman()!=null}">[[${mail.getAssignPostman().getId()}]]</div></td>
-                <td><div th:if="${mail.getReceiveTime()!=null}">[[${mail.getReceiveTime()}]]</div></td>
-                <td><div th:if="${mail.getAssignTime()!=null}">[[${mail.getAssignTime()}]]</div></td>
-                <td><div th:if="${mail.getCreateTime()!=null}">[[${mail.getCreateTime()}]]</div></td>
-                <td><div th:if="${mail.getDistributeReceiveTime()!=null}">[[${mail.getDistributeReceiveTime()}]]</div></td>
-                <td><div th:if="${mail.getDistributeAssignTime()!=null}">[[${mail.getDistributeAssignTime()}]]</div></td>
+                <td><div th:if="${mail.receiveState!=null}">[[${mail.receiveState.state}]]</div></td>
+                <td><div th:if="${mail.assignState!=null}">[[${mail.assignState.state}]]</div></td>
+                <td><div th:if="${mail.getReceiveTime()!=null}">[[${#dates.format(mail.getReceiveTime(),'yyyy-MM-dd HH:mm')}]]</div></td>
+                <td><div th:if="${mail.getAssignTime()!=null}">[[${#dates.format(mail.getAssignTime(),'yyyy-MM-dd HH:mm')}]]</div></td>
+                <td><div th:if="${mail.getDistributeReceiveTime()!=null}">[[${#dates.format(mail.getDistributeReceiveTime(),'yyyy-MM-dd HH:mm')}]]</div></td>
+                <td><div th:if="${mail.getDistributeAssignTime()!=null}">[[${#dates.format(mail.getDistributeAssignTime(),'yyyy-MM-dd HH:mm')}]]</div></td>
+                <td><div th:if="${mail.getCreateTime()!=null}">[[${#dates.format(mail.getCreateTime(),'yyyy-MM-dd HH:mm')}]]</div></td>
                 <div th:if="${session.state=='收件不成功'||session.state=='派件不成功'}">
                     <td>[[${mail.getReason()}]]</td>
                 </div>
             </tr>
         </table>
-    <a th:href="@{|mailState?state=${session.state}&i=${session.page-1}|}"><span th:if="${session.page!=0}">上一页</span></a>
-    <a th:href="@{|mailState?state=${session.state}&i=${session.page+1}|}"><span th:if="${session.page+1<session.totalPage}">下一页</span></a>
+
     </div>
+    <br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <th:url var="url_pre" value="contact_select">
+                <th:param name="pageCur" value="${session.page-1}"/>
+            </th:url>
+            <th:url var="url_next" value="contact_select">
+                <th:param name="pageCur" value="${session.page+1}"/>
+            </th:url>
+
+            <span th:if="${session.page !=0 }">
+            <li class="page-item">
+                <a class="page-link" th:href="@{mailState(i=${session.page-1},state=${session.state})}">上一页</a>
+            </li>
+        </span>
+            <li class="page-item"><a class="page-link">第<span th:text="${session.page+1}"></span>页/共<span
+                    th:text="${session.totalPage}"></span>页</a></li>
+            <span th:if="${session.page+1 !=session.totalPage && session.totalPage !=0}">
+            <li class="page-item">
+                <!--<a class="page-link" href="passign?page=1">下一页</a>-->
+                <a class="page-link" th:href="@{mailState(i=${session.page+1},state=${session.state})}">下一页</a>
+            </li>
+        </span>
+            <span th:if="${session.page+1 == session.TotalPages || session.totalPage == 0}">
+            <li class="page-item disabled">
+                <a class="page-link" th:href="@{mailState(i=${session.page+1},state=${session.state})}">下一页</a>
+            </li>
+        </span>
+        </ul>
+    </nav>
     <div th:if="${#lists.size(mailAllStateMap)==0}">
         <center>没有相关数据</center>
     </div>
@@ -118,7 +147,7 @@
         if(mid==""||mid==null){
             alert("请输入快递单号");
             return false;
-        }else if(mid.replace(/[^\d]/g,'').length==0){
+        }else if(mid.replace(/[^\d]/g,'').length==0||mid.length>10){
             alert("请输入有效的快递单号");
             return false;
         }

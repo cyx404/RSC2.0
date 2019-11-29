@@ -5,6 +5,7 @@ import com.rsc.entity.Mail;
 import com.rsc.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -24,14 +25,14 @@ public class CustomerController {
 
     //用户提交的注册
     @PostMapping("toregister")
-    public String customerToRegister(@ModelAttribute Customer customer, HttpSession session) {
-       return customerService.customerToRegister(customer,session);
+    public String customerToRegister(@ModelAttribute Customer customer,Model model) {
+       return customerService.customerToRegister(customer,model);
     }
 
     //用户提交的登录
     @PostMapping("ctologin")
-    public String customerToLogin(@RequestParam String phone, @RequestParam String password, HttpSession session) {
-        return customerService.customerToLogin(phone, password, session);
+    public String customerToLogin(@RequestParam String phone, @RequestParam String password, HttpSession session, Model model) {
+        return customerService.customerToLogin(phone, password, session,model);
     }
 
     //用户提交的快递
