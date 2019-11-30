@@ -300,20 +300,30 @@ public class PostmanServiceImpl implements PostmanService {
         }
     }
 
+    //xiaqi:查找某年某月所有员工的工资情况
     @Override
-    public List<List> findAllPostmanSalary() {
+    public List<List> findAllPostmanSalary(int year,int month) {
         List<Postman> postmanList = postmanRepository.findAllPostman();
         List<List> salaryList = new ArrayList<>();
         for (Postman p : postmanList) {
             List salary = new ArrayList();
             double total = 3000;
             List<Workload> workloads = p.getWorkloads();
+            int receiveWorkloadsum = 0;//收件总和
+            int assignWorkloadsum = 0;//派件总和
             for (Workload w : workloads) {
+                if(w.getYear()==year&&w.getMonth()==month){
                 total += w.getTotalWorkload() * 5;
+                    receiveWorkloadsum += w.getReceiveWorkload();
+                    assignWorkloadsum += w.getAssignWorkload();
+                }
             }
-            salary.add(p.getId());
-            salary.add(p.getName());
-            salary.add(total);
+            salary.add(p.getId());//0
+            salary.add(p.getName());//1
+            salary.add(total);//2
+            double assessment = (receiveWorkloadsum + assignWorkloadsum) * 5;
+            salary.add(assessment);//考核工资:3
+
             salaryList.add(salary);
         }
         System.out.println(salaryList.toString());

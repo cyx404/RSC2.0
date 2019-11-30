@@ -44,31 +44,46 @@
     tr.over td {
         background: #bcd4ec; /*这个将是鼠标高亮行的背景色*/
     }
-
-    h2 {
-        color: transparent;
-        background-color: black;
-        text-shadow: rgba(255, 255, 255, 0.5) 0 5px 6px, rgba(255, 255, 255, 0.2) 1px 3px 3px;
-        -webkit-background-clip: text;
-    }
 </style>
 <body>
 <center>
     <p><h4>邮差工资情况</h4></p>
-    <form action="postmanSalary1" method="POST" onsubmit="return verify()">
-        <div class="col-lg-6">
-            <div class="input-group">
-                <input type="text" class="form-control" id="pid" placeholder="请输入要查询员工的id" name="pid"   oninput="value=value.replace(/[^\d]/g,'');">
-                <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">Go!</button>
-                    </span>
-            </div><!-- /input-group -->
+    <form action="postsAllSalary" method="POST">
+        <div class="row col-sm-7" style="text-align: center;margin-left: 150px;" >
+            <label style="font-size: 22px;">&nbsp;&nbsp;年份&nbsp;&nbsp;&nbsp;&nbsp; </label>
+            <div id="year">
+                <select class="form-control" name="year">
+                    <option th:each="year:${years}" th:value="${year}" th:text="${year}"></option>
+                </select>
+            </div>
+
+            <label  style="font-size: 22px;"> &nbsp;&nbsp;月份 &nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <div id="month">
+                <select class="form-control" name="month">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
+            <div class="col-sm-1"><input type="submit" value="确定" id="btn" class="btn btn-primary form-control"/></div>
         </div>
     </form>
+
     <p th:text="${error}" style="color:red"></p>
     <br>
+
+    <div th:if="${salaryList!=null}">
     <table width="70%" border="0" class="t1" style="text-align: center;" cellpadding="0"
-           cellspacing="0">
+           cellspacing="0" th:if="${#lists.size(salaryList)!=0}">
         <tr>
             <th>id</th>
             <th>名字</th>
@@ -79,25 +94,18 @@
             <td th:text="${deltail.get(0)}"></td>
             <td th:text="${deltail.get(1)}"></td>
             <td>[[${deltail.get(2)}]] 元</td>
-            <td><a th:href="@{'postmanSalary?id='+${deltail.get(0)}}">详情</a></td>
+            <td><a th:href="@{'postmanSalary1?pid='+${deltail.get(0)}+'&year='+${year}+'&month='+${month}+'&tag='+1}">详情</a></td>
         </tr>
     </table>
+        <a th:href="@{'addAllSaray?year='+${year}+'&month='+${month}}"><button class="btn btn-info">确定发工资</button></a>
+  <!--      <form action="addAllSaray" method="post">
+            <input type="text" th:value="${salaryList}" name="postmanSalaryList" hidden="true"/>
+            <input type="text" th:value="${year}" name="year" hidden="true"/>
+            <input type="text" th:value="${month}" name="month" hidden="true"/>
+            <input type="submit" value="确定发工资" class="btn btn-primary"/>
+        </form>-->
+    </div>
     <br>
 </center>
-<script src="/jquery-3.4.1.min.js"></script>
-<script type="text/javascript">
-    function verify() {
-        var mid = $("#pid").val();
-        if (mid == "" || mid == null) {
-            alert("请输入员工id");
-            return false;
-        } else if (mid.replace(/[^\d]/g, '').length == 0||mid.length>6) {
-            alert("请输入有效的员工id");
-            return false;
-        }
-    }
-</script>
-
-
 </body>
 </html>

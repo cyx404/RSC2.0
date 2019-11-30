@@ -12,7 +12,48 @@
         <div class="panel-heading">
             <p><h4>邮差工资详情</h4></p>
         </div><br/>
-        <div class="panel-body">
+        <!---->
+
+            <form action="postmanSalary1" method="POST" onsubmit="return verify()">
+                <div class="row col-sm-7" style="text-align: center;margin-left: 150px;" >
+                <input class="form-control" type="text" id="pid" placeholder="请输入员工id" name="pid"/>
+
+                <label style="font-size: 22px;">&nbsp;&nbsp;年份&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                <div id="year">
+                    <select class="form-control" name="year">
+                        <option th:each="year:${years}" th:value="${year}" th:text="${year}"></option>
+                    </select>
+                </div>
+
+                <label  style="font-size: 22px;"> &nbsp;&nbsp;月份 &nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <div id="month">
+                    <select class="form-control" name="month">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                </div>
+                    <input type="text" th:value="${0}" name="tag" hidden="true"/>
+                <div class="col-sm-1"><input type="submit" value="确定" id="btn" class="btn btn-primary form-control"/></div>
+                </div>
+            </form>
+
+        <!---->
+        <p th:text="${error}" style="color:red"></p>
+
+
+
+        <div th:if="${salary!=null}">
+        <div class="panel-body" th:if="${#lists.size(salary)!=0}"><!--判断list是否有数据-->
             <form action="addSalary" method="post">
                 <table width="70%" border="0" class="t1" style="text-align: center;font-size:18px;" cellpadding="0"
                        cellspacing="0">
@@ -34,11 +75,11 @@
                     </tr>
                     <tr>
                         <td>年份</td>
-                        <td>[[${salary.get(8)}]]</td>
+                        <td>[[${salary.get(10)}]]</td>
                     </tr>
                     <tr>
                         <td>月份</td>
-                        <td>[[${salary.get(8)}]]</td>
+                        <td>[[${salary.get(11)}]]</td>
                     </tr>
                     <tr>
                         <td>收件量</td>
@@ -61,6 +102,8 @@
                 <input type="text" th:value="${salary.get(0)}" name="id" hidden="true"/>
                 <input type="text" th:value="${salary.get(5)}" name="totalMail" hidden="true"/>
                 <input type="text" th:value="${salary.get(7)}" name="assessment" hidden="true"/>
+                <input type="text" th:value="${salary.get(10)}" name="year" hidden="true"/>
+                <input type="text" th:value="${salary.get(11)}" name="month" hidden="true"/>
                 <div th:switch="${salary.get(9)}">
                     <div th:case="1"><input type="submit" value="确定发工资" class="btn btn-primary"></div>
                     <div th:case="0" style="color: red"><h4>已发工资了！</h4></div>
@@ -68,11 +111,25 @@
             </form>
         </div>
     </div>
-<!--    <h2>工资详情</h2>-->
+    </div>
 
     <br>
-    <a href="postsAllSalary"><button class="btn btn-info">返回上一页</button></a>
+    <div th:if="${tag==0}"><a th:href="postmanSalary"><button class="btn btn-info">返回上一页</button></a></div>
+  <div th:if="${tag==1}"><a th:href="@{'postsAllSalary?year='+${salary.get(10)}+'&month='+${salary.get(11)}}"><button class="btn btn-info">返回上一页</button></a></div>
 
 </center>
 </body>
+<script src="/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    function verify() {
+        var pid=$("#pid").val();
+        if(pid==""||pid==null){
+            alert("请输入员工id");
+            return false;
+        }else if(pid.replace(/[^\d]/g,'').length==0||pid.length>10){
+            alert("请输入有效的员工id");
+            return false;
+        }
+    }
+</script>
 </html>

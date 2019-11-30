@@ -22,8 +22,8 @@ public class SalaryServiceImpl implements SalaryService {
     SalaryRepository salaryRepository;
 
     @Override
-    public List postmanSalaryDetails(int id) {
-        Calendar date = Calendar.getInstance();
+    public List postmanSalaryDetails(int id,int year,int month) {
+        //Calendar date = Calendar.getInstance();
         Postman postman = postmanRepository.findPostmanById(id);
         List detail = new ArrayList();
         detail.add(id);// id:0
@@ -46,22 +46,23 @@ public class SalaryServiceImpl implements SalaryService {
             double assessment = (receiveWorkloadsum + assignWorkloadsum) * 5;
             detail.add(assessment);//考核工资:7
             detail.add(postman.getRegion().getRegion());//邮差所在地:8
-            Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id, date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1);
+            //Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id, date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1);
+            Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id,year, month);
             if (salary == null) {
                 detail.add(1);//查看数据库是否已有数据（没有）:9
             } else {
                 detail.add(0);//查看数据库是否已有数据（有）:9
             }
+            detail.add(year);//年：10
+            detail.add(month);//月：11
+
             return detail;
         }
     }
 
     @Override
-    public int addSalary(int pid, double assessment, double total) {
+    public int addSalary(int pid, double assessment, double total,int year,int month) {
         Salary salary = new Salary();
-        Calendar date = Calendar.getInstance();
-        int year = date.get(Calendar.YEAR);
-        int month = date.get(Calendar.MONTH) + 1;
         Postman postman = postmanRepository.findPostmanById(pid);
         Salary salary1 = salaryRepository.findSalaryByPostmanAndYearAndMonth(pid, year, month);
         if (salary1 == null) {

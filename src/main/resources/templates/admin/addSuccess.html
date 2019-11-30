@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>RSC后台侍服系统</title>
@@ -7,6 +7,8 @@
 <body>
 <center>
     <h3>工资已发</h3>
+    <div th:if="${tag==0}"><a href="postsAllSalary1">返回上一步</a></div>
+    <div th:if="${tag==1}"><a href="postmanSalary">返回上一步</a></div>
  <!--   <a href="admin">返回首页</a>-->
 </center>
 </body>

@@ -101,8 +101,8 @@ public interface PostmanService {
      **/
     String postmanReceivefault(HttpSession session, int mailId, String season, int page, Model model);
 
-    //查询所有邮差的工资情况
-    List<List> findAllPostmanSalary();
+    //xiaqi:查询所有邮差的工资情况
+    List<List> findAllPostmanSalary(int year,int month);
 
     //查询某一邮差
     Postman findPostman(String name);
