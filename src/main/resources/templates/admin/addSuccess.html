@@ -7,8 +7,9 @@
 <body>
 <center>
     <h3>工资已发</h3>
-    <div th:if="${tag==0}"><a href="postsAllSalary1">返回上一步</a></div>
-    <div th:if="${tag==1}"><a href="postmanSalary">返回上一步</a></div>
+    <div th:if="${tag==0}"><a href="postsAllSalary1"><button class="btn btn-info">返回上一步</button></a></div>
+    <br>
+    <span th:if="${tag==1}"><a href="postmanSalary"><button class="btn btn-info">返回上一步</button></a></span>
  <!--   <a href="admin">返回首页</a>-->
 </center>
 </body>

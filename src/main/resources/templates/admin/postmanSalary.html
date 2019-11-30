@@ -49,7 +49,7 @@
 <center>
     <p><h4>邮差工资情况</h4></p>
     <form action="postsAllSalary" method="POST">
-        <div class="row col-sm-7" style="text-align: center;margin-left: 150px;" >
+        <div class="row col-sm-7" style="text-align: center;margin-left: 25%;" >
             <label style="font-size: 22px;">&nbsp;&nbsp;年份&nbsp;&nbsp;&nbsp;&nbsp; </label>
             <div id="year">
                 <select class="form-control" name="year">
@@ -79,9 +79,9 @@
     </form>
 
     <p th:text="${error}" style="color:red"></p>
-    <br>
 
     <div th:if="${salaryList!=null}">
+        <p><h5><span th:text="${month}"></span>月工资情况</h5></p>
     <table width="70%" border="0" class="t1" style="text-align: center;" cellpadding="0"
            cellspacing="0" th:if="${#lists.size(salaryList)!=0}">
         <tr>
@@ -97,6 +97,7 @@
             <td><a th:href="@{'postmanSalary1?pid='+${deltail.get(0)}+'&year='+${year}+'&month='+${month}+'&tag='+1}">详情</a></td>
         </tr>
     </table>
+        <br>
         <a th:href="@{'addAllSaray?year='+${year}+'&month='+${month}}"><button class="btn btn-info">确定发工资</button></a>
   <!--      <form action="addAllSaray" method="post">
             <input type="text" th:value="${salaryList}" name="postmanSalaryList" hidden="true"/>
