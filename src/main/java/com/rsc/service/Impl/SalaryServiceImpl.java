@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class SalaryServiceImpl implements SalaryService {
     SalaryRepository salaryRepository;
 
     @Override
-    public List postmanSalaryDetails(int id,int year,int month) {
+    public List postmanSalaryDetails(int id, int year, int month) {
         //Calendar date = Calendar.getInstance();
         Postman postman = postmanRepository.findPostmanById(id);
         List detail = new ArrayList();
@@ -35,8 +34,10 @@ public class SalaryServiceImpl implements SalaryService {
             int receiveWorkloadsum = 0;//收件总和
             int assignWorkloadsum = 0;//派件总和
             for (Workload w : postman.getWorkloads()) {
-                receiveWorkloadsum += w.getReceiveWorkload();
-                assignWorkloadsum += w.getAssignWorkload();
+                if (w.getMonth() == month && w.getYear() == year) {
+                    receiveWorkloadsum += w.getReceiveWorkload();
+                    assignWorkloadsum += w.getAssignWorkload();
+                }
             }
             detail.add(receiveWorkloadsum);//收件总和:3
             detail.add(assignWorkloadsum);//派件总和:4
@@ -47,7 +48,7 @@ public class SalaryServiceImpl implements SalaryService {
             detail.add(assessment);//考核工资:7
             detail.add(postman.getRegion().getRegion());//邮差所在地:8
             //Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id, date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1);
-            Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id,year, month);
+            Salary salary = salaryRepository.findSalaryByPostmanAndYearAndMonth(id, year, month);
             if (salary == null) {
                 detail.add(1);//查看数据库是否已有数据（没有）:9
             } else {
@@ -61,7 +62,7 @@ public class SalaryServiceImpl implements SalaryService {
     }
 
     @Override
-    public int addSalary(int pid, double assessment, double total,int year,int month) {
+    public int addSalary(int pid, double assessment, double total, int year, int month) {
         Salary salary = new Salary();
         Postman postman = postmanRepository.findPostmanById(pid);
         Salary salary1 = salaryRepository.findSalaryByPostmanAndYearAndMonth(pid, year, month);
