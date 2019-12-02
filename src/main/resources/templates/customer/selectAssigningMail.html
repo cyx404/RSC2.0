@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <title>失败的件</title>
+    <title>查看历史寄件</title>
 </head>
 
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
-        <p><h4 style="color: #cf9d2a">失败的件</h4></p>
+        <p><h4 style="color: #cf9d2a">正在派送的件</h4></p>
         <table class="table-striped form-group vw-100">
             <thead>
             <tr>
@@ -26,9 +26,11 @@
                 <th>收件人详细地址</th>
                 <th>收件员/手机</th>
                 <th>收件状态</th>
+                <th>收件时间</th>
                 <th>派件员/手机</th>
                 <th>派件状态</th>
                 <th>失败原因</th>
+                <th>派件时间</th>
                 <th>订单生成时间</th>
             </tr>
             </thead>
@@ -44,15 +46,18 @@
                 <td th:text="${mail.assignRegion.region}"></td>
                 <td th:text="${mail.address}"></td>
                 <td>[[${mail.receivePostman.name}]]<br>[[${mail.receivePostman.phone}]]</td>
-                <td th:text="${mail.receiveState.state}" style="color: brown;"></td>
-                <td><span th:if="${mail.assignPostman==null}">无</span><span
-                        th:if="${mail.assignPostman!=null}">[[${mail.assignPostman.name}]]<br>[[${mail.assignPostman.phone}]]</span>
-                </td>
-                <td style="color:brown;"><span th:if="${mail.assignState==null}" style="color: brown;">无</span><span
-                        th:if="${mail.assignState!=null}"><span th:text="${mail.assignState.state}"></span></span></td>
-                <td style="color:blue;"><span th:if="${mail.reason==null}" style="color: brown;">无</span><span
-                        th:if="${mail.reason!=null}"><span th:text="${mail.reason}"></span></span></td>
+                <td th:text="${mail.receiveState.state}" style="color: blue"></td>
                 <td th:text="${#dates.format(mail.createTime,'yyyy-MM-dd HH:mm')}"></td>
+                <td><span th:if="${mail.assignPostman==null}" style="color: coral;">暂无分配</span><span
+                        th:if="${mail.assignPostman!=null}">[[${mail.assignPostman.name}]]<br>[[${mail.assignPostman.phone}]]</span></span>
+                </td>
+                <td style="color:blue;"><span th:if="${mail.assignState==null}" style="color: brown;">还没派件</span><span
+                        th:if="${mail.assignState!=null}"><span th:text="${mail.assignState.state}"></span></span></td>
+                <td style="color: red;"><span th:if="${mail.reason==null}">无</span><span th:if="${mail.reason!=null}"><span
+                        th:text="${mail.reason}"></span></span></td>
+                <td><span th:if="${mail.assignTime==null}">无</span><span th:if="${mail.assignTime!=null}"><span
+                        th:text="${#dates.format(mail.assignTime,'yyyy-MM-dd HH:mm')}"></span></span></td>
+                <td th:text="${#dates.format(mail.receiveTime,'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             </tbody>
         </table>
@@ -68,12 +73,12 @@
         </th:url>
         <span th:if="${session.page !=0 }">
             <li class="page-item">
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page-1})}">上一页</a>
+                <a class="page-link" th:href="@{selectassigningmail(page=${session.page-1})}">上一页</a>
             </li>
         </span>
         <span th:if="${session.page ==0 }">
             <li class="page-item disabled">
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page-1})}">上一页</a>
+                <a class="page-link" th:href="@{selectassigningmail(page=${session.page-1})}">上一页</a>
             </li>
         </span>
         <li class="page-item"><a class="page-link">第<span th:text="${session.page+1}"></span>页/共<span
@@ -82,12 +87,12 @@
         <span th:if="${session.page+1 !=session.TotalPages && session.TotalPages !=0}">
             <li class="page-item">
                 <!--<a class="page-link" href="passign?page=1">下一页</a>-->
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page+1})}">下一页</a>
+                <a class="page-link" th:href="@{selectassigningmail(page=${session.page+1})}">下一页</a>
             </li>
         </span>
         <span th:if="${session.page+1 == session.TotalPages || session.TotalPages == 0}">
             <li class="page-item disabled">
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page+1})}">下一页</a>
+                <a class="page-link" th:href="@{selectassigningmail(page=${session.page+1})}">下一页</a>
             </li>
         </span>
     </ul>

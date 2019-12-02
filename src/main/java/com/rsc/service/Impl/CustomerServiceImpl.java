@@ -73,7 +73,8 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setPassword(md5Password);
             customerRepository.save(customer);
             model.addAttribute("success", "注册成功！");
-            return "customer/success";
+            //return "customer/success";
+            return "forward:/rsc/customer/clogin";
         }
     }
 
@@ -90,7 +91,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @Date: 2019/11/29  18:28
      **/
     @Override
-    public String customerToLogin(String phone, String password, HttpSession session,Model model) {
+    public String customerToLogin(String phone, String password, HttpSession session, Model model) {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
         Customer customer = customerRepository.findCustomerByPhoneAndPassword(phone, md5Password);
         if (null == customer) {
@@ -170,7 +171,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
             MailState mailStateReadying = mailStateRepository.findMailStateById(1);//返回准备收件状态
             MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
             MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回等待分配状态
@@ -185,7 +186,7 @@ public class CustomerServiceImpl implements CustomerService {
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
-                session.setAttribute("count",count);
+                session.setAttribute("count", count);
                 return "customer/checkOrDetermine";
             }
         }
@@ -233,8 +234,45 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     /**
+     * @Title selectAssigningMail
+     * @Description: TODO 返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”的单
+     * @param session
+     * @param page
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/2  17:54
+     **/
+    @Override
+    public String selectAssigningMail(HttpSession session, int page) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (null == customer)
+            return "customer/login";
+        else {
+            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
+            MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回完成收件状态
+            MailState mailStateAS = mailStateRepository.findMailStateById(6);//返回正在派件状态
+            MailState mailStateAE = mailStateRepository.findMailStateById(9);//返回派件异常状态
+            MailState mailState0 = mailStateRepository.findMailStateById(0);//返回等待分配状态
+            Page<Mail> mailPage = mailRepository.selectAssigningMail(customer, mailStateFinishing, mailStateAS, mailStateAE, mailState0, pageable);
+            int totalPages = mailPage.getTotalPages();//一共多少页
+            if (0 == totalPages) {//0页
+                session.setAttribute("success", "您没有该状态的邮件！");
+                return "customer/success";
+            } else {
+                List<Mail> mailList = mailPage.getContent();
+                session.setAttribute("page", page);
+                session.setAttribute("count", mailList.size());
+                session.setAttribute("TotalPages", totalPages);
+                session.setAttribute("mailList", mailList);
+                return "customer/selectAssigningMail";
+            }
+        }
+
+    }
+
+    /**
      * @Title customerSelectMail
-     * @Description: TODO 用户查看已经"收件完成"的寄件：返回”收件完成“状态的单
+     * @Description: TODO 返回收件状态为”收件完成“且派件状态为“派件签收”的单
      * @param session
      * @param page
      * @return java.lang.String
@@ -247,15 +285,17 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
             MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回完成收件状态
-            Page<Mail> mailPage = mailRepository.findMailByCustomerAndFinishing(customer, mailStateFinishing, pageable);
+            MailState mailStateAS = mailStateRepository.findMailStateById(7);//返回派件签收状态
+            Page<Mail> mailPage = mailRepository.findMailByCustomerAndFinishing(customer, mailStateFinishing, mailStateAS, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("success", "您没有该状态的邮件！");
                 return "customer/success";
             } else {
                 List<Mail> mailList = mailPage.getContent();
+                session.setAttribute("count", mailList.size());
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
@@ -292,6 +332,7 @@ public class CustomerServiceImpl implements CustomerService {
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
+                session.setAttribute("count", mailList.size());
                 return "customer/selectfaultmail";
             }
         }

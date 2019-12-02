@@ -31,7 +31,7 @@ public class IndexController1 {
     }
 
     //返回用户使用的主页(登录/注册)
-    @GetMapping("clogin")
+    @RequestMapping("clogin")
     public String customerIndex(HttpSession session) {
             return "customer/login";
     }
@@ -55,8 +55,9 @@ public class IndexController1 {
     }
 
 
-    @GetMapping("clogout")
+    @RequestMapping("clogout")
     public String clogout(HttpSession session){
+        System.out.println("clogout");
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) {
             System.out.println("空工号，没登录！");

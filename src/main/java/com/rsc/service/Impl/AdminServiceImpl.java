@@ -65,7 +65,7 @@ public class AdminServiceImpl implements AdminService {
         String s="<h3>分配收件工作</h3><h4>";
         //所有的区都分配一次
         for (Region region : regions) {
-            System.out.println("<center><br>地区：" + region.getRegion() + "  编号：" + region.getId());
+            System.out.println("地区：" + region.getRegion() + "  编号：" + region.getId());
             s ="<center>"+s+ "地区：" +region.getRegion() + " &nbsp;编号：" + region.getId()+"---->";
             //返回某地区所有收件状态为“等待分配”的件
             List<Mail> remailList = mailRepository.findMailByRegionAndReceiveStateIsWaitingDistribution(region, mailStateWaitingDistribution);
@@ -129,7 +129,7 @@ public class AdminServiceImpl implements AdminService {
 
         //所有的区都分配一次
         for (Region region : regions) {
-            System.out.println("<br>地区：" + region.getRegion() + "&nbsp; 编号：" + region.getId());
+            System.out.println("地区：" + region.getRegion() + "&nbsp; 编号：" + region.getId());
             s ="<center>"+ s+ "地区：" +region.getRegion() + " 编号：" + region.getId()+"---->";
 
 

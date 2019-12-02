@@ -46,12 +46,16 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Query("select m from  Mail m where m.id=?1")
     List<Mail> findMailById1(int mailId);
 
-    //返回某用户的邮件状态为“收件完成”的所有单并分页
-    @Query("select m from  Mail m where m.customer=?1 and m.receiveState=?2")
-    Page<Mail> findMailByCustomerAndFinishing(Customer customer, MailState mailStateFinishing, Pageable pageable);
+    //返回某用户的邮件状态为“收件完成”的且派件状态为“派件签收”的所有单并分页
+    @Query("select m from  Mail m where m.customer=?1 and m.receiveState=?2 and m.assignState=?3")
+    Page<Mail> findMailByCustomerAndFinishing(Customer customer, MailState mailStateFinishing, MailState mailStateAS, Pageable pageable);
+
+    //返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”的单并分页
+    @Query("select m from  Mail m where m.customer=?1 and m.receiveState=?2 and (m.assignState=?3 or m.assignState=?4 or m.assignState=?5) ")
+    Page<Mail> selectAssigningMail(Customer customer, MailState mailStateFinishing, MailState mailStateAS, MailState mailStateAE, MailState mailState0, Pageable pageable);
 
     //返回某用户的邮件状态为“收件不成功”或”派件不成功“的所有单并分页
-    @Query("select m from  Mail m where m.customer=?1 and (m.receiveState=?2 or m.receiveState=?3)")
+    @Query("select m from  Mail m where m.customer=?1 and (m.receiveState=?2 or m.assignState=?3)")
     Page<Mail> findMailByCustomerAndFault(Customer customer, MailState mailStateReceiveFault, MailState mailStateAssignFault, Pageable pageable);
 
     //某邮差确定某邮件收件故障
@@ -78,8 +82,7 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     int addAMailAssignPostman(Postman assignPostman, MailState assignState, Date date, Mail mail);
 
     @Query("select m from Mail m")
-    List<Mail>  findAllMail();
-
+    List<Mail> findAllMail();
 
 
     //某邮差的邮件状态为“准备派件”的单更新为邮件状态“正在派件”
@@ -87,7 +90,7 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Query("update Mail as m set m.assignState =?1, m.assignFrequency=1 where m.assignState=?2 and m.assignPostman=?3")
     int updateAssignStateToAssigning(MailState mailStateReceiving, MailState mailStateReadying, Postman postman);
 
-    Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequency(Postman postman, MailState mailState,int af, Pageable pageable);
+    Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequency(Postman postman, MailState mailState, int af, Pageable pageable);
 
     //某邮差确定某邮件派件故障
     @Modifying
@@ -112,6 +115,14 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     @Query("update Mail as m set m.assignState = 7 where m.id = ?1")
     int updateAMailAssignSuccess(int mailId);
 
-    Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(Postman postman,MailState mailState, int before_af, int after_af, Pageable pageable);
+    Page<Mail> findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(Postman postman, MailState mailState, int before_af, int after_af, Pageable pageable);
+
+    //返回收件状态是“收件成功”和“收件失败”的件
+    @Query("select m from  Mail m where m.receivePostman=?1  and( m.receiveState=?2 or m.receiveState=?3)")
+    Page<Mail> historicalReceive(Postman postman, MailState mailState3, MailState mailState4, Pageable pageable);
+
+    //返回派件状态是“派件签收”和“派件失败”的件
+    @Query("select m from  Mail m where m.assignPostman=?1  and( m.assignState=?2 or m.assignState=?3)")
+    Page<Mail> historicalAssign(Postman postman, MailState mailState7, MailState mailState8, Pageable pageable);
 
 }

@@ -24,7 +24,7 @@
                 <th>收件人手机</th>
                 <th>收件人的地区</th>
                 <th>收件人详细地址</th>
-                <th>收件快递小哥</th>
+                <th>收件员/手机</th>
                 <th>收件状态</th>
                 <th>订单生成时间</th>
                 <th width="120px">已收取/付款</th>
@@ -42,7 +42,7 @@
                 <td th:text="${mail.assignRegion.region}"></td>
                 <td th:text="${mail.address}"></td>
                 <td><span th:if="${mail.receivePostman==null}" style="color: brown">暂无分配</span><span
-                        th:if="${mail.receivePostman!=null}"><span th:text="${mail.receivePostman.name}"></span></span>
+                        th:if="${mail.receivePostman!=null}">[[${mail.receivePostman.name}]]<br>[[${mail.receivePostman.phone}]]</span>
                 </td>
                 <td th:text="${mail.receiveState.state}" style="color: blue;"></td>
                 <td th:text="${#dates.format(mail.createTime,'yyyy-MM-dd HH:mm')}"></td>

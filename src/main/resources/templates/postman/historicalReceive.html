@@ -5,54 +5,34 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <title>失败的件</title>
+    <title>历史收件</title>
 </head>
 
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
-        <p><h4 style="color: #cf9d2a">失败的件</h4></p>
+        <p><h4 style="color: #cf9d2a">历史收件</h4></p>
         <table class="table-striped form-group vw-100">
             <thead>
             <tr>
                 <th>邮件编号</th>
-                <th>您的姓名</th>
-                <th>您的手机号</th>
-                <th>您的地区</th>
-                <th>您的地址</th>
-                <th>收件人姓名</th>
-                <th>收件人手机</th>
-                <th>收件人的地区</th>
-                <th>收件人详细地址</th>
-                <th>收件员/手机</th>
                 <th>收件状态</th>
-                <th>派件员/手机</th>
-                <th>派件状态</th>
-                <th>失败原因</th>
+                <th>系统分配收件时间</th>
                 <th>订单生成时间</th>
+                <th>收件是否故障</th>
+                <th>失败原因</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="mail:${session.mailList}">
+            <tr th:each="mail:${session.mailList}" var="contactrecordlistByType">
                 <td th:text="${mail.id}"></td>
-                <td th:text="${mail.customer.name}"></td>
-                <td th:text="${mail.customer.phone}"></td>
-                <td th:text="${mail.customer.region.region}"></td>
-                <td th:text="${mail.customer.address}"></td>
-                <td th:text="${mail.addresseeName}"></td>
-                <td th:text="${mail.addresseePhone}"></td>
-                <td th:text="${mail.assignRegion.region}"></td>
-                <td th:text="${mail.address}"></td>
-                <td>[[${mail.receivePostman.name}]]<br>[[${mail.receivePostman.phone}]]</td>
-                <td th:text="${mail.receiveState.state}" style="color: brown;"></td>
-                <td><span th:if="${mail.assignPostman==null}">无</span><span
-                        th:if="${mail.assignPostman!=null}">[[${mail.assignPostman.name}]]<br>[[${mail.assignPostman.phone}]]</span>
-                </td>
-                <td style="color:brown;"><span th:if="${mail.assignState==null}" style="color: brown;">无</span><span
-                        th:if="${mail.assignState!=null}"><span th:text="${mail.assignState.state}"></span></span></td>
+                <td th:text="${mail.receiveState.state}" style="color:blue;"></td>
+                <td th:text="${#dates.format(mail.distributeReceiveTime,'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#dates.format(mail.createTime,'yyyy-MM-dd HH:mm')}"></td>
+                <td><span th:if="${mail.receiveFrequency == 0}">否</span><span
+                        th:if="${mail.receiveFrequency == 1}">是</span></td>
                 <td style="color:blue;"><span th:if="${mail.reason==null}" style="color: brown;">无</span><span
                         th:if="${mail.reason!=null}"><span th:text="${mail.reason}"></span></span></td>
-                <td th:text="${#dates.format(mail.createTime,'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             </tbody>
         </table>
@@ -68,12 +48,12 @@
         </th:url>
         <span th:if="${session.page !=0 }">
             <li class="page-item">
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page-1})}">上一页</a>
+                <a class="page-link" th:href="@{historicalreceive(page=${session.page-1})}">上一页</a>
             </li>
         </span>
-        <span th:if="${session.page ==0 }">
+        <span  th:if="${session.page ==0 }">
             <li class="page-item disabled">
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page-1})}">上一页</a>
+                <a class="page-link" th:href="@{historicalreceive(page=${session.page-1})}">上一页</a>
             </li>
         </span>
         <li class="page-item"><a class="page-link">第<span th:text="${session.page+1}"></span>页/共<span
@@ -82,15 +62,15 @@
         <span th:if="${session.page+1 !=session.TotalPages && session.TotalPages !=0}">
             <li class="page-item">
                 <!--<a class="page-link" href="passign?page=1">下一页</a>-->
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page+1})}">下一页</a>
+                <a class="page-link" th:href="@{historicalreceive(page=${session.page+1})}">下一页</a>
             </li>
         </span>
         <span th:if="${session.page+1 == session.TotalPages || session.TotalPages == 0}">
             <li class="page-item disabled">
-                <a class="page-link" th:href="@{selectfaultmail(page=${session.page+1})}">下一页</a>
+                <a class="page-link" th:href="@{historicalreceive(page=${session.page+1})}">下一页</a>
             </li>
         </span>
-    </ul>
+    </ul><
 </nav>
 
 <script src="/js/jquery-3.4.0.js"></script>
@@ -110,7 +90,7 @@
 
         $('#delete').on('click', function () {
             var cid = $(this).data('cid')
-            // console.log('此处发送AJAX请求到服务端删除cid为 %s 的记录。', cid)
+            console.log('此处发送AJAX请求到服务端删除cid为 %s 的记录。', cid)
             $('#mymodal').modal('hide')
         })
 

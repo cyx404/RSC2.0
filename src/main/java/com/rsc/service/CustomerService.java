@@ -86,4 +86,15 @@ public interface CustomerService {
      * @Date: 2019/11/17  17:37
      **/
     String customerSelectFaultMail(HttpSession session, int page);
+
+    /**
+     * @Title selectAssigningMail
+     * @Description: TODO 返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”的单
+     * @param session
+     * @param page
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/2  17:52
+     **/
+    String selectAssigningMail(HttpSession session, int page);
 }

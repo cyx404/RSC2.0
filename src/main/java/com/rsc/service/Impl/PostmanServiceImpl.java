@@ -574,4 +574,76 @@ public class PostmanServiceImpl implements PostmanService {
 
         }
     }
+
+    /**
+     * @Title historicalReceive
+     * @Description: TODO 历史收件：返回收件状态是“收件成功”和“收件失败”的件
+     * @param session
+     * @param page
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/2  18:45
+     **/
+    @Override
+    public String historicalReceive(HttpSession session, int page) {
+        Postman postman = (Postman) session.getAttribute("postman");
+        if (postman == null) {
+            System.out.println("==========空工号，没登录！==========");
+            return "postman/login";
+        } else {
+            Pageable pageable = PageRequest.of(page, 4);//分页，每页多少条记录
+            MailState mailState3 = mailStateRepository.findMailStateById(3);//返回"收件成功"状态
+            MailState mailState4 = mailStateRepository.findMailStateById(4);//返回"收件失败"状态
+            Page<Mail> mailPage = mailRepository.historicalReceive(postman, mailState3, mailState4, pageable);
+            int totalPages = mailPage.getTotalPages();//一共多少页
+            if (0 == totalPages) {//0页
+                session.setAttribute("psuccess", "你没有该状态的单！");
+                return "postman/success";
+            } else {
+                List<Mail> mailList = mailPage.getContent();
+                int count = mailList.size();
+                session.setAttribute("page", page);
+                session.setAttribute("TotalPages", totalPages);
+                session.setAttribute("mailList", mailList);
+                session.setAttribute("count", count);
+            }
+        }
+        return "postman/historicalReceive";
+    }
+
+    /**
+     * @Title historicalAssign
+     * @Description: TODO  历史派件：返回派件状态是“派件签收”和“派件失败”的件
+     * @param session
+     * @param page
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/2  18:58
+     **/
+    @Override
+    public String historicalAssign(HttpSession session, int page) {
+        Postman postman = (Postman) session.getAttribute("postman");
+        if (postman == null) {
+            System.out.println("==========空工号，没登录！==========");
+            return "postman/login";
+        } else {
+            Pageable pageable = PageRequest.of(page, 4);//分页，每页多少条记录
+            MailState mailState7 = mailStateRepository.findMailStateById(7);//返回"派件签收"状态
+            MailState mailState8 = mailStateRepository.findMailStateById(8);//返回"派件失败"状态
+            Page<Mail> mailPage = mailRepository.historicalAssign(postman, mailState7, mailState8, pageable);
+            int totalPages = mailPage.getTotalPages();//一共多少页
+            if (0 == totalPages) {//0页
+                session.setAttribute("psuccess", "你没有该状态的单！");
+                return "postman/success";
+            } else {
+                List<Mail> mailList = mailPage.getContent();
+                int count = mailList.size();
+                session.setAttribute("page", page);
+                session.setAttribute("TotalPages", totalPages);
+                session.setAttribute("mailList", mailList);
+                session.setAttribute("count", count);
+            }
+        }
+        return "postman/historicalAssign";
+    }
 }

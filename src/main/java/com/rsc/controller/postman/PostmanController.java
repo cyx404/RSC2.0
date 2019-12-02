@@ -102,4 +102,17 @@ public class PostmanController {
     public String exceptionToSuccess(HttpSession session, @RequestParam Mail mailId, @RequestParam int page, Model model) {
         return postmanService.exceptionToSuccess(session, mailId, page, model);
     }
+
+    //历史收件：返回收件状态是“收件成功”和“收件失败”的件
+    @RequestMapping("historicalreceive")
+    public String historicalReceive(HttpSession session,@RequestParam int page){
+        return  postmanService.historicalReceive(session,page);
+    }
+
+    //历史派件：返回派件状态是“派件签收”和“派件失败”的件
+    @RequestMapping("historicalassign")
+    public String historicalAssign(HttpSession session,@RequestParam int page){
+        return  postmanService.historicalAssign(session,page);
+    }
+
 }

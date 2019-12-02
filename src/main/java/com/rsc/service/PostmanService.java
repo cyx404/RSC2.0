@@ -183,4 +183,27 @@ public interface PostmanService {
      *@date: 2019/11/26 14:56
      */
     String exceptionToSuccess(HttpSession session, Mail mailId, int page, Model model);
+
+    /**
+     * @Title historicalReceive
+     * @Description: TODO 历史收件：返回收件状态是“收件成功”和“收件失败”的件
+     * @param session
+     * @param page
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/2  18:45
+     **/
+    String historicalReceive(HttpSession session, int page);
+
+
+    /**
+     * @Title historicalAssign
+     * @Description: TODO  历史派件：返回派件状态是“派件签收”和“派件失败”的件
+     * @param session
+     * @param page
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/2  18:58
+     **/
+    String historicalAssign(HttpSession session, int page);
 }

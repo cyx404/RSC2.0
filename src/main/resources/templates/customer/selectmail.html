@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <title>查看历史寄件</title>
+    <title>成功的件</title>
 </head>
 
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
-        <p><h4 style="color: #cf9d2a">已成功的收件</h4></p>
+        <p><h4 style="color: #cf9d2a">成功的件</h4></p>
         <table class="table-striped form-group vw-100">
             <thead>
             <tr>
@@ -24,10 +24,10 @@
                 <th>收件人手机</th>
                 <th>收件人的地区</th>
                 <th>收件人详细地址</th>
-                <th>收件快递小哥</th>
+                <th>收件员/手机</th>
                 <th>收件状态</th>
                 <th>收件时间</th>
-                <th>派件快递小哥</th>
+                <th>派件员/手机</th>
                 <th>派件状态</th>
                 <th>派件时间</th>
                 <th>订单生成时间</th>
@@ -44,11 +44,11 @@
                 <td th:text="${mail.addresseePhone}"></td>
                 <td th:text="${mail.assignRegion.region}"></td>
                 <td th:text="${mail.address}"></td>
-                <td th:text="${mail.receivePostman.name}"></td>
+                <td>[[${mail.receivePostman.name}]]<br>[[${mail.receivePostman.phone}]]</td>
                 <td th:text="${mail.receiveState.state}" style="color: blue"></td>
                 <td th:text="${#dates.format(mail.createTime,'yyyy-MM-dd HH:mm')}"></td>
-                <td style="color:#d39e04;"><span th:if="${mail.assignPostman==null}" style="color: coral;">暂无分配</span><span
-                        th:if="${mail.assignPostman!=null}"><span th:text="${mail.assignPostman.name}"></span></span>
+                <td><span th:if="${mail.assignPostman==null}" style="color: coral;">暂无分配</span><span
+                        th:if="${mail.assignPostman!=null}">[[${mail.assignPostman.name}]]<br>[[${mail.assignPostman.phone}]]</span></span>
                 </td>
                 <td style="color:blue;"><span th:if="${mail.assignState==null}" style="color: brown;">还没派件</span><span
                         th:if="${mail.assignState!=null}"><span th:text="${mail.assignState.state}"></span></span></td>
