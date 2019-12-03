@@ -235,7 +235,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * @Title selectAssigningMail
-     * @Description: TODO 返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”的单
+     * @Description: TODO 返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”或”准备派件“的单
      * @param session
      * @param page
      * @return java.lang.String
@@ -250,10 +250,9 @@ public class CustomerServiceImpl implements CustomerService {
         else {
             Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
             MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回完成收件状态
-            MailState mailStateAS = mailStateRepository.findMailStateById(6);//返回正在派件状态
-            MailState mailStateAE = mailStateRepository.findMailStateById(9);//返回派件异常状态
-            MailState mailState0 = mailStateRepository.findMailStateById(0);//返回等待分配状态
-            Page<Mail> mailPage = mailRepository.selectAssigningMail(customer, mailStateFinishing, mailStateAS, mailStateAE, mailState0, pageable);
+            MailState mailStateE = mailStateRepository.findMailStateById(8);//返回派件异常状态
+            MailState mailStateF = mailStateRepository.findMailStateById(7);//返回派件签收状态
+            Page<Mail> mailPage = mailRepository.selectAssigningMail(customer, mailStateFinishing, mailStateE, mailStateF, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
             if (0 == totalPages) {//0页
                 session.setAttribute("success", "您没有该状态的邮件！");

@@ -51,8 +51,8 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     Page<Mail> findMailByCustomerAndFinishing(Customer customer, MailState mailStateFinishing, MailState mailStateAS, Pageable pageable);
 
     //返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”的单并分页
-    @Query("select m from  Mail m where m.customer=?1 and m.receiveState=?2 and (m.assignState=?3 or m.assignState=?4 or m.assignState=?5) ")
-    Page<Mail> selectAssigningMail(Customer customer, MailState mailStateFinishing, MailState mailStateAS, MailState mailStateAE, MailState mailState0, Pageable pageable);
+    @Query("select m from  Mail m where m.customer=?1 and m.receiveState=?2 and m.assignState<>?3 and m.assignState<>?4  ")
+    Page<Mail> selectAssigningMail(Customer customer, MailState mailStateFinishing, MailState mailStateE,MailState mailStateF, Pageable pageable);
 
     //返回某用户的邮件状态为“收件不成功”或”派件不成功“的所有单并分页
     @Query("select m from  Mail m where m.customer=?1 and (m.receiveState=?2 or m.assignState=?3)")

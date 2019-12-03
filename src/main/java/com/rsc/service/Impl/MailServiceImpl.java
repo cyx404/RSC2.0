@@ -51,6 +51,9 @@ public class MailServiceImpl implements MailService {
             }
             if (m.getAssignState() != null) {
                 switch (m.getAssignState().getId()) {
+                    case 0:
+                        mailState0.add(m);
+                        break;
                     case 5:
                         mailState5.add(m);
                         break;

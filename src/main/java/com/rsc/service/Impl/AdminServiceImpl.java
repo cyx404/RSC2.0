@@ -7,6 +7,9 @@ import com.rsc.repository.RegionRepository;
 import com.rsc.repository.WorkloadRepository;
 import com.rsc.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -70,8 +73,9 @@ public class AdminServiceImpl implements AdminService {
             //返回某地区所有收件状态为“等待分配”的件
             List<Mail> remailList = mailRepository.findMailByRegionAndReceiveStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
+            Pageable pageable = PageRequest.of(0, 100, Sort.Direction.ASC, "expectationWorkload");//预期工作量升序排列
             //返回某地区的已经签到上班的邮差的工作量
-            List<Workload> workloadList = workloadRepository.findWorkloadByAlreadyOnduty(year, month, date, region);
+            List<Workload> workloadList = workloadRepository.findWorkloadByAlreadyOnduty(year, month, date, region,pageable);
 
             //根据上班的邮差人数分配邮件
             Postman postman;
@@ -136,8 +140,10 @@ public class AdminServiceImpl implements AdminService {
             //返回某地区所有派件状态为“等待分配”的件
             List<Mail> asmailList = mailRepository.findMailByRegionAndAssignStateIsWaitingDistribution(region, mailStateWaitingDistribution);
 
+
+            Pageable pageable = PageRequest.of(0, 100, Sort.Direction.ASC, "expectationWorkload");//预期工作量升序排列
             //返回某地区的已经签到上班的邮差的工作量
-            List<Workload> workloadList = workloadRepository.findWorkloadByAlreadyOnduty(year, month, date, region);
+            List<Workload> workloadList = workloadRepository.findWorkloadByAlreadyOnduty(year, month, date, region,pageable);
 
             //根据上班的邮差人数分配邮件
             Postman postman;
@@ -145,7 +151,7 @@ public class AdminServiceImpl implements AdminService {
             int postmanIdnex = 0;//List中第一个邮差的下标
             int asmailnum = asmailList.size();//需要分配的派件的数量
             System.out.println("需要分配的派件的数量:" + asmailnum);
-            s = s+ "需要分配的收件的数量:" +asmailnum+"---->";
+            s = s+ "需要分配的派件的数量:" +asmailnum+"---->";
             int postmannum = workloadList.size();//上班邮差人数，一个人当天生成一条工作量，可以通过当天多少条工作量得出多少人上班
             System.out.println("上班邮差人数:" + postmannum);
             s = s+ "上班邮差人数:" +postmannum+"<br><br>";

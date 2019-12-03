@@ -53,7 +53,7 @@ public class CustomerController {
         return customerService.customerDetermineMail(session,mailId);
     }
 
-    //返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”的单
+    //返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”或”准备派件“的单
     @RequestMapping("selectassigningmail")
     public String selectAssigningMail(HttpSession session,@RequestParam int page){
         return customerService.selectAssigningMail(session,page);

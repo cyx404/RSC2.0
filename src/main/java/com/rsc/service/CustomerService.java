@@ -89,7 +89,7 @@ public interface CustomerService {
 
     /**
      * @Title selectAssigningMail
-     * @Description: TODO 返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”的单
+     * @Description: TODO 返回收件状态是”收件完成“的且派件状态是“正在派件”或“派件异常”或“等待分配”或”准备派件“的单
      * @param session
      * @param page
      * @return java.lang.String

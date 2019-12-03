@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class AttendanceController {
 
     @Autowired
-   private AttendanceRepository attendanceRepository;
+    private AttendanceRepository attendanceRepository;
 
     @RequestMapping(value = "leaves")
     public String addLeaves(HttpSession session, @RequestParam int pid, @RequestParam int year, @RequestParam int month) {
@@ -28,22 +28,23 @@ public class AttendanceController {
     public String addOvertime(HttpSession session, @RequestParam int pid, @RequestParam int year, @RequestParam int month) {
         // System.out.println("id"+pid+"year"+year+"month"+month);
         attendanceRepository.updateAttendanceOvertimeByPostmanIdAndYearAndMonth(pid, year, month);
-        return "c";
+        return "redirect:/rsc/admin/attendance";
 
     }
 
     @RequestMapping(value = "attendance")
-    public String attendance(HttpSession session) {
+    public String attendance(HttpSession session,Model model) {
         // attendanceRepository.updateAttendanceLeavesByPostmanAndYearAndMonth(pid,year,month);
         if (session.getAttribute("mid") != null) {
-            session.setAttribute("attendences", attendanceRepository.findAttendancesByPostman((Integer) session.getAttribute("mid")));
+            model.addAttribute("attendences", attendanceRepository.findAttendancesByPostman((Integer) session.getAttribute("mid")));
         }
         return "admin/attendance.html";
     }
 
     @RequestMapping(value = "findPostmanAttendance")
-    public String findPostmanAttendance(Model model, @RequestParam int mid) {
+    public String findPostmanAttendance(HttpSession session,Model model, @RequestParam int mid) {
         // attendanceRepository.updateAttendanceLeavesByPostmanAndYearAndMonth(pid,year,month);
+        session.setAttribute("mid",mid);
         model.addAttribute("mid", mid);
         model.addAttribute("attendences", attendanceRepository.findAttendancesByPostman(mid));
         return "admin/attendance.html";
