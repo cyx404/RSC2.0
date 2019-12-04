@@ -123,9 +123,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = (Customer) session.getAttribute("customer");
         if (null != customer) {
-
             try {//快递小哥上班了，立即分配任务
-                Postman postman = postmanService.selectPostmantoWork(year, month, date, customer.getRegion());////分配收件员
+                Postman postman = postmanService.selectPostmantoWork(year, month, date, mail.getReceiveRegion());////分配收件员
                 mail.setDistributeReceiveTime(new Date());//设置系统分配时间
                 mail.setReceivePostman(postman);//收件员
                 MailState mailStateReadying = mailStateRepository.findMailStateById(1);//返回“准备收件”状态
@@ -142,7 +141,8 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             mail.setCustomer(customer);//所属客户
-            mail.setReceiveRegion(customer.getRegion());//收件地区（客户的地区）
+            //mail.setReceiveRegion(customer.getRegion());//上门收件地区
+
 //            MailState mailStateNull = mailStateRepository.findMailStateById(0);//返回空件状态
 //            mail.setAssignState(mailStateNull);//派件状态
             mail.setCreateTime(new Date());//订单生成时间

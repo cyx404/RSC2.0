@@ -23,6 +23,8 @@ public class Mail {
     @Column(name = "addressee_phone")
     private String addresseePhone;//收件人手机号
 
+    private String raddress;//上门收件的地址
+
     private String address;//派送的详细地址
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Customer.class)
@@ -104,6 +106,14 @@ public class Mail {
 
     public void setAddresseePhone(String addresseePhone) {
         this.addresseePhone = addresseePhone;
+    }
+
+    public String getRaddress() {
+        return raddress;
+    }
+
+    public void setRaddress(String raddress) {
+        this.raddress = raddress;
     }
 
     public String getAddress() {

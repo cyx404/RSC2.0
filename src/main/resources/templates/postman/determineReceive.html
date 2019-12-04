@@ -28,8 +28,8 @@
                 <th>邮件编号</th>
                 <th>所属客户姓名</th>
                 <th>所属客户手机号</th>
-                <th>客户的地区</th>
-                <th>客户的地址</th>
+                <th>上门收件地区</th>
+                <th>上门收件地址</th>
                 <th>收件状态</th>
                 <th>系统分配收件时间</th>
                 <th>编辑异常原因</th>
@@ -41,8 +41,8 @@
                 <td th:text="${mail.id}"></td>
                 <td th:text="${mail.customer.name}"></td>
                 <td th:text="${mail.customer.phone}"></td>
-                <td th:text="${mail.customer.region.region}"></td>
-                <td th:text="${mail.customer.address}"></td>
+                <td th:text="${mail.receiveRegion.region}"></td>
+                <td th:text="${mail.raddress}"></td>
                 <td th:text="${mail.receiveState.state}" style="color: blue;"></td>
                 <td th:text="${#dates.format(mail.distributeReceiveTime,'yyyy-MM-dd HH:mm')}"></td>
 
