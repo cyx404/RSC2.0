@@ -526,7 +526,7 @@ public class PostmanServiceImpl implements PostmanService {
         } else {
             MailState mailStateReadying = mailStateRepository.findMailStateById(5);//返回准备派件状态
             MailState mailStateAssigning = mailStateRepository.findMailStateById(6);//返回正在派件状态
-            int num = mailRepository.updateAssignStateToAssigning(mailStateAssigning, mailStateReadying, postman);
+            int num = mailRepository.updateAssignStateToAssigning(mailStateAssigning, mailStateReadying, postman,new Date());
             session.setAttribute("psuccess", "一共 " + num + " 单，派件接单成功！");
             return "postman/success";
         }

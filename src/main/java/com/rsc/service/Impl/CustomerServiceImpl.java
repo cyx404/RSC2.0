@@ -225,6 +225,18 @@ public class CustomerServiceImpl implements CustomerService {
             //完成状态，即该单对应邮差工作量（收件计件数加1，工作总量+1）
             int a = workloadRepository.updateWorkloadReceiveWorkloadAndTotalWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, mail.getReceivePostman());
             System.out.println("收件计件数加1，工作总量+1：" + a);
+
+            try {//快递小哥上班了，立即找人来分配派件任务
+                MailState mailStateReadyingAssign = mailStateRepository.findMailStateById(5);//返回“准备派件”状态
+                Postman postman = postmanService.selectPostmantoWork(year, month, date, mail.getAssignRegion());////分配派件员
+                mailRepository.addAMailAssignPostman(postman, mailStateReadyingAssign, new Date(), mail); //根据寄件给它分配派件员,派件状态变成”准备派件“,设置系统分配派件时间
+                workloadRepository.updateWorkloadExpectationWorkloadByPostmanAndYearAndMonthAndDate(year, month, date, postman);//派件员预期工作总量+1
+            } catch (Exception e) {//快递小哥还没上班，收件员为空但订单先存起来，等明天上班，管理员再分配
+                System.out.println("分配派件工作失败没人上班，等待管理员分配");
+            }
+
+
+
             return "customer/success";
         } else {
             session.setAttribute("success", "付款失败！快递小哥还没揽件！");
