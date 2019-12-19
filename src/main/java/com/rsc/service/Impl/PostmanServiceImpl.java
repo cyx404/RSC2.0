@@ -685,7 +685,7 @@ public class PostmanServiceImpl implements PostmanService {
             listmap.add(mapValue);
         }
 
-        String columnNames[] = {"邮件编号", "所属客户姓名", "客户手机号", "上门收件地区", "上门收件地址", "系统分配收件时间", "是否收件"};//列名
+        String columnNames[] = {"邮件编号", "所属客户姓名", "客户手机号", "上门收件地区", "上门收件地址", "系统分配收件时间", "是否收件/原因"};//列名
         String keys[] = {"id", "name", "phone", "region", "address", "time", "determine"};//map中的key
         try {
             ExcelUtil.downloadWorkBook(listmap, keys, columnNames, fileName, response);
@@ -741,7 +741,7 @@ public class PostmanServiceImpl implements PostmanService {
             listmap.add(mapValue);
         }
 
-        String columnNames[] = {"邮件编号", "收件人姓名", "收件人手机号", "派送的地区", "派送的地址", "派件状态", "系统分配派件时间", "是否派件"};//列名
+        String columnNames[] = {"邮件编号", "收件人姓名", "收件人手机号", "派送的地区", "派送的地址", "派件状态", "系统分配派件时间", "是否派件/原因"};//列名
         String keys[] = {"id", "name", "phone", "region", "address", "state", "time", "determine"};//map中的key
         try {
             ExcelUtil.downloadWorkBook(listmap, keys, columnNames, fileName, response);
