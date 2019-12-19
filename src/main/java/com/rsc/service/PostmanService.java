@@ -213,13 +213,13 @@ public interface PostmanService {
     /**
      * @Title downExcelOfReceiveMail
      * @Description: TODO 下载正在收件的件
-     * @param response
      * @param session
+     * @param response
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/12/19  0:15
      **/
-    String downExcelOfReceiveMail(HttpSession session,HttpServletResponse response);
+    String downExcelOfReceiveMail(HttpSession session, HttpServletResponse response);
 
 
     /**

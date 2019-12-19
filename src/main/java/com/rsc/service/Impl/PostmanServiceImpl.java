@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -651,8 +652,9 @@ public class PostmanServiceImpl implements PostmanService {
     /**
      * @Title downExcelOfReceiveMail
      * @Description: TODO 下载正在收件的件
-     * @param response
      * @param session
+     * @param response
+     * @param request
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/12/19  0:16
@@ -662,8 +664,9 @@ public class PostmanServiceImpl implements PostmanService {
         //导出Excel文件
         Postman postman = (Postman) session.getAttribute("postman");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH时mm分ss秒");
-        String fileName = postman.getName() + "-收件信息表-" + formatter2.format(new Date());
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+        //String fileName = postman.getName() + "-收件信息表-" + formatter2.format(new Date());
+        String fileName = postman.getId() + "-ReceiveMails-" + formatter2.format(new Date());
         MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
         List<Mail> mailList = mailRepository.findAllByReceivePostmanAndReceiveState(postman, mailStateReceiving);//返回该邮差正在派件的单
 
@@ -711,8 +714,8 @@ public class PostmanServiceImpl implements PostmanService {
         //导出Excel文件
         Postman postman = (Postman) session.getAttribute("postman");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH时mm分ss秒");
-        String fileName = postman.getName() + "-派件信息表-" + formatter2.format(new Date());
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+        String fileName = postman.getId() + "-AssignMails-" + formatter2.format(new Date());
 
         MailState mailStateAssignException = mailStateRepository.findMailStateById(9);//返回派件异常状态
         MailState mailStateAssigning = mailStateRepository.findMailStateById(6);//返回正在派件状态
