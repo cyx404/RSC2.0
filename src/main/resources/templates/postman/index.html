@@ -82,23 +82,45 @@
         </div>
 
         <div class="list-group">
-            <a href="" class="list-group-item list-group-item-action bg-dark text-light"
-               data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">快递管理</a>
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                 data-parent="#accordionExample">
+            <a class="list-group-item list-group-item-action bg-dark text-light" href="pduty" target="lqx" id="qd">上班签到</a>
+
+            <a href="#collapseTwo" class="list-group-item list-group-item-action bg-dark text-light"
+               data-toggle="collapse" aria-expanded="true" aria-controls="collapseTwo">收件工作</a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body p-0">
-                    <div class="nav flex-column nav-pills" id="v-pills-tab">
-                        <a class="nav-link" href="pduty" target="lqx" id="client1">上班签到</a>
+                    <div class="nav flex-column nav-pills" id="v-pills-tab1">
                         <a class="nav-link" href="preceive?page=0" target="lqx" id="contact1">去收件</a>
+                        <a class="nav-link" href="downExcelOfReceiveMail" target="lqx" id="contact12">下载收件信息</a>
                         <a class="nav-link" href="pdeterminereceive?page=0" target="lqx" id="contactRecord1">确认收件</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <a href="#collapseThree" class="list-group-item list-group-item-action bg-dark text-light"
+               data-toggle="collapse" aria-expanded="true" aria-controls="collapseTwo">派件工作</a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body p-0">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab2">
                         <a class="nav-link" href="passign?page=0" target="lqx" id="clinefeedback1">去派件</a>
+                        <a class="nav-link" href="downExcelOfAssigneMail" target="lqx" id="clinefeedback12">下载派件信息</a>
                         <a class="nav-link" href="pdetermineassigned?page=0" target="lqx" id="fileabout1">确认派件</a>
                         <a class="nav-link" href="assignException?page=0" target="lqx" id="clientSelect1">异常派件</a>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#collapseFour" class="list-group-item list-group-item-action bg-dark text-light"
+               data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">历史快递</a>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body p-0">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab3">
                         <a class="nav-link" href="historicalreceive?page=0" target="lqx" >历史收件</a>
                         <a class="nav-link" href="historicalassign?page=0" target="lqx" >历史派件</a>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 

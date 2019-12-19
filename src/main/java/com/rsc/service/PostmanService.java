@@ -6,6 +6,7 @@ import com.rsc.entity.Postman;
 import com.rsc.entity.Region;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -80,11 +81,12 @@ public interface PostmanService {
      * @Title postmanToAllReceive
      * @Description: TODO 邮差一键全部接单(接全部收件)
      * @param session
+     * @param response
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/17  12:45
      **/
-    String postmanToAllReceive(HttpSession session);
+    String postmanToAllReceive(HttpSession session,HttpServletResponse response);
 
 
     /**
@@ -206,4 +208,28 @@ public interface PostmanService {
      * @Date: 2019/12/2  18:58
      **/
     String historicalAssign(HttpSession session, int page);
+
+
+    /**
+     * @Title downExcelOfReceiveMail
+     * @Description: TODO 下载正在收件的件
+     * @param response
+     * @param session
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/19  0:15
+     **/
+    String downExcelOfReceiveMail(HttpSession session,HttpServletResponse response);
+
+
+    /**
+     * @Title downExcelOfAssigneMail
+     * @Description: TODO 下载正在派件+派件异常的件
+     * @param session
+     * @param response
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/19  1:18
+     **/
+    String downExcelOfAssigneMail(HttpSession session, HttpServletResponse response);
 }

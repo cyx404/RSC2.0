@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <title>确认派件</title>
 </head>
-
+<script>
+    function check() {
+        var yichang = $("#yichang").val();
+        if (yichang == null || yichang == "") {
+            alert("异常原因不能为空");
+            return false;
+        }
+        return true;
+    }
+</script>
 <body>
 <div class="d-flex justify-content-center vh-90">
     <center>
@@ -41,10 +50,10 @@
                 <td th:text="${#dates.format(mail.lastAssignTime,'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${mail.assignFrequency-1}">
                 <td>
-                    <form action="assignfault" method="post">
+                    <form action="assignfault" method="post" onsubmit="return check()">
                         <input type="hidden" th:value="${mail.id}" name="mailId"/>
                         <input type="hidden" th:value="${session.page}" name="page"/>
-                        <textarea name="reason" placeholder="如异常请填写异常原因" rows="2" cols="22"></textarea><br>
+                        <textarea name="reason" placeholder="如异常请填写异常原因" rows="2" cols="22" id="yichang"></textarea><br>
                         <input type="submit" value="异常" class="btn btn-danger"/>
                     </form>
                 </td>

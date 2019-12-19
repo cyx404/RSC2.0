@@ -3,6 +3,7 @@ package com.rsc.service.Impl;
 import com.rsc.entity.*;
 import com.rsc.repository.*;
 import com.rsc.service.PostmanService;
+import com.rsc.utils.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,11 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @ClassName:PostmanServiceImpl
@@ -56,7 +56,7 @@ public class PostmanServiceImpl implements PostmanService {
      * @Date: 2019/11/16  13:16
      **/
     @Override
-    public String postmanToLogin(String phone, String password, HttpSession session,Model model) {
+    public String postmanToLogin(String phone, String password, HttpSession session, Model model) {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
         Postman postman = postmanRepository.findPostmanByPhoneAndPassword(phone, md5Password);
         if (null == postman) {
@@ -175,7 +175,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 6);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回准备派件状态
             Page<Mail> mailPage = mailRepository.findMailByReceivePostmanAndReceiveState(postman, mailState, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
@@ -188,7 +188,7 @@ public class PostmanServiceImpl implements PostmanService {
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
-                session.setAttribute("count",count);
+                session.setAttribute("count", count);
                 //return "postman/receive";
                 return str;
             }
@@ -200,13 +200,14 @@ public class PostmanServiceImpl implements PostmanService {
      * @Title postmanToAllReceive
      * @Description: TODO 邮差一键全部接单(接全部收件)
      * @param session
+     * @param response
      * @return java.lang.String
      * @Author: chenyx
      * @Date: 2019/11/17  12:45
      **/
     @Transactional
     @Override
-    public String postmanToAllReceive(HttpSession session) {
+    public String postmanToAllReceive(HttpSession session, HttpServletResponse response) {
         Postman postman = (Postman) session.getAttribute("postman");
         if (postman == null) {
             System.out.println("==========空工号，没登录！==========");
@@ -302,7 +303,7 @@ public class PostmanServiceImpl implements PostmanService {
 
     //xiaqi:查找某年某月所有员工的工资情况
     @Override
-    public List<List> findAllPostmanSalary(int year,int month) {
+    public List<List> findAllPostmanSalary(int year, int month) {
         List<Postman> postmanList = postmanRepository.findAllPostman();
         List<List> salaryList = new ArrayList<>();
         for (Postman p : postmanList) {
@@ -312,8 +313,8 @@ public class PostmanServiceImpl implements PostmanService {
             int receiveWorkloadsum = 0;//收件总和
             int assignWorkloadsum = 0;//派件总和
             for (Workload w : workloads) {
-                if(w.getYear()==year&&w.getMonth()==month){
-                total += w.getTotalWorkload() * 5;
+                if (w.getYear() == year && w.getMonth() == month) {
+                    total += w.getTotalWorkload() * 5;
                     receiveWorkloadsum += w.getReceiveWorkload();
                     assignWorkloadsum += w.getAssignWorkload();
                 }
@@ -357,7 +358,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 6);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回准备派件状态
             Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState, 0, pageable);
             int totalPages = mailPage.getTotalPages();//一共多少页
@@ -370,7 +371,7 @@ public class PostmanServiceImpl implements PostmanService {
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
-                session.setAttribute("count",count);
+                session.setAttribute("count", count);
                 return str;
             }
         }
@@ -391,7 +392,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 2);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 6);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回正在派件状态
             Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequency(postman, mailState, 1, pageable);//获取派件次数为1、状态为正在派件的订单
             int totalPages = mailPage.getTotalPages();//一共多少页
@@ -404,7 +405,7 @@ public class PostmanServiceImpl implements PostmanService {
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
-                session.setAttribute("count",count);
+                session.setAttribute("count", count);
                 return str;
             }
         }
@@ -422,7 +423,7 @@ public class PostmanServiceImpl implements PostmanService {
     public String postmanAssignedSuccess(HttpSession session, int page, int mailStateId, String str) {
         Postman postman = (Postman) session.getAttribute("postman");
 //        System.out.println(postman.getName());
-        Pageable pageable = PageRequest.of(page, 2);
+        Pageable pageable = PageRequest.of(page, 6);
 //        System.out.println("1:"+pageable);
         MailState mailState = mailStateRepository.findMailStateById(mailStateId);//返回正在派件状态
         Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignState(postman, mailState, pageable);
@@ -460,7 +461,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 6);//分页，每页多少条记录
             MailState mailState = mailStateRepository.findMailStateById(stateId);//返回派件异常状态
             Page<Mail> mailPage = mailRepository.findMailByAssignPostmanAndAssignStateAndAssignFrequencyBetween(postman, mailState, 2, 4, pageable);//获取派件次数>1、状态为派件异常的订单
             int totalPages = mailPage.getTotalPages();//一共多少页
@@ -473,7 +474,7 @@ public class PostmanServiceImpl implements PostmanService {
                 session.setAttribute("page", page);
                 session.setAttribute("TotalPages", totalPages);
                 session.setAttribute("mailList", mailList);
-                session.setAttribute("count",count);
+                session.setAttribute("count", count);
                 return str;
             }
         }
@@ -526,7 +527,7 @@ public class PostmanServiceImpl implements PostmanService {
         } else {
             MailState mailStateReadying = mailStateRepository.findMailStateById(5);//返回准备派件状态
             MailState mailStateAssigning = mailStateRepository.findMailStateById(6);//返回正在派件状态
-            int num = mailRepository.updateAssignStateToAssigning(mailStateAssigning, mailStateReadying, postman,new Date());
+            int num = mailRepository.updateAssignStateToAssigning(mailStateAssigning, mailStateReadying, postman, new Date());
             session.setAttribute("psuccess", "一共 " + num + " 单，派件接单成功！");
             return "postman/success";
         }
@@ -591,7 +592,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 4);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 12);//分页，每页多少条记录
             MailState mailState3 = mailStateRepository.findMailStateById(3);//返回"收件成功"状态
             MailState mailState4 = mailStateRepository.findMailStateById(4);//返回"收件失败"状态
             Page<Mail> mailPage = mailRepository.historicalReceive(postman, mailState3, mailState4, pageable);
@@ -627,7 +628,7 @@ public class PostmanServiceImpl implements PostmanService {
             System.out.println("==========空工号，没登录！==========");
             return "postman/login";
         } else {
-            Pageable pageable = PageRequest.of(page, 4);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 12);//分页，每页多少条记录
             MailState mailState7 = mailStateRepository.findMailStateById(7);//返回"派件签收"状态
             MailState mailState8 = mailStateRepository.findMailStateById(8);//返回"派件失败"状态
             Page<Mail> mailPage = mailRepository.historicalAssign(postman, mailState7, mailState8, pageable);
@@ -645,5 +646,109 @@ public class PostmanServiceImpl implements PostmanService {
             }
         }
         return "postman/historicalAssign";
+    }
+
+    /**
+     * @Title downExcelOfReceiveMail
+     * @Description: TODO 下载正在收件的件
+     * @param response
+     * @param session
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/19  0:16
+     **/
+    @Override
+    public String downExcelOfReceiveMail(HttpSession session, HttpServletResponse response) {
+        //导出Excel文件
+        Postman postman = (Postman) session.getAttribute("postman");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH时mm分ss秒");
+        String fileName = postman.getName() + "-收件信息表-" + formatter2.format(new Date());
+        MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
+        List<Mail> mailList = mailRepository.findAllByReceivePostmanAndReceiveState(postman, mailStateReceiving);//返回该邮差正在派件的单
+
+        List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("sheetName", "收件信息簿");
+        listmap.add(map);
+        for (int j = 0; j < mailList.size(); j++) {
+            Mail mail = mailList.get(j);
+            Map<String, Object> mapValue = new HashMap<String, Object>();
+            mapValue.put("id", mail.getId());
+            mapValue.put("name", mail.getCustomer().getName());
+            mapValue.put("phone", mail.getCustomer().getPhone());
+            mapValue.put("region", mail.getReceiveRegion().getRegion());
+            mapValue.put("address", mail.getRaddress());
+            mapValue.put("time", formatter.format(mail.getDistributeReceiveTime()));
+            mapValue.put("determine", "  ");
+
+            listmap.add(mapValue);
+        }
+
+        String columnNames[] = {"邮件编号", "所属客户姓名", "客户手机号", "上门收件地区", "上门收件地址", "系统分配收件时间", "是否收件"};//列名
+        String keys[] = {"id", "name", "phone", "region", "address", "time", "determine"};//map中的key
+        try {
+            ExcelUtil.downloadWorkBook(listmap, keys, columnNames, fileName, response);
+        } catch (Exception e) {
+            System.out.println("捕获异常啊！！！！！！！！！");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * @Title downExcelOfAssigneMail
+     * @Description: TODO 下载正在派件+派件异常的件
+     * @param session
+     * @param response
+     * @return java.lang.String
+     * @Author: chenyx
+     * @Date: 2019/12/19  1:19
+     **/
+    @Override
+    public String downExcelOfAssigneMail(HttpSession session, HttpServletResponse response) {
+        //导出Excel文件
+        Postman postman = (Postman) session.getAttribute("postman");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH时mm分ss秒");
+        String fileName = postman.getName() + "-派件信息表-" + formatter2.format(new Date());
+
+        MailState mailStateAssignException = mailStateRepository.findMailStateById(9);//返回派件异常状态
+        MailState mailStateAssigning = mailStateRepository.findMailStateById(6);//返回正在派件状态
+        List<Mail> mailList = mailRepository.findAllByAssignPostmanAndAssignStateOrAssignPostmanAndAssignState(postman, mailStateAssignException, postman, mailStateAssigning);//返回该邮差正在派件的单
+
+        List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("sheetName", "派件信息簿");
+        listmap.add(map);
+        for (int j = 0; j < mailList.size(); j++) {
+            Mail mail = mailList.get(j);
+            Map<String, Object> mapValue = new HashMap<String, Object>();
+            mapValue.put("id", mail.getId());
+            mapValue.put("name", mail.getAddresseeName());
+            mapValue.put("phone", mail.getAddresseePhone());
+            mapValue.put("region", mail.getAssignRegion().getRegion());
+            mapValue.put("address", mail.getAddress());
+            if (9 == mail.getAssignState().getId()) {//派件异常的话打印出原因
+                mapValue.put("state", mail.getAssignState().getState() + ":\n" + mail.getReason());
+            } else {
+                mapValue.put("state", mail.getAssignState().getState());
+            }
+            mapValue.put("time", formatter.format(mail.getDistributeAssignTime()));
+            mapValue.put("determine", "  ");
+
+            listmap.add(mapValue);
+        }
+
+        String columnNames[] = {"邮件编号", "收件人姓名", "收件人手机号", "派送的地区", "派送的地址", "派件状态", "系统分配派件时间", "是否派件"};//列名
+        String keys[] = {"id", "name", "phone", "region", "address", "state", "time", "determine"};//map中的key
+        try {
+            ExcelUtil.downloadWorkBook(listmap, keys, columnNames, fileName, response);
+        } catch (Exception e) {
+            System.out.println("捕获异常啊！！！！！！！！！");
+            e.printStackTrace();
+        }
+        return null;
     }
 }

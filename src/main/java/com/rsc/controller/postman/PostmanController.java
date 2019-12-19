@@ -5,11 +5,9 @@ import com.rsc.service.PostmanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -27,8 +25,8 @@ public class PostmanController {
 
     //邮差提交的登录
     @PostMapping("ptologin")
-    public String postmanToLogin(@RequestParam String phone, @RequestParam String password, HttpSession session,Model model) {
-        return postmanService.postmanToLogin(phone, password, session,model);
+    public String postmanToLogin(@RequestParam String phone, @RequestParam String password, HttpSession session, Model model) {
+        return postmanService.postmanToLogin(phone, password, session, model);
     }
 
     //邮差去签到
@@ -45,8 +43,8 @@ public class PostmanController {
 
     //邮差一键全部接单(接全部收件)
     @GetMapping("ptoallreceive")
-    public String postmanToAllReceive(HttpSession session) {
-        return postmanService.postmanToAllReceive(session);
+    public String postmanToAllReceive(HttpSession session, HttpServletResponse response) {
+        return postmanService.postmanToAllReceive(session, response);
     }
 
     //邮差确定邮件是否收取成功
@@ -93,7 +91,7 @@ public class PostmanController {
 
     //获取派件异常的订单界面
     @RequestMapping("assignException")
-    public String postmanAssignException(HttpSession session,@RequestParam int page) {
+    public String postmanAssignException(HttpSession session, @RequestParam int page) {
         return postmanService.postmanAssignException(session, page, 9, "postman/assignException");
     }
 
@@ -105,14 +103,29 @@ public class PostmanController {
 
     //历史收件：返回收件状态是“收件成功”和“收件失败”的件
     @RequestMapping("historicalreceive")
-    public String historicalReceive(HttpSession session,@RequestParam int page){
-        return  postmanService.historicalReceive(session,page);
+    public String historicalReceive(HttpSession session, @RequestParam int page) {
+        return postmanService.historicalReceive(session, page);
     }
 
     //历史派件：返回派件状态是“派件签收”和“派件失败”的件
     @RequestMapping("historicalassign")
-    public String historicalAssign(HttpSession session,@RequestParam int page){
-        return  postmanService.historicalAssign(session,page);
+    public String historicalAssign(HttpSession session, @RequestParam int page) {
+        return postmanService.historicalAssign(session, page);
     }
+
+    //下载正在收件的件
+    @ResponseBody
+    @RequestMapping(value = "downExcelOfReceiveMail", produces = {"application/vnd.ms-excel;charset=UTF-8"})
+    public String downExcelOfReceiveMail(HttpSession session, HttpServletResponse response){
+      return postmanService.downExcelOfReceiveMail(session,response);
+    }
+
+    //下载正在派件+派件异常的件
+    @ResponseBody
+    @RequestMapping(value = "downExcelOfAssigneMail", produces = {"application/vnd.ms-excel;charset=UTF-8"})
+    public String downExcelOfAssigneMail(HttpSession session, HttpServletResponse response){
+        return postmanService.downExcelOfAssigneMail(session,response);
+    }
+
 
 }

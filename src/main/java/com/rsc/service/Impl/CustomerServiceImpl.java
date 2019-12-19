@@ -171,7 +171,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 6);//分页，每页多少条记录
             MailState mailStateReadying = mailStateRepository.findMailStateById(1);//返回准备收件状态
             MailState mailStateReceiving = mailStateRepository.findMailStateById(2);//返回正在收件状态
             MailState mailStateWaitingDistribution = mailStateRepository.findMailStateById(0);//返回等待分配状态
@@ -260,7 +260,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 6);//分页，每页多少条记录
             MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回完成收件状态
             MailState mailStateE = mailStateRepository.findMailStateById(8);//返回派件异常状态
             MailState mailStateF = mailStateRepository.findMailStateById(7);//返回派件签收状态
@@ -296,7 +296,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 3);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 6);//分页，每页多少条记录
             MailState mailStateFinishing = mailStateRepository.findMailStateById(3);//返回完成收件状态
             MailState mailStateAS = mailStateRepository.findMailStateById(7);//返回派件签收状态
             Page<Mail> mailPage = mailRepository.findMailByCustomerAndFinishing(customer, mailStateFinishing, mailStateAS, pageable);
@@ -330,7 +330,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (null == customer)
             return "customer/login";
         else {
-            Pageable pageable = PageRequest.of(page, 5);//分页，每页多少条记录
+            Pageable pageable = PageRequest.of(page, 8);//分页，每页多少条记录
             MailState mailStateReceiveFault = mailStateRepository.findMailStateById(4);//返回“收件不成功"状态
             MailState mailStateAssignFault = mailStateRepository.findMailStateById(8);//返回”派件不成功“状态
             Page<Mail> mailPage = mailRepository.findMailByCustomerAndFault(customer, mailStateReceiveFault, mailStateAssignFault, pageable);

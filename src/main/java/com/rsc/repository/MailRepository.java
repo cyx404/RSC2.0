@@ -17,8 +17,11 @@ public interface MailRepository extends JpaRepository<Mail, Integer> {
     //Page<Object[]> findMailByReceivePostmanAndReceiveState(Postman receivePostman, MailState receiveState, Pageable pageable);
     Page<Mail> findMailByReceivePostmanAndReceiveState(Postman receivePostman, MailState receiveState, Pageable pageable);
 
-    //根据某邮差和邮件状态分页返回所有单
+    //根据某收件邮差和收件邮件状态返回单，导出Excel
     List<Mail> findAllByReceivePostmanAndReceiveState(Postman receivePostman, MailState receiveState);
+
+    //根据某派件邮差和派件邮件状态返回单，导出Excel
+    List<Mail> findAllByAssignPostmanAndAssignStateOrAssignPostmanAndAssignState(Postman postman1,MailState mailStateAssignException,Postman postman2,MailState mailStateAssigning);
 
     //某邮差的邮件状态为“准备收件”的单更新为邮件状态“正在收件”
     @Modifying
